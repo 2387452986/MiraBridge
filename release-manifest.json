@@ -2,7 +2,7 @@
   "schema_version": 1,
   "product": "MiraBridge",
   "version": "2.0.0-rc.1",
-  "generated_at": "2026-08-22T23:25:34.054Z",
+  "generated_at": "2026-08-22T23:31:36.201Z",
   "files": [
     {
       "path": ".agents/plugins/marketplace.json",
@@ -256,8 +256,8 @@
     },
     {
       "path": "docs/RELEASE_CHECKLIST.md",
-      "bytes": 4029,
-      "sha256": "a680848e2d8e05c1898ec36046e1da3eb743034b9198961e1c906c1de4f00fe1"
+      "bytes": 4198,
+      "sha256": "8ee29d35d9c1e4e9d23bda41c387f61727fa6fce1e4e0d26ba5fb11079baadc5"
     },
     {
       "path": "docs/release-notes-v2.0.0-rc.1.md",
@@ -266,8 +266,8 @@
     },
     {
       "path": "docs/TEST_REPORT.md",
-      "bytes": 11446,
-      "sha256": "0e650e881fe2af94d39331e7386d4282a1e03702a69233cd9e17cf05a5ddc1c0"
+      "bytes": 11786,
+      "sha256": "1e46de108ef6ae1bb145a481cf918c89eca63f4b38d12a1ed2fe653cb58289c7"
     },
     {
       "path": "LICENSE",
@@ -276,8 +276,8 @@
     },
     {
       "path": "MODULE_DEVELOPMENT.md",
-      "bytes": 7271,
-      "sha256": "b45fd21ed8e8867f61343c098b6dd84526cf20ea5a8510f293fe9f07a5975fa5"
+      "bytes": 7377,
+      "sha256": "0aca7d590b6f2e850ce5823b2b0d5a19223f152a3f0589863ba0fe36412056d9"
     },
     {
       "path": "plugins/mira-bridge/.codex-plugin/plugin.json",
@@ -436,8 +436,8 @@
     },
     {
       "path": "plugins/mira-bridge/MODULE_DEVELOPMENT.md",
-      "bytes": 5849,
-      "sha256": "2d6725110807c55b72546a72e8f9df610b343b2bd11fa8ed729ea8b4a55937a3"
+      "bytes": 5955,
+      "sha256": "8e194fe15ef216a8aac4e95058ca16528f2ab0d42fbb88939f4bc5083da708ea"
     },
     {
       "path": "plugins/mira-bridge/package-lock.json",

@@ -26,7 +26,7 @@ Last updated: 2026-08-23
 
 - Mac TypeScript strict typecheck: PASS.
 - Mac Vitest: PASS, 26 files / 130 tests after pairing, config, installer-path, public-validator and atomic maintenance-admission additions.
-- Public CI error-before: run `32604692142` proved Windows checkout changed unspecified text bytes and two real Windows process-identity tests exceeded Vitest's unrelated 5-second default. Rerun `32604911050` verified the Manifest and transfer bound, then exposed a cold `Get-CimInstance` PID-identity probe timing out before Job cancellation. The shared probe now reads native `System.Diagnostics.Process.StartTime`; Windows verify-after is pending.
+- Public CI error-before: run `32604692142` proved Windows checkout changed unspecified text bytes and two real Windows process-identity tests exceeded Vitest's unrelated 5-second default. Rerun `32604911050` verified the Manifest and transfer bound, then exposed a cold `Get-CimInstance` PID-identity probe timing out before Job cancellation. The shared probe now reads native `System.Diagnostics.Process.StartTime`; verify-after run `32605195125` passed macOS Apple Silicon/Intel and Windows x64/native ARM64.
 - Isolated Mac managed runtime: PASS with verified Node 24.19.0, build, CLI version and doctor; no Homebrew dependency.
 - Real Windows 11 x64 `.NET 10.0.400` solution build: PASS, 0 warnings / 0 errors.
 - Real Windows client contract runner: PASS, 8/8 (TTL/fingerprint, replay, SSH preservation, authorized keys, redaction, update success/rollback states, ViewModel).
@@ -34,7 +34,7 @@ Last updated: 2026-08-23
 - In-place takeover: PASS; baseline 66 Jobs/54 Workspaces/1,876 Requests/419 Outputs and the final acceptance snapshot 99/84/2,344/498 show retained and increasing durable state.
 - Atomic maintenance admission: PASS on the physical node. An acquired lease rejected a real MCP `start_job` with retryable `NODE_MAINTENANCE`, release allowed the Job, an active Job made lease acquisition fail closed, and the installed v8 Host repeated the block/release result.
 - Stable Host, old global-Worker removal, SSH preservation, reboot Worker recovery, real file/Job/Edge/directory-transfer loop: PASS.
-- ARM64, Windows 10, clean VM, signing, login-triggered tray and injected update rollback remain `NOT_RUN` in `docs/TEST_REPORT.md`.
+- Physical ARM64 GUI, Windows 10, clean VM, signing, login-triggered tray and injected update rollback remain `NOT_RUN` in `docs/TEST_REPORT.md`; native ARM64 CI is `PASS_REAL`.
 
 ## Reusable lessons
 
@@ -55,9 +55,9 @@ Last updated: 2026-08-23
 
 ## Open release gates
 
-- GitHub authentication and public repository/tag/prerelease creation.
+- Public tag, prerelease assets, SBOM/attestation and clean Git-tag install.
 - Interactive-login tray startup, old-public-RC click update/real package downgrade and full data-purge uninstall evidence.
 - Clean Windows VM onboarding with no Node/.NET/OpenSSH.
-- Native ARM64 runner artifacts and a physical ARM64 GUI smoke.
+- Physical ARM64 GUI smoke (native ARM64 CI is complete).
 - Physical Windows 10 22H2 VM smoke.
 - Windows code-signing certificate before stable `2.0.0`.

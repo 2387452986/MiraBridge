@@ -28,9 +28,10 @@ publication or stable-release gates; a nearby unit test does not close them.
 - [x] Local marketplace install/enabled; cached MCP reports exactly 28 tools.
 - [x] Pair acceptance live-scans and pins the real Host Fingerprint before the
   stable Host handshake.
-- [ ] Public Git tag installation in a clean checkout (blocked only on GitHub
-  authentication/repository creation).
-- [ ] Intel macOS completed CI/physical evidence.
+- [ ] Public Git tag installation in a clean checkout (blocked on the final tag
+  and release workflow only).
+- [x] Intel macOS public CI completed the full gate and isolated managed-runtime
+  install in run `32605195125`.
 
 ## Windows 11 x64 — physical `windows-main`
 
@@ -62,17 +63,18 @@ publication or stable-release gates; a nearby unit test does not close them.
 
 - [ ] Fresh Windows VM with no Node, .NET or OpenSSH: Setup-to-Ready without a
   terminal.
-- [ ] Native GitHub Windows ARM64 build/test/package job.
+- [x] Native GitHub Windows ARM64 build/test/package job in public run
+  `32605195125`; x64 and ARM64 unpacked artifacts were uploaded.
 - [ ] Physical Windows ARM64 GUI.
 - [ ] Physical Windows 10 22H2 GUI and Optional Capability workflow.
 - [ ] Physical Intel-only/GPU-less node capability smoke.
 
 ## Publication
 
-- [ ] `gh auth status`; repository-scoped author derived from authenticated
+- [x] `gh auth status`; repository-scoped author derived from authenticated
   GitHub identity.
-- [ ] Public `2387452986/MiraBridge`, main commit and tag
-  `v2.0.0-rc.1`.
+- [x] Public `2387452986/MiraBridge` and green `main` CI.
+- [ ] Annotated tag `v2.0.0-rc.1` and tag workflow.
 - [ ] GitHub x64/ARM64 Setup and macOS arm64/x64 runtime assets.
 - [ ] Aggregate SHA-256 manifest, SBOM, dependency notices and artifact
   attestations.

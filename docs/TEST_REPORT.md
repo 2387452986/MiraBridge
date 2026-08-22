@@ -40,8 +40,8 @@ Environment: macOS Apple Silicon; managed Node.js 24.19.0; system OpenSSH.
 | Managed install without Homebrew | PASS_REAL | default `~/Library/Application Support/MiraBridge` install, Node 24.19.0, CLI doctor and atomic `current` switch passed |
 | Path-with-spaces installer regression | PASS_REAL | original unquoted managed-Node path failed; quoting fix has a regression test and the real default-path install passed |
 | Local marketplace | PASS_REAL | installed/enabled `mira-bridge@mirabridge`; cached runtime returned exactly 28 tools |
-| Public Git tag install | NOT_RUN | public repository/tag cannot exist before the operator completes `gh auth login` |
-| Intel Mac | NOT_RUN | public CI job is defined; no physical or completed GitHub-run evidence yet |
+| Public Git tag install | NOT_RUN | public repository and `main` exist; tag installation remains gated on the final release workflow |
+| Intel Mac | PASS_REAL | public CI run `32605195125`, `macos-15-intel`, completed the full runtime gate and isolated managed-runtime install |
 
 The installed MCP starts from local configuration and does not connect to every
 node. An isolated stdio smoke with no node configuration returned all 28 tools
@@ -124,8 +124,8 @@ succeed against personal data.
 
 | Gate | Result | Notes |
 |---|---|---|
-| GitHub Windows x64 artifact | NOT_RUN | workflow defined; repository/tag not pushed |
-| Native GitHub Windows ARM64 runner | NOT_RUN | `windows-11-arm` workflow defined; no completed public run |
+| GitHub Windows x64 artifact | PASS_REAL | public CI run `32605195125`, `windows-2025`, passed native tests/build/package smoke and uploaded `windows-win-x64-unpacked` (242,347,174 bytes) |
+| Native GitHub Windows ARM64 runner | PASS_REAL | public CI run `32605195125`, native `windows-11-arm`, passed Worker/Node/ConPTY/SQLite/native package smoke and uploaded `windows-win-arm64-unpacked` (228,711,742 bytes) |
 | Physical Windows ARM64 GUI | NOT_RUN | stable-release gate |
 | Physical Windows 10 22H2 GUI/Optional Capability | NOT_RUN | stable-release gate |
 | Clean Windows VM with no Node/.NET/OpenSSH | NOT_RUN | Setup is self-contained and helper paths are tested, but no fresh-VM execution evidence |
@@ -136,9 +136,10 @@ succeed against personal data.
 ## RC conclusion
 
 The source, managed Mac install, real Windows x64 Setup, in-place data takeover,
-stable SSH/Host chain and realistic file/Job/web/transfer loop are
-`PASS_REAL`. The candidate is suitable for an explicitly unsigned x64 RC
-publication after GitHub authentication and a successful public workflow.
+stable SSH/Host chain, realistic file/Job/web/transfer loop and public four-platform
+CI run `32605195125` are `PASS_REAL`. The candidate is suitable for an explicitly
+unsigned x64/ARM64 RC publication; tag assets, SBOM and attestations remain the
+next release-workflow evidence.
 
 It is not a stable `2.0.0` release. Signing, physical Windows 10 and physical
 ARM64 GUI acceptance remain mandatory. Clean-VM onboarding, interactive-login
