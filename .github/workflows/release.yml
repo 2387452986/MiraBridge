@@ -80,7 +80,7 @@ jobs:
           cp packages/cli/dist/index.mjs ../../artifacts/mac-${{ matrix.arch }}/cli/
           cp scripts/*-mac.sh scripts/run-mcp.sh ../../artifacts/mac-${{ matrix.arch }}/scripts/
           tar -czf ../../artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.1.tar.gz -C ../../artifacts/mac-${{ matrix.arch }} .
-          shasum -a 256 ../../artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.1.tar.gz > ../../artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.1.tar.gz.sha256
+          (cd ../../artifacts && shasum -a 256 MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.1.tar.gz) > ../../artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.1.tar.gz.sha256
           npm sbom --omit=dev --sbom-format cyclonedx > ../../artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.1.sbom.cdx.json
       - uses: actions/attest-build-provenance@v3
         with:

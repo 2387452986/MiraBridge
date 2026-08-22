@@ -27,6 +27,7 @@ Last updated: 2026-08-23
 - Mac TypeScript strict typecheck: PASS.
 - Mac Vitest: PASS, 26 files / 130 tests after pairing/config, installer-path, public-validator and maintenance-admission additions.
 - Public CI error-before: run `32604692142` exposed cross-checkout Manifest bytes plus Windows process-identity tests whose intended operation bound exceeds Vitest's default. Rerun `32604911050` passed the Manifest and transfer regression, then exposed the shared cold CIM identity probe timing out during Job cancellation; it now uses native `System.Diagnostics.Process.StartTime`. Verify-after run `32605195125` passed macOS Apple Silicon/Intel and Windows x64/native ARM64.
+- Public release: annotated `v2.0.0-rc.1`, prerelease run `32605676616` and 24 assets are published. Clean Git-tag install, both Mac downloads, both Windows Setup downloads, aggregate hashes and tag/workflow-scoped provenance passed.
 - Isolated Mac managed runtime: PASS with verified Node 24.19.0, build, CLI version and doctor; no Homebrew dependency.
 - Real Windows 11 x64 `.NET 10.0.400` solution build: PASS, 0 warnings / 0 errors.
 - Real Windows client contract runner: PASS, 8/8 including update success/rollback recovery paths.
@@ -49,10 +50,10 @@ Last updated: 2026-08-23
 - Byte manifests require LF-normalized Git checkout and explicit PowerShell native-exit checks; `$ErrorActionPreference` alone did not stop a failed Node verifier.
 - Keep slow Windows WMI/taskkill ownership tests real, but give only those tests their operation-sized timeout instead of hiding the signal with a global timeout.
 - Do not put cold CIM module loading on the Job cancellation path; query `System.Diagnostics.Process.StartTime` so the PID-reuse guard remains fail-closed without WMI startup latency.
+- Release checksum sidecars must name the downloadable basename, not a CI build path. The aggregate RC manifest was correct; the next-tag workflow now also makes each Mac sidecar directly consumable.
 
 ## Open release gates
 
-- Public tag, prerelease assets, SBOM/attestation and clean Git-tag install.
 - Interactive-login tray startup, old-RC update/rollback, clean-VM onboarding and full-purge uninstall evidence.
 - Physical ARM64 GUI smoke (native ARM64 CI is complete).
 - Physical Windows 10 22H2 VM smoke.

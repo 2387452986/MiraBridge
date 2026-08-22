@@ -27,6 +27,7 @@ Last updated: 2026-08-23
 - Mac TypeScript strict typecheck: PASS.
 - Mac Vitest: PASS, 26 files / 130 tests after pairing, config, installer-path, public-validator and atomic maintenance-admission additions.
 - Public CI error-before: run `32604692142` proved Windows checkout changed unspecified text bytes and two real Windows process-identity tests exceeded Vitest's unrelated 5-second default. Rerun `32604911050` verified the Manifest and transfer bound, then exposed a cold `Get-CimInstance` PID-identity probe timing out before Job cancellation. The shared probe now reads native `System.Diagnostics.Process.StartTime`; verify-after run `32605195125` passed macOS Apple Silicon/Intel and Windows x64/native ARM64.
+- Public release: annotated `v2.0.0-rc.1`, prerelease run `32605676616` and 24 assets are published. Clean Git-tag install, both Mac downloads, both Windows Setup downloads, aggregate hashes and tag/workflow-scoped provenance passed.
 - Isolated Mac managed runtime: PASS with verified Node 24.19.0, build, CLI version and doctor; no Homebrew dependency.
 - Real Windows 11 x64 `.NET 10.0.400` solution build: PASS, 0 warnings / 0 errors.
 - Real Windows client contract runner: PASS, 8/8 (TTL/fingerprint, replay, SSH preservation, authorized keys, redaction, update success/rollback states, ViewModel).
@@ -52,10 +53,10 @@ Last updated: 2026-08-23
 - A byte-level release manifest must be invariant after Git checkout: set repository text to `eol=lf`, and make PowerShell check each native verifier exit code immediately instead of relying on `$ErrorActionPreference`.
 - Windows process identity and `taskkill` integration can legitimately outlive Vitest's 5-second unit default on hosted x64/ARM64. Give only those platform tests their bounded operation timeout; do not weaken assertions or raise the global suite timeout.
 - Do not cold-load CIM for the cancellation hot path. `System.Diagnostics.Process.StartTime` reads the same Windows process identity without WMI startup latency while preserving the PID-reuse guard.
+- Release checksum sidecars must name the downloadable basename, not a CI build path. The aggregate RC manifest was correct; the next-tag workflow now also makes each Mac sidecar directly consumable.
 
 ## Open release gates
 
-- Public tag, prerelease assets, SBOM/attestation and clean Git-tag install.
 - Interactive-login tray startup, old-public-RC click update/real package downgrade and full data-purge uninstall evidence.
 - Clean Windows VM onboarding with no Node/.NET/OpenSSH.
 - Physical ARM64 GUI smoke (native ARM64 CI is complete).

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "product": "MiraBridge",
   "version": "2.0.0-rc.1",
-  "generated_at": "2026-08-22T23:31:36.201Z",
+  "generated_at": "2026-08-22T23:50:17.456Z",
   "files": [
     {
       "path": ".agents/plugins/marketplace.json",
@@ -26,8 +26,8 @@
     },
     {
       "path": ".github/workflows/release.yml",
-      "bytes": 5070,
-      "sha256": "e575ecd6c62d357f6d1b6401c3206404e9a0c27f2449d655d358ce55b0d60534"
+      "bytes": 5078,
+      "sha256": "5ba6e93e9017d7369ec4e6c4bf6b1f93d4ac0389f1d2c74351f8660728e3876e"
     },
     {
       "path": ".gitignore",
@@ -256,18 +256,18 @@
     },
     {
       "path": "docs/RELEASE_CHECKLIST.md",
-      "bytes": 4198,
-      "sha256": "8ee29d35d9c1e4e9d23bda41c387f61727fa6fce1e4e0d26ba5fb11079baadc5"
+      "bytes": 4263,
+      "sha256": "7ba23cf122d905fd767ee84c4b3b0460318daa2bc3ddcf156a9b648a086d63ea"
     },
     {
       "path": "docs/release-notes-v2.0.0-rc.1.md",
-      "bytes": 2053,
-      "sha256": "8bb30ef176bf727f0e1a3687e035f4bf8f91ceb93862ece4e82d422525693144"
+      "bytes": 2284,
+      "sha256": "56293177a84d2441f859217c82b200dd01e9c19873c80aef2aee39b6ee08a33d"
     },
     {
       "path": "docs/TEST_REPORT.md",
-      "bytes": 11786,
-      "sha256": "1e46de108ef6ae1bb145a481cf918c89eca63f4b38d12a1ed2fe653cb58289c7"
+      "bytes": 12742,
+      "sha256": "f6be3dbff229b39a352b034eb318688c092a072343e1f60dd902e97595fba8ce"
     },
     {
       "path": "LICENSE",
@@ -276,8 +276,8 @@
     },
     {
       "path": "MODULE_DEVELOPMENT.md",
-      "bytes": 7377,
-      "sha256": "0aca7d590b6f2e850ce5823b2b0d5a19223f152a3f0589863ba0fe36412056d9"
+      "bytes": 7734,
+      "sha256": "2bfcd3eccf615e1a7c76abbc55b434f8c1323bf9b78f0e9f5a1b89a4f7c1500d"
     },
     {
       "path": "plugins/mira-bridge/.codex-plugin/plugin.json",
@@ -436,8 +436,8 @@
     },
     {
       "path": "plugins/mira-bridge/MODULE_DEVELOPMENT.md",
-      "bytes": 5955,
-      "sha256": "8e194fe15ef216a8aac4e95058ca16528f2ab0d42fbb88939f4bc5083da708ea"
+      "bytes": 6312,
+      "sha256": "97b0d05fe1bb3edde93196a905df65a1f6f87fa76fb3a6186d7810b9368a56e3"
     },
     {
       "path": "plugins/mira-bridge/package-lock.json",
@@ -881,8 +881,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 5917,
-      "sha256": "98ec5df5258855673dd63957a8e06cdfef16777ccca2b16f68374c40f6664e8a"
+      "bytes": 6018,
+      "sha256": "c1a74b013a42999d5c852d1a6d3fa3502795dab31a9aa7ebfa8d556613d1257f"
     },
     {
       "path": "scripts/build-windows-release.ps1",

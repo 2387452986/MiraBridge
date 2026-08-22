@@ -28,8 +28,9 @@ publication or stable-release gates; a nearby unit test does not close them.
 - [x] Local marketplace install/enabled; cached MCP reports exactly 28 tools.
 - [x] Pair acceptance live-scans and pins the real Host Fingerprint before the
   stable Host handshake.
-- [ ] Public Git tag installation in a clean checkout (blocked on the final tag
-  and release workflow only).
+- [x] Public Git tag installation in a clean checkout; Manifest, isolated
+  managed runtime, Git marketplace cache, 28 tools and live Worker handshake
+  passed.
 - [x] Intel macOS public CI completed the full gate and isolated managed-runtime
   install in run `32605195125`.
 
@@ -74,11 +75,11 @@ publication or stable-release gates; a nearby unit test does not close them.
 - [x] `gh auth status`; repository-scoped author derived from authenticated
   GitHub identity.
 - [x] Public `2387452986/MiraBridge` and green `main` CI.
-- [ ] Annotated tag `v2.0.0-rc.1` and tag workflow.
-- [ ] GitHub x64/ARM64 Setup and macOS arm64/x64 runtime assets.
-- [ ] Aggregate SHA-256 manifest, SBOM, dependency notices and artifact
+- [x] Annotated tag `v2.0.0-rc.1` and tag workflow `32605676616`.
+- [x] GitHub x64/ARM64 Setup and macOS arm64/x64 runtime assets.
+- [x] Aggregate SHA-256 manifest, SBOM, dependency notices and artifact
   attestations.
-- [ ] Prerelease notes identify the unsigned installer and all `NOT_RUN`
+- [x] Prerelease notes identify the unsigned installer and all `NOT_RUN`
   evidence.
 
 Stable `2.0.0` additionally requires Windows code signing plus physical

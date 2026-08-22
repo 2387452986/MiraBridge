@@ -8,6 +8,8 @@ The Agent thinks, plans and decides completion on the Mac. A deterministic Windo
 
 > `2.0.0-rc.1` is an unsigned release candidate. Windows SmartScreen may show an unknown-publisher warning. Download only from this repository's Release page and verify the published SHA-256 manifest. Stable `2.0.0` will not ship until Windows code signing and physical Windows 10/ARM64 acceptance are complete.
 
+[Download MiraBridge 2.0.0-rc.1](https://github.com/2387452986/MiraBridge/releases/tag/v2.0.0-rc.1)
+
 ## Architecture
 
 ```text

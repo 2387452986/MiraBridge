@@ -40,7 +40,7 @@ Environment: macOS Apple Silicon; managed Node.js 24.19.0; system OpenSSH.
 | Managed install without Homebrew | PASS_REAL | default `~/Library/Application Support/MiraBridge` install, Node 24.19.0, CLI doctor and atomic `current` switch passed |
 | Path-with-spaces installer regression | PASS_REAL | original unquoted managed-Node path failed; quoting fix has a regression test and the real default-path install passed |
 | Local marketplace | PASS_REAL | installed/enabled `mira-bridge@mirabridge`; cached runtime returned exactly 28 tools |
-| Public Git tag install | NOT_RUN | public repository and `main` exist; tag installation remains gated on the final release workflow |
+| Public Git tag install | PASS_REAL | exact annotated tag cloned into a clean temporary checkout; all 183 files verified; isolated no-Homebrew install/doctor passed; live marketplace was switched to Git tag source and the installed cache returned exactly 28 tools plus a real Worker `2.0.0-rc.1` / RPC `2.0` handshake |
 | Intel Mac | PASS_REAL | public CI run `32605195125`, `macos-15-intel`, completed the full runtime gate and isolated managed-runtime install |
 
 The installed MCP starts from local configuration and does not connect to every
@@ -131,15 +131,24 @@ succeed against personal data.
 | Clean Windows VM with no Node/.NET/OpenSSH | NOT_RUN | Setup is self-contained and helper paths are tested, but no fresh-VM execution evidence |
 | Intel-only or GPU-less physical Windows | NOT_RUN | capability model/tests exist; no physical execution evidence |
 | Windows code signing | NOT_RUN | unsigned RC by design; mandatory before stable `2.0.0` |
-| SBOM and GitHub attestation | NOT_RUN | release workflow produces both after the public tag |
+| SBOM and GitHub attestation | PASS_REAL | prerelease run `32605676616` published per-platform CycloneDX SBOMs and SLSA provenance; both Windows Setup and both Mac runtime downloads matched `SHA256SUMS`, and provenance verification was constrained to this repository, tag and release workflow |
+
+The public prerelease contains 24 assets. Windows x64 Setup is 249,669,078
+bytes with SHA-256 `40e295b2d25a4d3b002fab2d374f999496b595f72daa155de0f5f1696e8402e9`;
+Windows ARM64 Setup is 235,596,023 bytes with SHA-256
+`721ef7f555fa6037cd5859dd8083d3df3800536c9e0d031ecde0647c2d200151`.
+The published Mac per-archive sidecars contain a build-relative filename, so
+the aggregate `SHA256SUMS` is the canonical RC verification file. The next-tag
+workflow now emits portable basename-only sidecars; artifact bytes and the
+installer path were never affected.
 
 ## RC conclusion
 
 The source, managed Mac install, real Windows x64 Setup, in-place data takeover,
 stable SSH/Host chain, realistic file/Job/web/transfer loop and public four-platform
-CI run `32605195125` are `PASS_REAL`. The candidate is suitable for an explicitly
-unsigned x64/ARM64 RC publication; tag assets, SBOM and attestations remain the
-next release-workflow evidence.
+CI run `32605195125`, public Git install and prerelease run `32605676616` are
+`PASS_REAL`. The explicitly unsigned x64/ARM64 RC is published at
+`https://github.com/2387452986/MiraBridge/releases/tag/v2.0.0-rc.1`.
 
 It is not a stable `2.0.0` release. Signing, physical Windows 10 and physical
 ARM64 GUI acceptance remain mandatory. Clean-VM onboarding, interactive-login

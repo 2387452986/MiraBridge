@@ -6,6 +6,11 @@ This release candidate moves MiraBridge into its independent MIT repository and 
 
 The Windows installers are **not code-signed**. Windows SmartScreen may show an unknown-publisher warning. Download only from this Release, verify `SHA256SUMS`, and use GitHub's artifact attestation. Stable `2.0.0` is blocked on signing plus physical Windows 10 and ARM64 GUI validation.
 
+Use the aggregate `SHA256SUMS` file as the canonical checksum source. The two
+Mac `.sha256` sidecars retain a CI-relative filename in this RC; their hash
+values are correct, but direct `shasum -c` use requires substituting the asset
+basename.
+
 ## What changed
 
 - `mirabridge` Git marketplace and selector `mira-bridge@mirabridge`.
@@ -30,7 +35,7 @@ Consult `docs/TEST_REPORT.md` for current evidence. This RC does **not** claim:
 - destructive full-data uninstall against the live historical data root; or
 - Windows code signing/SmartScreen reputation.
 
-The public tag workflow must still complete native x64/ARM64 jobs, Intel/Apple
-Silicon Mac jobs, SHA-256 aggregation, SBOM generation and GitHub artifact
-attestation before the prerelease assets are considered published. CI
-compilation is not substituted for the physical gates above.
+Public tag workflow `32605676616` completed native Windows x64/ARM64 jobs,
+Intel/Apple Silicon Mac jobs, SHA-256 aggregation, SBOM generation and GitHub
+artifact attestation before publishing these assets. This CI evidence is not
+substituted for the physical gates above.
