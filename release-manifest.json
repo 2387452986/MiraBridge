@@ -2,7 +2,7 @@
   "schema_version": 1,
   "product": "MiraBridge",
   "version": "2.0.0-rc.1",
-  "generated_at": "2026-08-22T23:19:25.306Z",
+  "generated_at": "2026-08-22T23:25:34.054Z",
   "files": [
     {
       "path": ".agents/plugins/marketplace.json",
@@ -276,8 +276,8 @@
     },
     {
       "path": "MODULE_DEVELOPMENT.md",
-      "bytes": 6955,
-      "sha256": "be154231fe1884294a775dc424e5fae6dc2a0763793991859a49811782eff4ca"
+      "bytes": 7271,
+      "sha256": "b45fd21ed8e8867f61343c098b6dd84526cf20ea5a8510f293fe9f07a5975fa5"
     },
     {
       "path": "plugins/mira-bridge/.codex-plugin/plugin.json",
@@ -436,8 +436,8 @@
     },
     {
       "path": "plugins/mira-bridge/MODULE_DEVELOPMENT.md",
-      "bytes": 5493,
-      "sha256": "94ab524f58b2721375d0e4324678cb7e3ab3d826f056d9b0e96949d29ac6ab3f"
+      "bytes": 5849,
+      "sha256": "2d6725110807c55b72546a72e8f9df610b343b2bd11fa8ed729ea8b4a55937a3"
     },
     {
       "path": "plugins/mira-bridge/package-lock.json",
@@ -721,8 +721,8 @@
     },
     {
       "path": "plugins/mira-bridge/packages/windows-worker/src/process-exec.ts",
-      "bytes": 15563,
-      "sha256": "f5a9c9224ac23c002ad10ad46b3a3ec6127df5609b929fd2cb92f765adc40e26"
+      "bytes": 15530,
+      "sha256": "6b463ca752999b1485974f1d3058df277a68e6fa1e82baff142f648938dccdfb"
     },
     {
       "path": "plugins/mira-bridge/packages/windows-worker/src/recycle-bin.test.ts",

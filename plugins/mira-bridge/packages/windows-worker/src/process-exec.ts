@@ -107,7 +107,7 @@ function processIsAlive(pid: number): boolean {
 }
 
 async function windowsProcessStartedAt(pid: number): Promise<string | null | undefined> {
-  const script = `$p=Get-CimInstance Win32_Process -Filter \"ProcessId = ${pid}\" -ErrorAction SilentlyContinue; if ($null -eq $p) { exit 3 }; [Console]::Write($p.CreationDate.ToUniversalTime().ToString('o'))`;
+  const script = `try { $p=[Diagnostics.Process]::GetProcessById(${pid}); [Console]::Write($p.StartTime.ToUniversalTime().ToString('o')) } catch [ArgumentException] { exit 3 }`;
   return await new Promise((resolve) => {
     const child = nodeSpawn("powershell.exe", ["-NoLogo", "-NoProfile", "-NonInteractive", "-EncodedCommand", encodePowerShell(script)], { windowsHide: true, stdio: ["ignore", "pipe", "ignore"] });
     const chunks: Buffer[] = [];

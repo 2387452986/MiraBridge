@@ -26,7 +26,7 @@ Last updated: 2026-08-23
 
 - Mac TypeScript strict typecheck: PASS.
 - Mac Vitest: PASS, 26 files / 130 tests after pairing/config, installer-path, public-validator and maintenance-admission additions.
-- Public CI error-before: run `32604692142` exposed cross-checkout Manifest bytes plus two Windows process-identity tests whose intended operation bound exceeds Vitest's default; focused/full Mac verify-after pass and Windows rerun is pending.
+- Public CI error-before: run `32604692142` exposed cross-checkout Manifest bytes plus Windows process-identity tests whose intended operation bound exceeds Vitest's default. Rerun `32604911050` passed the Manifest and transfer regression, then exposed the shared cold CIM identity probe timing out during Job cancellation; it now uses native `System.Diagnostics.Process.StartTime`. Windows verify-after is pending.
 - Isolated Mac managed runtime: PASS with verified Node 24.19.0, build, CLI version and doctor; no Homebrew dependency.
 - Real Windows 11 x64 `.NET 10.0.400` solution build: PASS, 0 warnings / 0 errors.
 - Real Windows client contract runner: PASS, 8/8 including update success/rollback recovery paths.
@@ -48,6 +48,7 @@ Last updated: 2026-08-23
 - An active-Job precheck alone is a TOCTOU bug; upgrade/uninstall and durable Job admission must share a transactional SQLite lease owned by the Worker.
 - Byte manifests require LF-normalized Git checkout and explicit PowerShell native-exit checks; `$ErrorActionPreference` alone did not stop a failed Node verifier.
 - Keep slow Windows WMI/taskkill ownership tests real, but give only those tests their operation-sized timeout instead of hiding the signal with a global timeout.
+- Do not put cold CIM module loading on the Job cancellation path; query `System.Diagnostics.Process.StartTime` so the PID-reuse guard remains fail-closed without WMI startup latency.
 
 ## Open release gates
 

@@ -26,7 +26,7 @@ Last updated: 2026-08-23
 
 - Mac TypeScript strict typecheck: PASS.
 - Mac Vitest: PASS, 26 files / 130 tests after pairing, config, installer-path, public-validator and atomic maintenance-admission additions.
-- Public CI error-before: run `32604692142` proved Windows checkout changed unspecified text bytes and two real Windows process-identity tests exceeded Vitest's unrelated 5-second default. The focused 14-test and full 130-test Mac regressions pass after the minimal candidate fix; Windows verify-after is pending the next public run.
+- Public CI error-before: run `32604692142` proved Windows checkout changed unspecified text bytes and two real Windows process-identity tests exceeded Vitest's unrelated 5-second default. Rerun `32604911050` verified the Manifest and transfer bound, then exposed a cold `Get-CimInstance` PID-identity probe timing out before Job cancellation. The shared probe now reads native `System.Diagnostics.Process.StartTime`; Windows verify-after is pending.
 - Isolated Mac managed runtime: PASS with verified Node 24.19.0, build, CLI version and doctor; no Homebrew dependency.
 - Real Windows 11 x64 `.NET 10.0.400` solution build: PASS, 0 warnings / 0 errors.
 - Real Windows client contract runner: PASS, 8/8 (TTL/fingerprint, replay, SSH preservation, authorized keys, redaction, update success/rollback states, ViewModel).
@@ -51,6 +51,7 @@ Last updated: 2026-08-23
 - A check-then-update active-Job gate is racy: another client can start a Job between the count and installer mutation. Serialize Job admission and upgrade/uninstall with one transactional Worker-owned lease; do not duplicate this authority in the GUI.
 - A byte-level release manifest must be invariant after Git checkout: set repository text to `eol=lf`, and make PowerShell check each native verifier exit code immediately instead of relying on `$ErrorActionPreference`.
 - Windows process identity and `taskkill` integration can legitimately outlive Vitest's 5-second unit default on hosted x64/ARM64. Give only those platform tests their bounded operation timeout; do not weaken assertions or raise the global suite timeout.
+- Do not cold-load CIM for the cancellation hot path. `System.Diagnostics.Process.StartTime` reads the same Windows process identity without WMI startup latency while preserving the PID-reuse guard.
 
 ## Open release gates
 
