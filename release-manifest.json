@@ -2,7 +2,7 @@
   "schema_version": 1,
   "product": "MiraBridge",
   "version": "2.0.0-rc.1",
-  "generated_at": "2026-08-22T21:33:11.258Z",
+  "generated_at": "2026-08-22T23:19:25.306Z",
   "files": [
     {
       "path": ".agents/plugins/marketplace.json",
@@ -11,8 +11,8 @@
     },
     {
       "path": ".gitattributes",
-      "bytes": 339,
-      "sha256": "c32a344443e6e8a0fe64bc4a6ee9137791d3ecf4d90f8c9a5f36cef4cd67a6ea"
+      "bytes": 346,
+      "sha256": "c644b0a765f20357e3cb29198e85932d5a38f309a3e89f3b93da0d7217791916"
     },
     {
       "path": ".github/dependabot.yml",
@@ -21,13 +21,13 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "bytes": 2324,
-      "sha256": "81514fb202b6d558f81cc7996c862ea6b1609c94f2dc392de0eebfff4afc10dd"
+      "bytes": 2438,
+      "sha256": "463c8bf3e2f3a5e150eb40ba1732ab3f0e8c85751aabce53186b456c64786fc5"
     },
     {
       "path": ".github/workflows/release.yml",
-      "bytes": 4956,
-      "sha256": "af84d61796cb4ff6f28be679dab90044809d9c1eccda2c4f11671e07c0f53e58"
+      "bytes": 5070,
+      "sha256": "e575ecd6c62d357f6d1b6401c3206404e9a0c27f2449d655d358ce55b0d60534"
     },
     {
       "path": ".gitignore",
@@ -276,8 +276,8 @@
     },
     {
       "path": "MODULE_DEVELOPMENT.md",
-      "bytes": 5978,
-      "sha256": "50d814d8a3e923c8d82ff1d0b98f441b4e2ced96b69be64c22980c74e18ee7ad"
+      "bytes": 6955,
+      "sha256": "be154231fe1884294a775dc424e5fae6dc2a0763793991859a49811782eff4ca"
     },
     {
       "path": "plugins/mira-bridge/.codex-plugin/plugin.json",
@@ -436,8 +436,8 @@
     },
     {
       "path": "plugins/mira-bridge/MODULE_DEVELOPMENT.md",
-      "bytes": 4812,
-      "sha256": "d44db4f447aa69033d3c9f4572081826c76a61de00e3d0538594ab4f2545dc49"
+      "bytes": 5493,
+      "sha256": "94ab524f58b2721375d0e4324678cb7e3ab3d826f056d9b0e96949d29ac6ab3f"
     },
     {
       "path": "plugins/mira-bridge/package-lock.json",
@@ -676,8 +676,8 @@
     },
     {
       "path": "plugins/mira-bridge/packages/windows-worker/src/jobs.test.ts",
-      "bytes": 9125,
-      "sha256": "89973d2a6db0e986f9687abebacf2f77f7a7acb55c893867fd82de48c61877d7"
+      "bytes": 9133,
+      "sha256": "8035278787963592a6d1fb6573c4bc40f1276d11008fc62c696c8eed03df41b7"
     },
     {
       "path": "plugins/mira-bridge/packages/windows-worker/src/jobs.ts",
@@ -781,8 +781,8 @@
     },
     {
       "path": "plugins/mira-bridge/packages/windows-worker/src/transfers.test.ts",
-      "bytes": 6442,
-      "sha256": "f8d0d2c3ccc3ca98c7787a5e54421697b851c6e8de1d7605e52e6b13a5442149"
+      "bytes": 6450,
+      "sha256": "da1633442d7d695c06137153cd44d4ed1e9d9dd3a053bbc32ecdcd619a79cfa6"
     },
     {
       "path": "plugins/mira-bridge/packages/windows-worker/src/transfers.ts",

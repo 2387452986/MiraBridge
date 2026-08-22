@@ -65,6 +65,7 @@ jobs:
         shell: pwsh
         run: |
           node scripts/verify-release-manifest.mjs release-manifest.json .
+          if ($LASTEXITCODE -ne 0) { throw "Release manifest verification failed with exit code $LASTEXITCODE." }
           ./scripts/build-windows-release.ps1 -RuntimeIdentifier ${{ matrix.rid }} -SkipPackage
       - uses: actions/upload-artifact@v7
         with:

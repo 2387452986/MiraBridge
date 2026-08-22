@@ -116,7 +116,7 @@ describe("transfer crash recovery", () => {
       await transfers.cleanupStale();
       await expect(readFile(join(destination, "value.txt"), "utf8")).resolves.toBe("old");
     } finally { state.close(); }
-  });
+  }, 50_000);
 
   it("removes only unreferenced transfer temporaries after 24 hours", async () => {
     const root = await mkdtemp(join(tmpdir(), "mirabridge-transfer-orphan-"));

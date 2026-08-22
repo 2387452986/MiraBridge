@@ -155,7 +155,7 @@ describe("Job cancellation", () => {
       if (child.pid) try { process.kill(child.pid, "SIGKILL"); } catch { /* already terminated */ }
       state.close();
     }
-  });
+  }, 50_000);
 
   it("reports current running log bytes and final terminal counters", async () => {
     const root = await mkdtemp(join(tmpdir(), "mirabridge-running-logs-"));

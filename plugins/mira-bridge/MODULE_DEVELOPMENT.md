@@ -20,11 +20,13 @@ Last updated: 2026-08-23
 4. Updates check at most daily, notify first and apply only after a click. Update/uninstall acquire one Worker-owned transactional execution-maintenance lease that atomically excludes active/new Job admission; config and SQLite are backed up before Velopack applies it.
 5. Core dependencies are bundled. Optional developer/media tools use explicit WinGet actions and documented official-source fallback. GPU drivers are never managed.
 6. RC is unsigned and must show SmartScreen/SHA-256 guidance. Stable `2.0.0` is blocked on signing and physical Windows 10/ARM64 GUI acceptance.
+7. First-public-CI checkout/test gate fixes stay within `2.0.0-rc.1`; public/runtime contracts are unchanged.
 
 ## Verification evidence
 
 - Mac TypeScript strict typecheck: PASS.
 - Mac Vitest: PASS, 26 files / 130 tests after pairing/config, installer-path, public-validator and maintenance-admission additions.
+- Public CI error-before: run `32604692142` exposed cross-checkout Manifest bytes plus two Windows process-identity tests whose intended operation bound exceeds Vitest's default; focused/full Mac verify-after pass and Windows rerun is pending.
 - Isolated Mac managed runtime: PASS with verified Node 24.19.0, build, CLI version and doctor; no Homebrew dependency.
 - Real Windows 11 x64 `.NET 10.0.400` solution build: PASS, 0 warnings / 0 errors.
 - Real Windows client contract runner: PASS, 8/8 including update success/rollback recovery paths.
@@ -44,6 +46,8 @@ Last updated: 2026-08-23
 - Velopack package integrity is necessary but not a product health check; MiraBridge owns the previous-package hash, recovery receipt, Worker/SSH probe and external rollback.
 - RID-qualified release manifests/SBOMs prevent x64/ARM64 asset collision during publication.
 - An active-Job precheck alone is a TOCTOU bug; upgrade/uninstall and durable Job admission must share a transactional SQLite lease owned by the Worker.
+- Byte manifests require LF-normalized Git checkout and explicit PowerShell native-exit checks; `$ErrorActionPreference` alone did not stop a failed Node verifier.
+- Keep slow Windows WMI/taskkill ownership tests real, but give only those tests their operation-sized timeout instead of hiding the signal with a global timeout.
 
 ## Open release gates
 
