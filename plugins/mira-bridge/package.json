@@ -1,0 +1,59 @@
+{
+  "name": "mirabridge",
+  "version": "2.0.0-rc.1",
+  "private": true,
+  "type": "module",
+  "files": [
+    ".codex-plugin",
+    ".mcp.json",
+    "assets",
+    "skills",
+    "packages/mcp-server/dist/index.mjs",
+    "scripts/run-mcp.sh",
+    "scripts/backup-worker-state.mjs",
+    "README.md",
+    "docs",
+    "config.example.toml",
+    "worker.config.example.toml",
+    ".env.example"
+  ],
+  "engines": {
+    "node": ">=24.19 <25"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "build:windows": "node scripts/build.mjs --windows",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:unit": "vitest run packages",
+    "test:integration": "vitest run integration-tests",
+    "test:windows": "vitest run packages/protocol packages/windows-worker && node integration-tests/windows-local.mjs",
+    "smoke:stdio": "node integration-tests/mcp-stdio-smoke.mjs",
+    "smoke:packages": "node integration-tests/package-smoke.mjs",
+    "smoke:cli": "node integration-tests/cli-smoke.mjs",
+    "validate:plugin": "node scripts/validate-release.mjs plugin",
+    "validate:skill": "node scripts/validate-release.mjs skill",
+    "check": "npm run typecheck && npm test && npm run build && npm run validate:plugin && npm run validate:skill"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "cross-spawn": "7.0.6",
+    "playwright-core": "1.62.1",
+    "smol-toml": "1.8.0",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/cross-spawn": "6.0.6",
+    "@types/node": "24.13.3",
+    "esbuild": "0.28.2",
+    "typescript": "7.0.2",
+    "vitest": "4.1.11"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "fsevents": false
+  }
+}

@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="src/MiraBridge.Windows.Core/MiraBridge.Windows.Core.csproj" />
+  <Project Path="src/MiraBridge.Host/MiraBridge.Host.csproj" />
+  <Project Path="src/MiraBridge.Elevated/MiraBridge.Elevated.csproj" />
+  <Project Path="src/MiraBridge.Windows/MiraBridge.Windows.csproj" />
+  <Project Path="tests/MiraBridge.Windows.Tests/MiraBridge.Windows.Tests.csproj" />
+</Solution>

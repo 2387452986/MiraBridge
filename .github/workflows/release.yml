@@ -1,0 +1,121 @@
+name: Prerelease
+
+on:
+  push:
+    tags: ["v2.0.0-rc.1"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  windows:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-2025
+            rid: win-x64
+          - os: windows-11-arm
+            rid: win-arm64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24.19.0
+          cache: npm
+          cache-dependency-path: plugins/mira-bridge/package-lock.json
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.400
+      - shell: pwsh
+        run: |
+          node scripts/verify-release-manifest.mjs release-manifest.json .
+          ./scripts/build-windows-release.ps1 -RuntimeIdentifier ${{ matrix.rid }}
+      - uses: anchore/sbom-action@v0
+        with:
+          path: artifacts/windows/${{ matrix.rid }}/app
+          format: cyclonedx-json
+          output-file: artifacts/windows/${{ matrix.rid }}/MiraBridge.Windows-${{ matrix.rid }}-2.0.0-rc.1.sbom.cdx.json
+      - uses: actions/attest-build-provenance@v3
+        with:
+          subject-path: artifacts/windows/${{ matrix.rid }}/releases/*
+      - uses: actions/upload-artifact@v7
+        with:
+          name: release-${{ matrix.rid }}
+          path: |
+            artifacts/windows/${{ matrix.rid }}/releases/*
+            artifacts/windows/${{ matrix.rid }}/MiraBridge.Windows-${{ matrix.rid }}-2.0.0-rc.1.sha256.json
+            artifacts/windows/${{ matrix.rid }}/MiraBridge.Windows-${{ matrix.rid }}-2.0.0-rc.1.sbom.cdx.json
+
+  mac:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-15
+            arch: arm64
+          - os: macos-15-intel
+            arch: x64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24.19.0
+          cache: npm
+          cache-dependency-path: plugins/mira-bridge/package-lock.json
+      - name: Build Mac runtime payload
+        working-directory: plugins/mira-bridge
+        run: |
+          node ../../scripts/verify-release-manifest.mjs ../../release-manifest.json ../..
+          npm ci
+          npm run check
+          mkdir -p ../../artifacts/mac-${{ matrix.arch }}/mcp ../../artifacts/mac-${{ matrix.arch }}/cli ../../artifacts/mac-${{ matrix.arch }}/scripts
+          cp packages/mcp-server/dist/index.mjs ../../artifacts/mac-${{ matrix.arch }}/mcp/
+          cp packages/cli/dist/index.mjs ../../artifacts/mac-${{ matrix.arch }}/cli/
+          cp scripts/*-mac.sh scripts/run-mcp.sh ../../artifacts/mac-${{ matrix.arch }}/scripts/
+          tar -czf ../../artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.1.tar.gz -C ../../artifacts/mac-${{ matrix.arch }} .
+          shasum -a 256 ../../artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.1.tar.gz > ../../artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.1.tar.gz.sha256
+          npm sbom --omit=dev --sbom-format cyclonedx > ../../artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.1.sbom.cdx.json
+      - uses: actions/attest-build-provenance@v3
+        with:
+          subject-path: artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.1.tar.gz
+      - uses: actions/upload-artifact@v7
+        with:
+          name: release-mac-${{ matrix.arch }}
+          path: |
+            artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.1.tar.gz
+            artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.1.tar.gz.sha256
+            artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.1.sbom.cdx.json
+
+  publish:
+    needs: [windows, mac]
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: release-*
+          path: downloaded-assets
+      - name: Flatten and verify unique release asset names
+        run: |
+          mkdir release-assets
+          while IFS= read -r -d '' file; do
+            name="$(basename "$file")"
+            test ! -e "release-assets/$name" || { echo "Duplicate release asset: $name" >&2; exit 1; }
+            cp "$file" "release-assets/$name"
+          done < <(find downloaded-assets -type f -print0)
+          cp release-manifest.json LICENSE THIRD_PARTY_NOTICES.md SUPPORT_MATRIX.md release-assets/
+      - name: Create aggregate SHA-256 manifest
+        run: |
+          (cd release-assets && find . -maxdepth 1 -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum) > release-assets/SHA256SUMS
+      - name: Create GitHub prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" release-assets/* --prerelease --verify-tag --title "MiraBridge ${GITHUB_REF_NAME#v}" --notes-file docs/release-notes-v2.0.0-rc.1.md

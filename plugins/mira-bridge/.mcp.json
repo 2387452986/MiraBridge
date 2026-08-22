@@ -1,0 +1,27 @@
+{
+  "mcpServers": {
+    "mirabridge": {
+      "command": "bash",
+      "args": ["./scripts/run-mcp.sh"],
+      "cwd": ".",
+      "env_vars": ["MIRABRIDGE_CONFIG", "MIRABRIDGE_INSTALL_ROOT", "XDG_CONFIG_HOME", "HOME"],
+      "tool_timeout_sec": 1900,
+      "default_tools_approval_mode": "writes",
+      "tools": {
+        "mira_bridge_exec": {"approval_mode": "prompt"},
+        "mira_bridge_powershell": {"approval_mode": "prompt"},
+        "mira_bridge_write_text": {"approval_mode": "prompt"},
+        "mira_bridge_edit_text": {"approval_mode": "prompt"},
+        "mira_bridge_manage_path": {"approval_mode": "prompt"},
+        "mira_bridge_start_job": {"approval_mode": "prompt"},
+        "mira_bridge_write_job_input": {"approval_mode": "prompt"},
+        "mira_bridge_resize_job_terminal": {"approval_mode": "prompt"},
+        "mira_bridge_cancel_job": {"approval_mode": "prompt"},
+        "mira_bridge_push": {"approval_mode": "prompt"},
+        "mira_bridge_pull": {"approval_mode": "prompt"},
+        "mira_bridge_empty_recycle_bin": {"approval_mode": "prompt"},
+        "mira_bridge_web_snapshot": {"approval_mode": "prompt"}
+      }
+    }
+  }
+}

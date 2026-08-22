@@ -1,0 +1,20 @@
+{
+  "name": "mirabridge",
+  "interface": {
+    "displayName": "MiraBridge"
+  },
+  "plugins": [
+    {
+      "name": "mira-bridge",
+      "source": {
+        "source": "local",
+        "path": "./plugins/mira-bridge"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>MiraBridge.Windows.Tests</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\MiraBridge.Windows.Core\MiraBridge.Windows.Core.csproj" />
+    <ProjectReference Include="..\..\src\MiraBridge.Windows\MiraBridge.Windows.csproj" />
+  </ItemGroup>
+</Project>

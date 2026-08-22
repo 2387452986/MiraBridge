@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mac:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15, macos-15-intel]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24.19.0
+          cache: npm
+          cache-dependency-path: plugins/mira-bridge/package-lock.json
+      - name: Test plugin and runtime
+        working-directory: plugins/mira-bridge
+        run: |
+          node ../../scripts/verify-release-manifest.mjs ../../release-manifest.json ../..
+          npm ci
+          npm run check
+          npm run smoke:stdio
+          npm run smoke:cli
+          npm run smoke:packages
+          npm audit --omit=dev --audit-level=high
+      - name: Isolated managed-runtime install
+        working-directory: plugins/mira-bridge
+        run: |
+          test_root="$(mktemp -d)"
+          MIRABRIDGE_INSTALL_ROOT="$test_root/runtime" MIRABRIDGE_BIN_DIR="$test_root/bin" MIRABRIDGE_SKIP_PLUGIN_INSTALL=1 ./scripts/install-mac.sh
+          MIRABRIDGE_INSTALL_ROOT="$test_root/runtime" "$test_root/bin/mirabridge" --version
+          MIRABRIDGE_INSTALL_ROOT="$test_root/runtime" MIRABRIDGE_CONFIG="$test_root/config.toml" "$test_root/bin/mirabridge" doctor
+
+  windows:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-2025
+            rid: win-x64
+          - os: windows-11-arm
+            rid: win-arm64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24.19.0
+          cache: npm
+          cache-dependency-path: plugins/mira-bridge/package-lock.json
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.400
+      - name: Build and native smoke
+        shell: pwsh
+        run: |
+          node scripts/verify-release-manifest.mjs release-manifest.json .
+          ./scripts/build-windows-release.ps1 -RuntimeIdentifier ${{ matrix.rid }} -SkipPackage
+      - uses: actions/upload-artifact@v7
+        with:
+          name: windows-${{ matrix.rid }}-unpacked
+          path: artifacts/windows/${{ matrix.rid }}/app
+          if-no-files-found: error

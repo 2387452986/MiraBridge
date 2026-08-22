@@ -1,0 +1,44 @@
+{
+  "name": "mira-bridge",
+  "version": "2.0.0-rc.1",
+  "description": "Expose a paired Windows computer as a remote native tool runtime for an Agent reasoning on macOS.",
+  "author": {
+    "name": "2387452986",
+    "url": "https://github.com/2387452986/MiraBridge"
+  },
+  "homepage": "https://github.com/2387452986/MiraBridge",
+  "repository": "https://github.com/2387452986/MiraBridge",
+  "license": "MIT",
+  "keywords": [
+    "windows",
+    "ssh",
+    "remote-execution",
+    "mcp",
+    "codex"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "MiraBridge",
+    "shortDescription": "Run native Windows tools from a Mac-hosted Agent.",
+    "longDescription": "MiraBridge exposes a paired Windows computer as a deterministic remote tool runtime. Reasoning stays on macOS; Windows only executes structured operations and returns evidence.",
+    "developerName": "MiraBridge",
+    "category": "Productivity",
+    "capabilities": [
+      "Remote Windows tools",
+      "Structured execution",
+      "Durable jobs",
+      "Interactive Windows terminals",
+      "File and directory transfer",
+      "Edge snapshots"
+    ],
+    "defaultPrompt": [
+      "Describe my paired Windows node and its available toolchain.",
+      "Run this project's tests on my Windows computer.",
+      "Inspect a Windows workspace without changing Mac-local files."
+    ],
+    "brandColor": "#0A84FF",
+    "composerIcon": "./assets/mirabridge-logo.png",
+    "logo": "./assets/mirabridge-logo.png"
+  }
+}

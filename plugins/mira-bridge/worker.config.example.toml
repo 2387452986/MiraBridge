@@ -1,0 +1,21 @@
+allowed_roots = ["D:\\Projects", "D:\\Render"]
+desktop_access = "disabled"
+recycle_bin_enabled = false
+web_snapshot_enabled = false
+web_snapshot_allow_external = false
+max_concurrent_jobs = 2
+max_queued_jobs = 32
+max_inline_output_bytes = 65536
+default_timeout_ms = 300000
+max_sync_timeout_ms = 1800000
+
+[storage]
+request_retention_days = 7
+output_retention_days = 7
+job_log_retention_days = 14
+metadata_retention_days = 90
+audit_retention_days = 90
+max_bytes = 10737418240
+min_free_bytes = 2147483648
+max_stream_bytes = 268435456
+maintenance_interval_minutes = 60

@@ -1,0 +1,4 @@
+interface:
+  display_name: "MiraBridge"
+  short_description: "Use a paired Windows PC from macOS"
+  default_prompt: "Use $mira-bridge to inspect my paired Windows computer and report verified results."

@@ -1,0 +1,20 @@
+{
+  "name": "@mirabridge/windows-worker",
+  "version": "2.0.0-rc.1",
+  "type": "module",
+  "files": [
+    "dist/index.cjs",
+    "dist/conpty-host",
+    "README.md"
+  ],
+  "bin": {
+    "mirabridge-worker": "./dist/index.cjs"
+  },
+  "engines": {
+    "node": ">=24.19 <25"
+  },
+  "dependencies": {
+    "@xterm/headless": "6.0.0",
+    "playwright-core": "1.62.1"
+  }
+}

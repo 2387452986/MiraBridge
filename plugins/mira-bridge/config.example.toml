@@ -1,0 +1,10 @@
+[nodes.windows-main]
+host = "192.0.2.20"
+port = 22
+user = "Administrator"
+identity_file = "~/.config/mirabridge/identities/windows-main_ed25519"
+# Example-only value. Pairing replaces it with the live verified fingerprint.
+host_fingerprint = "SHA256:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+worker_command = "\"C:\\Users\\Administrator\\AppData\\Local\\MiraBridge.Windows\\current\\MiraBridge.Host.exe\" worker serve --stdio"
+management_command = "\"C:\\Users\\Administrator\\AppData\\Local\\MiraBridge.Windows\\current\\MiraBridge.Host.exe\" worker"
+connect_timeout_ms = 10000

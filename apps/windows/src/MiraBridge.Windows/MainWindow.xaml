@@ -1,0 +1,133 @@
+<Window x:Class="MiraBridge.Windows.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{DynamicResource AppTitle}" Width="940" Height="720" MinWidth="760" MinHeight="600"
+        WindowStartupLocation="CenterScreen" Background="#F5F7FA" Icon="Assets/mirabridge.ico">
+  <Grid Margin="24">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <Grid Grid.Row="0" Margin="0,0,0,16">
+      <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+      <StackPanel Orientation="Horizontal">
+        <Image Source="Assets/mirabridge.ico" Width="48" Height="48" Margin="0,0,14,0" />
+        <StackPanel>
+          <TextBlock Text="MiraBridge for Windows" FontSize="24" FontWeight="SemiBold" />
+          <TextBlock Text="{DynamicResource Subtitle}" Foreground="#5D6673" />
+        </StackPanel>
+      </StackPanel>
+      <ComboBox x:Name="LanguageSelector" Grid.Column="1" Width="150" Height="34" SelectedIndex="0" AutomationProperties.Name="Language">
+        <ComboBoxItem Content="简体中文" Tag="zh-CN" />
+        <ComboBoxItem Content="English" Tag="en-US" />
+      </ComboBox>
+    </Grid>
+
+    <Border Grid.Row="1" Background="White" CornerRadius="10" Padding="16" Margin="0,0,0,14" BorderBrush="#DCE2EA" BorderThickness="1">
+      <Grid>
+        <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+        <Ellipse Width="12" Height="12" Fill="{StaticResource MiraBlue}" VerticalAlignment="Center" Margin="0,0,12,0" />
+        <StackPanel Grid.Column="1">
+          <TextBlock Text="{Binding Status}" FontSize="18" FontWeight="SemiBold" />
+          <TextBlock Text="{DynamicResource VersionLine}" Foreground="#5D6673" />
+        </StackPanel>
+        <Button Grid.Column="2" Content="{DynamicResource Refresh}" Command="{Binding RefreshCommand}" AutomationProperties.Name="Refresh MiraBridge status" />
+      </Grid>
+    </Border>
+
+    <TabControl Grid.Row="2" Background="White" BorderBrush="#DCE2EA">
+      <TabItem Header="{DynamicResource SetupTab}">
+        <ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel Margin="22">
+          <TextBlock Text="{DynamicResource SetupStep1Title}" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,8" />
+          <TextBlock Text="{DynamicResource SetupStep1Description}" TextWrapping="Wrap" Foreground="#4E5865" />
+          <TextBlock Text="{DynamicResource DefaultRoot}" FontWeight="SemiBold" Margin="0,18,0,0" />
+          <TextBox Text="{Binding DefaultRoot, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.Name="Default allowed root" />
+          <Button Content="{DynamicResource Repair}" Command="{Binding RepairCommand}" HorizontalAlignment="Left" />
+          <Separator Margin="0,20" />
+          <TextBlock Text="{DynamicResource SetupStep2Title}" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,8" />
+          <TextBlock Text="{DynamicResource PairRequest}" FontWeight="SemiBold" />
+          <TextBox Text="{Binding PairRequestCode, UpdateSourceTrigger=PropertyChanged}" Height="88" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" AutomationProperties.Name="Mac pairing request code" />
+          <Button Content="{DynamicResource Pair}" Command="{Binding PairCommand}" HorizontalAlignment="Left" />
+          <TextBlock Text="{DynamicResource PairResponse}" FontWeight="SemiBold" Margin="0,14,0,0" />
+          <TextBox Text="{Binding PairResponseCode, Mode=OneWay}" Height="88" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" AutomationProperties.Name="Windows pairing response code" />
+          <Button Content="{DynamicResource CopyResponse}" Command="{Binding CopyResponseCommand}" HorizontalAlignment="Left" />
+        </StackPanel></ScrollViewer>
+      </TabItem>
+
+      <TabItem Header="{DynamicResource StatusTab}">
+        <Grid Margin="22">
+          <TextBox Text="{Binding Details, Mode=OneWay}" IsReadOnly="True" FontFamily="Consolas" FontSize="13" AcceptsReturn="True" TextWrapping="NoWrap" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" AutomationProperties.Name="MiraBridge readiness details" />
+        </Grid>
+      </TabItem>
+
+      <TabItem Header="{DynamicResource ConfigTab}">
+        <ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel Margin="22">
+          <TextBlock Text="{DynamicResource AllowedRoots}" FontSize="18" FontWeight="SemiBold" />
+          <TextBlock Text="{DynamicResource AllowedRootsDescription}" TextWrapping="Wrap" Foreground="#4E5865" Margin="0,4,0,10" />
+          <TextBox Text="{Binding DefaultRoot, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.Name="Allowed root to add" />
+          <WrapPanel>
+            <Button Content="{DynamicResource AddRoot}" Command="{Binding AddRootCommand}" />
+            <Button Content="{DynamicResource RemoveRoot}" Command="{Binding RemoveRootCommand}" />
+          </WrapPanel>
+          <Separator Margin="0,20" />
+          <TextBlock Text="{DynamicResource Capabilities}" FontSize="18" FontWeight="SemiBold" />
+          <StackPanel Orientation="Horizontal" Margin="0,12,0,8">
+            <TextBlock Text="{DynamicResource Desktop}" Width="180" VerticalAlignment="Center" />
+            <ComboBox SelectedValue="{Binding DesktopAccess}" SelectedValuePath="Content" Width="170" AutomationProperties.Name="Desktop access">
+              <ComboBoxItem Content="disabled" /><ComboBoxItem Content="read-only" /><ComboBoxItem Content="read-write" />
+            </ComboBox>
+          </StackPanel>
+          <CheckBox Content="{DynamicResource Recycle}" IsChecked="{Binding RecycleBin}" Margin="0,8" />
+          <CheckBox Content="{DynamicResource WebSnapshot}" IsChecked="{Binding WebSnapshot}" Margin="0,8" />
+          <TextBlock Text="{DynamicResource CapabilityDescription}" TextWrapping="Wrap" Foreground="#4E5865" Margin="0,4,0,10" />
+          <Button Content="{DynamicResource ApplyCapabilities}" Command="{Binding SaveCapabilitiesCommand}" HorizontalAlignment="Left" />
+          <Separator Margin="0,20" />
+          <TextBlock Text="{DynamicResource PairedMacs}" FontSize="18" FontWeight="SemiBold" />
+          <TextBox Text="{Binding PairedMacs, Mode=OneWay}" IsReadOnly="True" MinHeight="70" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" AutomationProperties.Name="Paired Mac computers" />
+          <TextBlock Text="{DynamicResource RevokeFingerprint}" FontWeight="SemiBold" Margin="0,12,0,0" />
+          <TextBox Text="{Binding RevokeFingerprint, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.Name="Paired Mac public key fingerprint to revoke" />
+          <Button Content="{DynamicResource RevokePairing}" Command="{Binding RevokePairingCommand}" HorizontalAlignment="Left" />
+        </StackPanel></ScrollViewer>
+      </TabItem>
+
+      <TabItem Header="{DynamicResource MaintenanceTab}">
+        <ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel Margin="22">
+          <TextBlock Text="{DynamicResource UpdateSupport}" FontSize="18" FontWeight="SemiBold" />
+          <TextBlock Text="{DynamicResource UnsignedWarning}" TextWrapping="Wrap" Foreground="#A24B00" Margin="0,8,0,10" />
+          <WrapPanel>
+            <Button Content="{DynamicResource CheckUpdate}" Command="{Binding CheckUpdateCommand}" />
+            <Button Content="{DynamicResource Diagnostics}" Command="{Binding DiagnosticsCommand}" />
+            <Button Content="{DynamicResource ReportIssue}" Command="{Binding OpenIssueCommand}" ToolTip="Generate and review a redacted diagnostic preview first." />
+            <Button Content="{DynamicResource Help}" Command="{Binding HelpCommand}" />
+          </WrapPanel>
+          <Separator Margin="0,20" />
+          <TextBlock Text="{DynamicResource OptionalTools}" FontSize="18" FontWeight="SemiBold" />
+          <TextBlock Text="{DynamicResource OptionalToolsDescription}" TextWrapping="Wrap" Foreground="#4E5865" Margin="0,4,0,10" />
+          <WrapPanel>
+            <Button Content="Git" Command="{Binding InstallGitCommand}" />
+            <Button Content="PowerShell 7" Command="{Binding InstallPowerShellCommand}" />
+            <Button Content="Python" Command="{Binding InstallPythonCommand}" />
+            <Button Content="Node.js SDK" Command="{Binding InstallNodeCommand}" />
+            <Button Content=".NET 10 SDK" Command="{Binding InstallDotNetCommand}" />
+            <Button Content="FFmpeg" Command="{Binding InstallFfmpegCommand}" />
+          </WrapPanel>
+          <Separator Margin="0,20" />
+          <TextBlock Text="{DynamicResource UninstallTitle}" FontSize="18" FontWeight="SemiBold" />
+          <TextBlock Text="{DynamicResource UninstallDescription}" TextWrapping="Wrap" Foreground="#4E5865" Margin="0,4,0,10" />
+          <WrapPanel>
+            <Button Content="{DynamicResource UninstallPreserve}" Command="{Binding UninstallPreserveCommand}" />
+            <Button Content="{DynamicResource UninstallAll}" Command="{Binding UninstallAllCommand}" />
+          </WrapPanel>
+        </StackPanel></ScrollViewer>
+      </TabItem>
+    </TabControl>
+
+    <Grid Grid.Row="3" Margin="0,12,0,0">
+      <ProgressBar IsIndeterminate="True" Visibility="{Binding Busy, Converter={StaticResource BooleanToVisibilityConverter}}" Height="3" VerticalAlignment="Top" />
+      <TextBlock Text="{Binding Message}" TextWrapping="Wrap" Foreground="#3B4652" Margin="0,8,0,0" />
+    </Grid>
+  </Grid>
+</Window>

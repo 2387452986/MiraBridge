@@ -1,0 +1,14 @@
+.DS_Store
+._*
+.idea/
+.vscode/
+artifacts/
+**/bin/
+**/obj/
+**/node_modules/
+**/dist/
+**/coverage/
+*.tgz
+*.nupkg
+*.snupkg
+*.partial
