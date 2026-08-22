@@ -133,7 +133,7 @@ succeed against personal data.
 | Windows code signing | NOT_RUN | unsigned RC by design; mandatory before stable `2.0.0` |
 | SBOM and GitHub attestation | PASS_REAL | prerelease run `32605676616` published per-platform CycloneDX SBOMs and SLSA provenance; both Windows Setup and both Mac runtime downloads matched `SHA256SUMS`, and provenance verification was constrained to this repository, tag and release workflow |
 
-The public prerelease contains 24 assets. Windows x64 Setup is 249,669,078
+The public prerelease contains 27 assets. Windows x64 Setup is 249,669,078
 bytes with SHA-256 `40e295b2d25a4d3b002fab2d374f999496b595f72daa155de0f5f1696e8402e9`;
 Windows ARM64 Setup is 235,596,023 bytes with SHA-256
 `721ef7f555fa6037cd5859dd8083d3df3800536c9e0d031ecde0647c2d200151`.
