@@ -19,30 +19,74 @@ public sealed class WindowsOperations : IWindowsOperations
 
     public async Task<WindowsStatus> GetStatusAsync(CancellationToken cancellationToken = default)
     {
+        string[] addresses = WindowsHostInfo.AddressCandidates();
         var details = new Dictionary<string, object?>
         {
-            ["version"] = "2.0.0-rc.1",
+            ["version"] = "2.0.0-rc.2",
             ["os"] = RuntimeInformation.OSDescription,
             ["architecture"] = WindowsHostInfo.Architecture,
-            ["addresses"] = WindowsHostInfo.AddressCandidates()
+            ["addresses"] = addresses
         };
         bool sshReady = false;
+        string hostFingerprint = "Unavailable";
         try
         {
             ProcessResult ssh = await ProcessRunner.RunAsync("sc.exe", ["query", "sshd"], TimeSpan.FromSeconds(15), cancellationToken);
             sshReady = ssh.ExitCode == 0 && ssh.Stdout.Contains("RUNNING", StringComparison.OrdinalIgnoreCase);
             details["ssh"] = sshReady ? "running" : "not running";
-            details["host_fingerprint"] = await WindowsHostInfo.HostFingerprintAsync(cancellationToken);
+            hostFingerprint = await WindowsHostInfo.HostFingerprintAsync(cancellationToken);
+            details["host_fingerprint"] = hostFingerprint;
         }
         catch (Exception error) { details["ssh_error"] = error.Message; }
         bool workerReady = false;
+        bool browserReady = false;
+        bool terminalReady = false;
+        string architecture = WindowsHostInfo.Architecture;
+        int activeJobs = 0;
+        long storageUsedBytes = 0;
+        long storageQuotaBytes = 0;
+        IReadOnlyList<string> allowedRoots = [];
+        string desktopAccess = "disabled";
+        bool recycleBinEnabled = false;
+        bool webSnapshotEnabled = false;
         try
         {
             using JsonDocument worker = await _worker.DoctorAsync(cancellationToken);
             details["worker"] = worker.RootElement.Clone();
             workerReady = worker.RootElement.TryGetProperty("runtime_ready", out JsonElement runtimeReady) && runtimeReady.GetBoolean();
+            if (worker.RootElement.TryGetProperty("architecture", out JsonElement architectureElement)
+                && architectureElement.TryGetProperty("architecture", out JsonElement nativeArchitecture))
+                architecture = nativeArchitecture.GetString() ?? architecture;
+            terminalReady = worker.RootElement.TryGetProperty("conpty", out JsonElement conpty)
+                && conpty.TryGetProperty("available", out JsonElement terminalAvailable)
+                && terminalAvailable.GetBoolean();
+            browserReady = worker.RootElement.TryGetProperty("edge", out JsonElement edge)
+                && edge.TryGetProperty("executable", out JsonElement edgeExecutable)
+                && edgeExecutable.ValueKind == JsonValueKind.String
+                && !string.IsNullOrWhiteSpace(edgeExecutable.GetString());
+            if (worker.RootElement.TryGetProperty("storage", out JsonElement storage))
+            {
+                if (storage.TryGetProperty("used_bytes", out JsonElement usedBytes)) storageUsedBytes = usedBytes.GetInt64();
+                if (storage.TryGetProperty("quota_bytes", out JsonElement quotaBytes)) storageQuotaBytes = quotaBytes.GetInt64();
+            }
             using JsonDocument jobs = await _worker.JobsListAsync(cancellationToken);
             details["jobs"] = jobs.RootElement.Clone();
+            if (jobs.RootElement.ValueKind == JsonValueKind.Array)
+            {
+                activeJobs = jobs.RootElement.EnumerateArray().Count(job =>
+                    job.TryGetProperty("executor_status", out JsonElement status)
+                    && status.GetString() is "queued" or "starting" or "running");
+            }
+            using JsonDocument config = await _worker.ConfigShowAsync(cancellationToken);
+            details["config"] = config.RootElement.Clone();
+            if (config.RootElement.TryGetProperty("result", out JsonElement result))
+            {
+                if (result.TryGetProperty("allowed_roots", out JsonElement roots) && roots.ValueKind == JsonValueKind.Array)
+                    allowedRoots = roots.EnumerateArray().Select(root => root.GetString()).OfType<string>().ToArray();
+                if (result.TryGetProperty("desktop_access", out JsonElement desktop)) desktopAccess = desktop.GetString() ?? desktopAccess;
+                if (result.TryGetProperty("recycle_bin_enabled", out JsonElement recycle)) recycleBinEnabled = recycle.GetBoolean();
+                if (result.TryGetProperty("web_snapshot_enabled", out JsonElement webSnapshot)) webSnapshotEnabled = webSnapshot.GetBoolean();
+            }
         }
         catch (Exception error) { details["worker_error"] = error.Message; }
         bool recoveryReady = true;
@@ -62,7 +106,24 @@ public sealed class WindowsOperations : IWindowsOperations
         }
         bool ready = sshReady && workerReady && recoveryReady;
         string json = JsonSerializer.Serialize(details, new JsonSerializerOptions(JsonSerializerDefaults.Web) { WriteIndented = true });
-        return new WindowsStatus(ready, ready ? "Ready" : "Needs Attention", DiagnosticRedactor.Redact(json));
+        return new WindowsStatus(
+            ready,
+            ready ? "Ready" : "Needs Attention",
+            DiagnosticRedactor.Redact(json),
+            sshReady,
+            workerReady,
+            browserReady,
+            terminalReady,
+            architecture,
+            addresses.Length == 0 ? "Unavailable" : string.Join("  ·  ", addresses),
+            hostFingerprint,
+            activeJobs,
+            storageUsedBytes,
+            storageQuotaBytes,
+            allowedRoots,
+            desktopAccess,
+            recycleBinEnabled,
+            webSnapshotEnabled);
     }
 
     public async Task<string> RepairAsync(string root, CancellationToken cancellationToken = default)
@@ -137,7 +198,7 @@ public sealed class WindowsOperations : IWindowsOperations
         try
         {
             await BackupWorkerStateAsync(cancellationToken);
-            recovery = await _updateRecovery.PrepareAsync("2.0.0-rc.1", update.TargetFullRelease.Version.ToString(), cancellationToken);
+            recovery = await _updateRecovery.PrepareAsync("2.0.0-rc.2", update.TargetFullRelease.Version.ToString(), cancellationToken);
             cancellationToken.ThrowIfCancellationRequested();
             await manager.DownloadUpdatesAsync(update);
             manager.ApplyUpdatesAndRestart(update);
@@ -159,7 +220,7 @@ public sealed class WindowsOperations : IWindowsOperations
         {
             generated_at = DateTimeOffset.UtcNow,
             product = "MiraBridge for Windows",
-            version = "2.0.0-rc.1",
+            version = "2.0.0-rc.2",
             status = status.Summary,
             architecture = WindowsHostInfo.Architecture,
             paired_mac_count = pairings.Count,

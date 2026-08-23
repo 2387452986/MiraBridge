@@ -95,6 +95,12 @@ internal static class Program
         await viewModel.InitializeAsync();
         Equal("Ready", viewModel.Status);
         True(viewModel.Details.Contains("x64", StringComparison.Ordinal));
+        True(viewModel.IsReady);
+        True(viewModel.SshReady && viewModel.WorkerReady && viewModel.BrowserReady && viewModel.TerminalReady);
+        Equal("x64", viewModel.Architecture);
+        Equal(1, viewModel.ActiveJobs);
+        Equal(1, viewModel.AllowedRoots.Count);
+        True(viewModel.StorageSummary.Contains("GB", StringComparison.Ordinal));
         True(viewModel.NotBusy);
     }
 
@@ -144,7 +150,7 @@ internal static class Program
 
     private static string RequestCode(DateTimeOffset created, DateTimeOffset expires)
     {
-        var request = new PairingRequest("request", 1, created, expires, "1pRvuX6uLgTvJx4oFyxskU_X6gK5bNbC", "windows-main", PublicKey, PairingCodec.FingerprintPublicKey(PublicKey), new PairingMac("Test Mac", "arm64", "2.0.0-rc.1"));
+        var request = new PairingRequest("request", 1, created, expires, "1pRvuX6uLgTvJx4oFyxskU_X6gK5bNbC", "windows-main", PublicKey, PairingCodec.FingerprintPublicKey(PublicKey), new PairingMac("Test Mac", "arm64", "2.0.0-rc.2"));
         byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(request, new JsonSerializerOptions(JsonSerializerDefaults.Web));
         return PairingCodec.Prefix + Convert.ToBase64String(bytes).TrimEnd('=').Replace('+', '-').Replace('/', '_');
     }
@@ -182,7 +188,24 @@ internal static class Program
 
     private sealed class FakeOperations : IWindowsOperations
     {
-        public Task<WindowsStatus> GetStatusAsync(CancellationToken cancellationToken = default) => Task.FromResult(new WindowsStatus(true, "Ready", "x64"));
+        public Task<WindowsStatus> GetStatusAsync(CancellationToken cancellationToken = default) => Task.FromResult(new WindowsStatus(
+            true,
+            "Ready",
+            "x64",
+            SshReady: true,
+            WorkerReady: true,
+            BrowserReady: true,
+            TerminalReady: true,
+            Architecture: "x64",
+            Addresses: "192.168.1.2",
+            HostFingerprint: "SHA256:test",
+            ActiveJobs: 1,
+            StorageUsedBytes: 1024 * 1024 * 1024,
+            StorageQuotaBytes: 10L * 1024 * 1024 * 1024,
+            AllowedRoots: [@"D:\MiraBridgeRoot"],
+            DesktopAccess: "read-write",
+            RecycleBinEnabled: true,
+            WebSnapshotEnabled: true));
         public Task<string> RepairAsync(string root, CancellationToken cancellationToken = default) => Task.FromResult("ok");
         public Task<string> PairAsync(string requestCode, CancellationToken cancellationToken = default) => Task.FromResult("response");
         public Task<IReadOnlyList<PairingRecord>> ListPairingsAsync(CancellationToken cancellationToken = default) => Task.FromResult<IReadOnlyList<PairingRecord>>([]);

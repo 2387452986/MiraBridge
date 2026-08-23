@@ -2,7 +2,24 @@ using MiraBridge.Windows.Core;
 
 namespace MiraBridge.Windows;
 
-public sealed record WindowsStatus(bool Ready, string Summary, string Details);
+public sealed record WindowsStatus(
+    bool Ready,
+    string Summary,
+    string Details,
+    bool SshReady = false,
+    bool WorkerReady = false,
+    bool BrowserReady = false,
+    bool TerminalReady = false,
+    string Architecture = "Unknown",
+    string Addresses = "—",
+    string HostFingerprint = "—",
+    int ActiveJobs = 0,
+    long StorageUsedBytes = 0,
+    long StorageQuotaBytes = 0,
+    IReadOnlyList<string>? AllowedRoots = null,
+    string DesktopAccess = "disabled",
+    bool RecycleBinEnabled = false,
+    bool WebSnapshotEnabled = false);
 
 public interface IWindowsOperations
 {

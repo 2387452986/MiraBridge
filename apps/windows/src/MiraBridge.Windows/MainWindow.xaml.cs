@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace MiraBridge.Windows;
 
@@ -10,10 +11,17 @@ public partial class MainWindow : Window
 {
     private readonly MainViewModel _viewModel;
     private readonly NotifyIcon _tray;
+    private readonly bool _startInTray;
     private bool _exitRequested;
 
     public MainWindow()
+        : this((System.Windows.Application.Current as App)?.StartInTray ?? false)
     {
+    }
+
+    internal MainWindow(bool startInTray)
+    {
+        _startInTray = startInTray;
         _viewModel = new MainViewModel(new WindowsOperations());
         InitializeComponent();
         DataContext = _viewModel;
@@ -34,7 +42,7 @@ public partial class MainWindow : Window
         _tray.DoubleClick += (_, _) => ShowFromTray();
         Loaded += async (_, _) =>
         {
-            if (Environment.GetCommandLineArgs().Contains("--tray", StringComparer.Ordinal)) Hide();
+            if (_startInTray) Hide();
             await _viewModel.InitializeAsync();
             _tray.Text = _viewModel.Status == "Ready" ? "MiraBridge — Ready" : "MiraBridge — Needs Attention";
         };
@@ -65,11 +73,35 @@ public partial class MainWindow : Window
         return menu;
     }
 
-    private void ShowFromTray()
+    internal void ShowFromTray()
     {
         Show();
         WindowState = WindowState.Normal;
         Activate();
+        Focus();
+    }
+
+    private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs eventArgs)
+    {
+        if (eventArgs.ChangedButton != MouseButton.Left) return;
+        if (eventArgs.ClickCount == 2)
+        {
+            WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+            return;
+        }
+        DragMove();
+    }
+
+    private void Minimize_Click(object sender, RoutedEventArgs eventArgs) => WindowState = WindowState.Minimized;
+
+    private void MaximizeRestore_Click(object sender, RoutedEventArgs eventArgs) =>
+        WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+
+    private void Close_Click(object sender, RoutedEventArgs eventArgs) => Close();
+
+    private void NavigateToPairing_Click(object sender, RoutedEventArgs eventArgs)
+    {
+        Navigation.SelectedIndex = 1;
     }
 
     private void LanguageChanged(object sender, SelectionChangedEventArgs eventArgs)

@@ -1,1 +1,1 @@
-{"name":"@mirabridge/mcp-server","version":"2.0.0-rc.1","private":true,"type":"module","bin":{"mirabridge-mcp":"./dist/index.mjs"}}
+{"name":"@mirabridge/mcp-server","version":"2.0.0-rc.2","private":true,"type":"module","bin":{"mirabridge-mcp":"./dist/index.mjs"}}

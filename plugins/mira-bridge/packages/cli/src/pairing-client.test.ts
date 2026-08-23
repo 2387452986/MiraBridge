@@ -21,7 +21,7 @@ function request(): PairingRequest {
     node_id: "windows-main",
     public_key: publicKey,
     public_key_fingerprint: fingerprintOpenSshPublicKey(publicKey),
-    mac: { name: "test-mac", architecture: "arm64", mirabridge_version: "2.0.0-rc.1" },
+    mac: { name: "test-mac", architecture: "arm64", mirabridge_version: "2.0.0-rc.2" },
   };
 }
 
@@ -35,7 +35,7 @@ function response(value = request()): PairingResponse {
     request_nonce: value.nonce,
     node_id: value.node_id,
     public_key_fingerprint: value.public_key_fingerprint,
-    windows: { hostname: "WINDOWS-NODE", architecture: "x64", user: "Administrator", mirabridge_version: "2.0.0-rc.1" },
+    windows: { hostname: "WINDOWS-NODE", architecture: "x64", user: "Administrator", mirabridge_version: "2.0.0-rc.2" },
     ssh: { addresses: [testAddress], port: 22, host_fingerprint: testHostFingerprint, host_key_algorithm: "ssh-ed25519" },
     worker_command: "mirabridge-worker serve --stdio",
     management_command: "mirabridge-worker",

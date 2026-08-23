@@ -1,10 +1,71 @@
-# MiraBridge 2.0.0-rc.1 test report
+# MiraBridge test report
 
 Date: 2026-08-23
 
 Status vocabulary is intentionally closed: `PASS_REAL`,
 `PASS_SAFE_REJECTION`, `FAIL_PRODUCT`, `FAIL_ENVIRONMENT`, and `NOT_RUN`.
 Mock, compile-only, CI-targeted, and real-LAN evidence are kept separate.
+
+## 2.0.0-rc.2 current release candidate
+
+| Contract | Observed |
+|---|---|
+| Product/packages | `2.0.0-rc.2` |
+| RPC / MCP surface | `2.0` / exactly 28 tools (unchanged) |
+| Worker database | SQLite `user_version=5` (unchanged) |
+| Windows default | Administrator-first; Worker path and approval boundaries remain enforced |
+
+### Mac native gate
+
+| Gate | Result | Evidence |
+|---|---|---|
+| Strict/type/unit/integration | PASS_REAL | managed Node 24.19.0; 26 Vitest files / 130 tests, typecheck, build, plugin contract and Skill contract all passed |
+| Official validators | PASS_REAL | OpenAI plugin validator and Skill quick validator passed against the public plugin root |
+| Production dependencies | PASS_REAL | `npm audit --omit=dev --audit-level=high`: 0 vulnerabilities |
+| Package inspection | PASS_REAL | root, `@mirabridge/cli` and `@mirabridge/windows-worker` dry-runs reported `2.0.0-rc.2` and valid payloads |
+| Public-source hygiene | PASS_REAL | no private-key marker, GitHub credential, real LAN address, workstation-absolute path or pinned node fingerprint in publishable files; internal Agent/module summaries and development checklists are excluded from the public tree |
+
+### Real Windows 11 x64 gate
+
+Environment: physical Administrator node (hostname/address redacted), Windows
+11 Pro x64, Node 24.19.0 bundle, .NET SDK 10.0.400 for build, Edge, SSH and
+mixed NVIDIA/AMD/virtual display adapters.
+
+| Gate | Result | Evidence |
+|---|---|---|
+| Final native release build | PASS_REAL | durable Job `job_d2luZG93cy1tYWlu_8c0edfb9-d8cf-4113-a127-618967bc030f`, exit 0; Windows Worker suite 102/102, WPF client checks 8/8, packaged Worker `2.0.0-rc.2` |
+| x64 Setup | PASS_REAL | 251,094,116 bytes; SHA-256 `b9e2a863af8c4d565a9de79b856ff0f1d7271d2eb6f34395b72a0511bcf37669` |
+| Upgrade protection | PASS_REAL | no active Job; `worker.toml`, SQLite `VACUUM INTO` and the rc.1 full package were backed up and hashed before replacement |
+| Real rc.1 → rc.2 replacement | PASS_REAL | uninstall 0, install 0, Worker doctor Ready, current Worker/App `2.0.0-rc.2`, durable data present, ED25519 Host Key unchanged, SSH Running/Automatic |
+| Single instance / tray owner | PASS_REAL | rc.1 error-before reproduced three true app processes; rc.2 headless gate and interactive installed acceptance each launched five duplicates and retained exactly one `current` app process |
+| Cold-start activation race | PASS_REAL | an immediate second launch during tray startup activated the original window; the final window handle was nonzero and no Application/.NET crash event appeared |
+| Installed UI | PASS_REAL | installed rc.2 window captured at 1180×780, current process count 1; capture 85,746 bytes / SHA-256 `c959121cbd53e661276b23c58db82640793ccd6eb0004945bcc66820ef6638d3` |
+| Installed icon | PASS_REAL | icon extracted from the installed executable is the new transparent Figure-2 mascot; 2,454-byte PNG / SHA-256 `2c900f12ba458f84423d3ad0dc8e5c442196dc3355edfb3562936f4bfc37924f` |
+| Durable state preservation | PASS_REAL | before: 128 Jobs / 92 Workspaces / 3,318 Requests / 646 Outputs; after: 128 / 93 / 3,340 / 655, with SQLite v5 and no count decrease |
+| Acceptance-task cleanup | PASS_REAL | one-shot install and UI-capture Scheduled Tasks were removed after their receipts were read |
+
+The first installed-package rerun counted three same-named processes and failed.
+Path-level evidence showed one real `current` tray application plus transient
+Velopack root launchers; seconds later only the `current` process remained. The
+acceptance owner was fixed to count the package's actual executable path and
+wait for launcher convergence. The unchanged product binary then passed the
+same reinstall and five-click scenario. This harness correction is not used to
+erase the original failure receipt.
+
+The real UI screenshots contain local addresses and a Host Fingerprint. They
+remain only under the ignored local `artifacts/` tree and are intentionally not
+part of the public README or release assets.
+
+### rc.2 publication state
+
+| Gate | Result | Notes |
+|---|---|---|
+| Public main/tag/prerelease | NOT_RUN | recorded only after the final manifest, commit, tag and GitHub workflow complete |
+| Windows ARM64 native CI | NOT_RUN | rc.1 passed the native ARM runner; rc.2 must rerun rather than inherit that result |
+| Physical Windows 10 / ARM64 GUI | NOT_RUN | stable `2.0.0` gate |
+| Windows code signing | NOT_RUN | rc.2 remains explicitly unsigned |
+
+## Historical baseline: 2.0.0-rc.1
 
 ## Release identity
 

@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-version="${1:-2.0.0-rc.1}"
+version="${1:-2.0.0-rc.2}"
 case "$version" in
   v*) version=${version#v} ;;
 esac

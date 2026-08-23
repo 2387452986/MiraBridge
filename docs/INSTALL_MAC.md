@@ -2,7 +2,7 @@
 
 ## Supported path
 
-The user asks Codex to install the fixed `v2.0.0-rc.1` tag. Codex should:
+The user asks Codex to install the fixed `v2.0.0-rc.2` tag. Codex should:
 
 1. Clone `https://github.com/2387452986/MiraBridge` at that exact tag.
 2. Run `node scripts/verify-release-manifest.mjs release-manifest.json .` if a suitable Node is already available; `install-mac.sh` repeats the check with its managed Node.
@@ -14,22 +14,22 @@ The installer uses macOS `curl`, `tar`, `shasum` and `sh`. It installs, without 
 ```text
 ~/Library/Application Support/MiraBridge/
 ├── cache/                         # verified official Node archive
-├── releases/2.0.0-rc.1/
+├── releases/2.0.0-rc.2/
 │   ├── node/                      # managed Node 24.19.0
 │   ├── mcp/index.mjs
 │   ├── cli/index.mjs
 │   └── scripts/
-└── current -> releases/2.0.0-rc.1
+└── current -> releases/2.0.0-rc.2
 
 ~/.local/bin/mirabridge
 ~/.config/mirabridge/              # pairing keys, config, managed known_hosts
 ```
 
-It registers `2387452986/MiraBridge` at ref `v2.0.0-rc.1` using the official Codex marketplace CLI, then installs `mira-bridge@mirabridge`.
+It registers `2387452986/MiraBridge` at ref `v2.0.0-rc.2` using the official Codex marketplace CLI, then installs `mira-bridge@mirabridge`.
 
 ## Update and rollback
 
-`mirabridge update 2.0.0-rc.1` downloads the exact tag archive and invokes the same idempotent installer. A new release is staged completely, doctor runs, and only then does the atomic `current` symlink switch remain active. Failure restores the previous link.
+`mirabridge update 2.0.0-rc.2` downloads the exact tag archive and invokes the same idempotent installer. A new release is staged completely, doctor runs, and only then does the atomic `current` symlink switch remain active. Failure restores the previous link.
 
 ## Uninstall
 

@@ -7,16 +7,240 @@
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Resources/Strings.zh-CN.xaml" />
       </ResourceDictionary.MergedDictionaries>
+
       <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-      <SolidColorBrush x:Key="MiraBlue" Color="#1677FF" />
-      <Style TargetType="Button">
-        <Setter Property="Padding" Value="16,9" />
-        <Setter Property="Margin" Value="0,4,8,4" />
-        <Setter Property="MinWidth" Value="112" />
+      <SolidColorBrush x:Key="MiraBlue" Color="#635BFF" />
+      <SolidColorBrush x:Key="MiraBlueDark" Color="#5148E5" />
+      <SolidColorBrush x:Key="CanvasBrush" Color="#F4F5F8" />
+      <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF" />
+      <SolidColorBrush x:Key="PrimaryTextBrush" Color="#17191F" />
+      <SolidColorBrush x:Key="SecondaryTextBrush" Color="#6B7080" />
+      <SolidColorBrush x:Key="DividerBrush" Color="#E5E7ED" />
+      <SolidColorBrush x:Key="SuccessBrush" Color="#18A779" />
+      <SolidColorBrush x:Key="WarningBrush" Color="#F59E0B" />
+      <SolidColorBrush x:Key="DangerBrush" Color="#DC2626" />
+
+      <Style TargetType="Window">
+        <Setter Property="FontFamily" Value="Segoe UI Variable Text, Segoe UI" />
+        <Setter Property="TextOptions.TextFormattingMode" Value="Display" />
+        <Setter Property="TextOptions.TextRenderingMode" Value="ClearType" />
       </Style>
+
+      <Style TargetType="Button">
+        <Setter Property="Foreground" Value="#273142" />
+        <Setter Property="Background" Value="#F1F3F7" />
+        <Setter Property="BorderBrush" Value="#E2E6EC" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="16,10" />
+        <Setter Property="MinHeight" Value="40" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="Button">
+              <Border x:Name="ButtonSurface" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="10" Padding="{TemplateBinding Padding}">
+                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" RecognizesAccessKey="True" />
+              </Border>
+              <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="ButtonSurface" Property="Opacity" Value="0.84" /></Trigger>
+                <Trigger Property="IsPressed" Value="True"><Setter TargetName="ButtonSurface" Property="Opacity" Value="0.68" /></Trigger>
+                <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="ButtonSurface" Property="BorderBrush" Value="#60A5FA" /></Trigger>
+                <Trigger Property="IsEnabled" Value="False"><Setter TargetName="ButtonSurface" Property="Opacity" Value="0.42" /><Setter Property="Cursor" Value="Arrow" /></Trigger>
+              </ControlTemplate.Triggers>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+
+      <Style x:Key="PrimaryButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Background" Value="{StaticResource MiraBlueDark}" />
+        <Setter Property="BorderBrush" Value="{StaticResource MiraBlueDark}" />
+      </Style>
+      <Style x:Key="QuietButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Background" Value="White" />
+      </Style>
+      <Style x:Key="DangerButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Foreground" Value="{StaticResource DangerBrush}" />
+        <Setter Property="Background" Value="#FFF5F5" />
+        <Setter Property="BorderBrush" Value="#FECACA" />
+      </Style>
+      <Style x:Key="CompactButtonStyle" TargetType="Button" BasedOn="{StaticResource QuietButtonStyle}">
+        <Setter Property="MinHeight" Value="34" />
+        <Setter Property="Padding" Value="12,7" />
+        <Setter Property="FontSize" Value="12" />
+      </Style>
+
       <Style TargetType="TextBox">
-        <Setter Property="Padding" Value="9" />
-        <Setter Property="Margin" Value="0,4,0,10" />
+        <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}" />
+        <Setter Property="Background" Value="White" />
+        <Setter Property="BorderBrush" Value="#D7DCE5" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="12,10" />
+        <Setter Property="MinHeight" Value="42" />
+        <Setter Property="CaretBrush" Value="{StaticResource MiraBlueDark}" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="TextBox">
+              <Border x:Name="TextBoxSurface" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="10">
+                <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}" />
+              </Border>
+              <ControlTemplate.Triggers>
+                <Trigger Property="IsKeyboardFocusWithin" Value="True"><Setter TargetName="TextBoxSurface" Property="BorderBrush" Value="{StaticResource MiraBlue}" /></Trigger>
+                <Trigger Property="IsEnabled" Value="False"><Setter TargetName="TextBoxSurface" Property="Opacity" Value="0.45" /></Trigger>
+              </ControlTemplate.Triggers>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+          <Trigger Property="IsKeyboardFocusWithin" Value="True"><Setter Property="BorderBrush" Value="{StaticResource MiraBlue}" /></Trigger>
+        </Style.Triggers>
+      </Style>
+      <Style x:Key="LanguageOptionStyle" TargetType="ComboBoxItem">
+        <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="12,9" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="ComboBoxItem">
+              <Border x:Name="OptionSurface" Background="{TemplateBinding Background}" CornerRadius="7" Padding="{TemplateBinding Padding}">
+                <ContentPresenter VerticalAlignment="Center" />
+              </Border>
+              <ControlTemplate.Triggers>
+                <Trigger Property="IsHighlighted" Value="True"><Setter TargetName="OptionSurface" Property="Background" Value="#F0EFFF" /></Trigger>
+                <Trigger Property="IsSelected" Value="True"><Setter TargetName="OptionSurface" Property="Background" Value="#E9E7FF" /><Setter Property="Foreground" Value="{StaticResource MiraBlueDark}" /></Trigger>
+              </ControlTemplate.Triggers>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+      <Style x:Key="LanguageSelectorStyle" TargetType="ComboBox">
+        <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}" />
+        <Setter Property="Background" Value="White" />
+        <Setter Property="BorderBrush" Value="{StaticResource DividerBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="MinHeight" Value="38" />
+        <Setter Property="ItemContainerStyle" Value="{StaticResource LanguageOptionStyle}" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="ComboBox">
+              <Grid>
+                <ToggleButton x:Name="DropDownToggle" Focusable="False" ClickMode="Press" IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
+                  <ToggleButton.Template>
+                    <ControlTemplate TargetType="ToggleButton">
+                      <Border x:Name="LanguageSurface"
+                              Background="{Binding Background, RelativeSource={RelativeSource AncestorType=ComboBox}}"
+                              BorderBrush="{Binding BorderBrush, RelativeSource={RelativeSource AncestorType=ComboBox}}"
+                              BorderThickness="{Binding BorderThickness, RelativeSource={RelativeSource AncestorType=ComboBox}}"
+                              CornerRadius="10">
+                        <Grid Margin="12,0,10,0">
+                          <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="18" /></Grid.ColumnDefinitions>
+                          <ContentPresenter Content="{Binding SelectionBoxItem, RelativeSource={RelativeSource AncestorType=ComboBox}}" VerticalAlignment="Center" />
+                          <Path Grid.Column="1" Data="M 1 2 L 5 6 L 9 2" Stroke="{StaticResource SecondaryTextBrush}" StrokeThickness="1.5" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Grid>
+                      </Border>
+                      <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="LanguageSurface" Property="Background" Value="#F7F7FB" /><Setter TargetName="LanguageSurface" Property="BorderBrush" Value="#D6D8E1" /></Trigger>
+                        <Trigger Property="IsChecked" Value="True"><Setter TargetName="LanguageSurface" Property="BorderBrush" Value="{StaticResource MiraBlue}" /></Trigger>
+                      </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                  </ToggleButton.Template>
+                </ToggleButton>
+                <Popup x:Name="PART_Popup" Placement="Bottom" AllowsTransparency="True" Focusable="False" IsOpen="{TemplateBinding IsDropDownOpen}" PopupAnimation="Fade">
+                  <Border Background="White" BorderBrush="{StaticResource DividerBrush}" BorderThickness="1" CornerRadius="10" Margin="0,6,0,0" Padding="5" MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}">
+                    <ScrollViewer MaxHeight="240"><ItemsPresenter /></ScrollViewer>
+                  </Border>
+                </Popup>
+              </Grid>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+      <Style TargetType="ComboBox" BasedOn="{StaticResource LanguageSelectorStyle}" />
+      <Style TargetType="CheckBox">
+        <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+      </Style>
+
+      <Style x:Key="PageTitleStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}" />
+        <Setter Property="FontSize" Value="30" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="LineHeight" Value="38" />
+      </Style>
+      <Style x:Key="PageDescriptionStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource SecondaryTextBrush}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="LineHeight" Value="22" />
+      </Style>
+      <Style x:Key="SectionTitleStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}" />
+        <Setter Property="FontSize" Value="17" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+      </Style>
+      <Style x:Key="LabelStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource SecondaryTextBrush}" />
+        <Setter Property="FontSize" Value="12" />
+      </Style>
+      <Style x:Key="ValueStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+      </Style>
+      <Style x:Key="SurfaceBorderStyle" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="16" />
+        <Setter Property="Padding" Value="24" />
+      </Style>
+
+      <Style x:Key="NavigationItemStyle" TargetType="ListBoxItem">
+        <Setter Property="Foreground" Value="#555B6B" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="Padding" Value="14,11" />
+        <Setter Property="Margin" Value="0,3" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="ListBoxItem">
+              <Grid>
+                <Border x:Name="NavigationSurface" Background="Transparent" CornerRadius="10" Padding="{TemplateBinding Padding}"><ContentPresenter /></Border>
+                <Border x:Name="SelectionMark" Width="3" Height="20" Background="{StaticResource MiraBlue}" CornerRadius="2" HorizontalAlignment="Left" Opacity="0" />
+              </Grid>
+              <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="NavigationSurface" Property="Background" Value="#ECEEF4" /><Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}" /></Trigger>
+                <Trigger Property="IsSelected" Value="True"><Setter TargetName="NavigationSurface" Property="Background" Value="#E9E7FF" /><Setter TargetName="SelectionMark" Property="Opacity" Value="1" /><Setter Property="Foreground" Value="{StaticResource MiraBlueDark}" /></Trigger>
+                <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="NavigationSurface" Property="BorderBrush" Value="#B7B2FF" /><Setter TargetName="NavigationSurface" Property="BorderThickness" Value="1" /></Trigger>
+              </ControlTemplate.Triggers>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+
+      <Style x:Key="WindowCommandButtonStyle" TargetType="Button">
+        <Setter Property="Width" Value="46" />
+        <Setter Property="Height" Value="38" />
+        <Setter Property="MinHeight" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="FontFamily" Value="Segoe Fluent Icons" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="Button">
+              <Border x:Name="WindowButtonSurface" Background="{TemplateBinding Background}" CornerRadius="8"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" /></Border>
+              <ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="WindowButtonSurface" Property="Background" Value="#E9EAF0" /></Trigger><Trigger Property="IsPressed" Value="True"><Setter TargetName="WindowButtonSurface" Property="Background" Value="#DDDDE5" /></Trigger></ControlTemplate.Triggers>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+      <Style x:Key="CloseWindowButtonStyle" TargetType="Button" BasedOn="{StaticResource WindowCommandButtonStyle}">
+        <Style.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter Property="Background" Value="#E5484D" /><Setter Property="Foreground" Value="White" /></Trigger></Style.Triggers>
       </Style>
     </ResourceDictionary>
   </Application.Resources>

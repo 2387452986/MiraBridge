@@ -2,7 +2,7 @@
 param(
     [ValidateSet("win-x64", "win-arm64")]
     [string]$RuntimeIdentifier = "win-x64",
-    [string]$Version = "2.0.0-rc.1",
+    [string]$Version = "2.0.0-rc.2",
     [switch]$SkipPackage
 )
 
@@ -61,6 +61,19 @@ $AppSmoke = Start-Process -FilePath $AppExecutable -ArgumentList @("--tray") -Pa
 try {
     Start-Sleep -Seconds 8
     if ($AppSmoke.HasExited) { throw "MiraBridge for Windows startup smoke failed with exit code $($AppSmoke.ExitCode)." }
+    for ($Launch = 1; $Launch -le 5; $Launch++) {
+        $Duplicate = Start-Process -FilePath $AppExecutable -PassThru
+        if (-not $Duplicate.WaitForExit(5000)) {
+            Stop-Process -Id $Duplicate.Id -Force -ErrorAction SilentlyContinue
+            throw "MiraBridge for Windows duplicate launch $Launch did not exit within 5 seconds."
+        }
+        if ($Duplicate.ExitCode -ne 0) { throw "MiraBridge for Windows duplicate launch $Launch exited with code $($Duplicate.ExitCode)." }
+    }
+    if ($AppSmoke.HasExited) { throw "MiraBridge for Windows primary instance exited after a duplicate launch." }
+    $ExactProcesses = @(Get-Process -Name "MiraBridge.Windows" -ErrorAction SilentlyContinue | Where-Object {
+        try { [IO.Path]::GetFullPath($_.Path) -eq [IO.Path]::GetFullPath($AppExecutable) } catch { $false }
+    })
+    if ($ExactProcesses.Count -ne 1) { throw "MiraBridge for Windows did not preserve one process after five duplicate launches; found $($ExactProcesses.Count)." }
     $AppCrashes = @(Get-WinEvent -FilterHashtable @{ LogName = "Application"; StartTime = $AppSmokeStarted } -ErrorAction SilentlyContinue | Where-Object {
         ($_.ProviderName -eq ".NET Runtime" -or $_.ProviderName -eq "Application Error") -and $_.Message -match "MiraBridge.Windows.exe"
     })

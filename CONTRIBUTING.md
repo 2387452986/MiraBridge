@@ -6,7 +6,7 @@ Thank you for helping make Windows a dependable native tool runtime for Mac-host
 2. Start from an issue for public-contract, protocol, persistence, security, installer, or dependency changes.
 3. Use Node.js 24.19.0 and .NET SDK 10.0.400. Keep TypeScript strict and C# warnings as errors.
 4. Add an `error_before` and `verify_after` for fixes. Separate Mac/mock, Windows-native and real-LAN evidence.
-5. Run the commands in `docs/RELEASE_CHECKLIST.md`. Never report mock coverage as a physical Windows acceptance.
+5. Run `npm ci && npm run check` from `plugins/mira-bridge`, the Windows-native gate in `plugins/mira-bridge/scripts/test-windows-local.ps1`, and the relevant real-LAN acceptance before claiming cross-device support. Never report mock coverage as a physical Windows acceptance.
 6. Do not commit credentials, private keys, pairing codes, machine names, personal paths, command bodies, file contents or unredacted diagnostics.
 
 By contributing, you agree that your contribution is licensed under the MIT License.

@@ -13,9 +13,11 @@ if (-not $AllowInstalledAppReplacement) {
 
 $Setup = [IO.Path]::GetFullPath($Setup)
 $Receipt = [IO.Path]::GetFullPath($Receipt)
-$AppRoot = Join-Path $env:LOCALAPPDATA "MiraBridge.Windows"
+$PackageRootName = if ([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString() -eq "Arm64") { "MiraBridge.Windows.ARM64" } else { "MiraBridge.Windows" }
+$AppRoot = Join-Path $env:LOCALAPPDATA $PackageRootName
 $Current = Join-Path $AppRoot "current"
 $App = Join-Path $AppRoot "MiraBridge.Windows.exe"
+$CurrentApp = Join-Path $Current "MiraBridge.Windows.exe"
 $HostExe = Join-Path $Current "MiraBridge.Host.exe"
 $Updater = Join-Path $AppRoot "Update.exe"
 $DataRoot = Join-Path $env:LOCALAPPDATA "MiraBridge"
@@ -31,6 +33,9 @@ $Result = [ordered]@{
     worker_version = $null
     runtime_ready = $false
     app_processes = 0
+    duplicate_launches = 0
+    immediate_window_activated = $false
+    window_activated = $false
     new_crashes = 0
     data_preserved = $false
     error = $null
@@ -40,6 +45,12 @@ function Invoke-Process {
     param([string]$File, [string[]]$Arguments)
     $process = Start-Process -FilePath $File -ArgumentList $Arguments -PassThru -Wait
     return $process.ExitCode
+}
+
+function Get-CurrentAppProcesses {
+    return @(Get-Process -Name "MiraBridge.Windows" -ErrorAction SilentlyContinue | Where-Object {
+        try { [IO.Path]::GetFullPath($_.Path) -eq [IO.Path]::GetFullPath($CurrentApp) } catch { $false }
+    })
 }
 
 try {
@@ -73,24 +84,54 @@ try {
     }
 
     $Result.worker_version = (& $HostExe worker --version | Out-String).Trim()
-    if ($LASTEXITCODE -ne 0 -or $Result.worker_version -ne "mirabridge-worker 2.0.0-rc.1") {
+    if ($LASTEXITCODE -ne 0 -or $Result.worker_version -ne "mirabridge-worker 2.0.0-rc.2") {
         throw "Installed stable Host returned an unexpected Worker version: $($Result.worker_version)"
     }
     $Doctor = (& $HostExe worker doctor | Out-String) | ConvertFrom-Json
     $Result.runtime_ready = [bool]$Doctor.runtime_ready
     if (-not $Result.runtime_ready) { throw "Installed Worker doctor did not report runtime_ready." }
+    $Result.data_preserved = Test-Path -LiteralPath $DataRoot
+    if (-not $Result.data_preserved) { throw "Durable Worker data root was not preserved." }
 
     Start-Process -FilePath $App -ArgumentList @("--tray") | Out-Null
-    Start-Sleep -Seconds 8
-    $Result.app_processes = @(Get-Process -Name "MiraBridge.Windows" -ErrorAction SilentlyContinue).Count
+    for ($Launch = 1; $Launch -le 5; $Launch++) {
+        $Duplicate = Start-Process -FilePath $App -PassThru
+        if (-not $Duplicate.WaitForExit(5000)) {
+            Stop-Process -Id $Duplicate.Id -Force -ErrorAction SilentlyContinue
+            throw "Installed MiraBridge duplicate launch $Launch did not exit within 5 seconds."
+        }
+        if ($Duplicate.ExitCode -ne 0) { throw "Installed MiraBridge duplicate launch $Launch exited with code $($Duplicate.ExitCode)." }
+        $Result.duplicate_launches = $Launch
+        if ($Launch -eq 1) {
+            Start-Sleep -Seconds 8
+            $ImmediateProcesses = Get-CurrentAppProcesses
+            if ($ImmediateProcesses.Count -eq 1) {
+                $ImmediateProcesses[0].Refresh()
+                $Result.immediate_window_activated = $ImmediateProcesses[0].MainWindowHandle -ne 0
+            }
+            if (-not $Result.immediate_window_activated) { throw "The immediate duplicate launch did not activate the starting tray window." }
+        }
+    }
+    $SettleDeadline = (Get-Date).AddSeconds(10)
+    do {
+        $AppProcesses = Get-CurrentAppProcesses
+        if ($AppProcesses.Count -eq 1) { break }
+        Start-Sleep -Milliseconds 250
+    } while ((Get-Date) -lt $SettleDeadline)
+    $Result.app_processes = $AppProcesses.Count
+    if ($AppProcesses.Count -eq 1) {
+        for ($Attempt = 0; $Attempt -lt 20; $Attempt++) {
+            $AppProcesses[0].Refresh()
+            if ($AppProcesses[0].MainWindowHandle -ne 0) { $Result.window_activated = $true; break }
+            Start-Sleep -Milliseconds 250
+        }
+    }
     $Result.new_crashes = @(Get-WinEvent -FilterHashtable @{ LogName = "Application"; StartTime = $Started } -ErrorAction SilentlyContinue | Where-Object {
         ($_.ProviderName -eq ".NET Runtime" -or $_.ProviderName -eq "Application Error") -and $_.Message -match "MiraBridge.Windows.exe"
     }).Count
-    if ($Result.app_processes -lt 1 -or $Result.new_crashes -ne 0) {
-        throw "Installed GUI lifecycle failed: processes=$($Result.app_processes), crash_events=$($Result.new_crashes)."
+    if ($Result.app_processes -ne 1 -or -not $Result.window_activated -or $Result.new_crashes -ne 0) {
+        throw "Installed GUI lifecycle failed: processes=$($Result.app_processes), activated=$($Result.window_activated), crash_events=$($Result.new_crashes)."
     }
-    $Result.data_preserved = Test-Path -LiteralPath $DataRoot
-    if (-not $Result.data_preserved) { throw "Durable Worker data root was not preserved." }
     $Result.ok = $true
 }
 catch {

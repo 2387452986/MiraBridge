@@ -1,6 +1,6 @@
 {
   "name": "mira-bridge",
-  "version": "2.0.0-rc.1",
+  "version": "2.0.0-rc.2",
   "description": "Expose a paired Windows computer as a remote native tool runtime for an Agent reasoning on macOS.",
   "author": {
     "name": "2387452986",
@@ -37,7 +37,7 @@
       "Run this project's tests on my Windows computer.",
       "Inspect a Windows workspace without changing Mac-local files."
     ],
-    "brandColor": "#0A84FF",
+    "brandColor": "#635BFF",
     "composerIcon": "./assets/mirabridge-logo.png",
     "logo": "./assets/mirabridge-logo.png"
   }

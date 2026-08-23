@@ -1,133 +1,483 @@
 <Window x:Class="MiraBridge.Windows.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="{DynamicResource AppTitle}" Width="940" Height="720" MinWidth="760" MinHeight="600"
-        WindowStartupLocation="CenterScreen" Background="#F5F7FA" Icon="Assets/mirabridge.ico">
-  <Grid Margin="24">
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="*" />
-      <RowDefinition Height="Auto" />
-    </Grid.RowDefinitions>
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        Title="{DynamicResource AppTitle}"
+        Width="1180" Height="780" MinWidth="980" MinHeight="680"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None" ResizeMode="CanResize"
+        UseLayoutRounding="True" SnapsToDevicePixels="True"
+        Background="{StaticResource CanvasBrush}"
+        Icon="Assets/mirabridge.ico"
+        Opacity="0">
+  <shell:WindowChrome.WindowChrome>
+    <shell:WindowChrome CaptionHeight="0" ResizeBorderThickness="6" GlassFrameThickness="0" CornerRadius="12" />
+  </shell:WindowChrome.WindowChrome>
+  <Window.Triggers>
+    <EventTrigger RoutedEvent="Window.Loaded">
+      <BeginStoryboard>
+        <Storyboard>
+          <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.22" />
+        </Storyboard>
+      </BeginStoryboard>
+    </EventTrigger>
+  </Window.Triggers>
 
-    <Grid Grid.Row="0" Margin="0,0,0,16">
-      <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
-      <StackPanel Orientation="Horizontal">
-        <Image Source="Assets/mirabridge.ico" Width="48" Height="48" Margin="0,0,14,0" />
-        <StackPanel>
-          <TextBlock Text="MiraBridge for Windows" FontSize="24" FontWeight="SemiBold" />
-          <TextBlock Text="{DynamicResource Subtitle}" Foreground="#5D6673" />
-        </StackPanel>
-      </StackPanel>
-      <ComboBox x:Name="LanguageSelector" Grid.Column="1" Width="150" Height="34" SelectedIndex="0" AutomationProperties.Name="Language">
-        <ComboBoxItem Content="简体中文" Tag="zh-CN" />
-        <ComboBoxItem Content="English" Tag="en-US" />
-      </ComboBox>
-    </Grid>
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="244" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
 
-    <Border Grid.Row="1" Background="White" CornerRadius="10" Padding="16" Margin="0,0,0,14" BorderBrush="#DCE2EA" BorderThickness="1">
-      <Grid>
-        <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
-        <Ellipse Width="12" Height="12" Fill="{StaticResource MiraBlue}" VerticalAlignment="Center" Margin="0,0,12,0" />
-        <StackPanel Grid.Column="1">
-          <TextBlock Text="{Binding Status}" FontSize="18" FontWeight="SemiBold" />
-          <TextBlock Text="{DynamicResource VersionLine}" Foreground="#5D6673" />
+    <Border Grid.Column="0" Background="#F8F8FB" BorderBrush="{StaticResource DividerBrush}" BorderThickness="0,0,1,0">
+      <Grid Margin="20,24,20,20">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="*" />
+          <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Margin="4,0,4,30">
+          <Grid.ColumnDefinitions><ColumnDefinition Width="58" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+          <Image Source="Assets/mirabridge.png" Width="48" Height="48" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
+          <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="12,0,0,0">
+            <TextBlock Text="MiraBridge" Foreground="{StaticResource PrimaryTextBrush}" FontSize="19" FontWeight="SemiBold" />
+            <TextBlock Text="FOR WINDOWS" Foreground="#858A98" FontSize="10" FontWeight="SemiBold" />
+          </StackPanel>
+        </Grid>
+
+        <ListBox x:Name="Navigation" Grid.Row="1" SelectedIndex="0" Background="Transparent" BorderThickness="0" ItemContainerStyle="{StaticResource NavigationItemStyle}" AutomationProperties.Name="MiraBridge navigation">
+          <ListBoxItem>
+            <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="30" /><ColumnDefinition /></Grid.ColumnDefinitions>
+              <TextBlock Text="&#xE80F;" FontFamily="Segoe Fluent Icons" FontSize="16" VerticalAlignment="Center" />
+              <TextBlock Grid.Column="1" Text="{DynamicResource NavOverview}" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" />
+            </Grid>
+          </ListBoxItem>
+          <ListBoxItem>
+            <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="30" /><ColumnDefinition /></Grid.ColumnDefinitions>
+              <TextBlock Text="&#xE8D4;" FontFamily="Segoe Fluent Icons" FontSize="16" VerticalAlignment="Center" />
+              <TextBlock Grid.Column="1" Text="{DynamicResource NavConnect}" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" />
+            </Grid>
+          </ListBoxItem>
+          <ListBoxItem>
+            <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="30" /><ColumnDefinition /></Grid.ColumnDefinitions>
+              <TextBlock Text="&#xEA18;" FontFamily="Segoe Fluent Icons" FontSize="16" VerticalAlignment="Center" />
+              <TextBlock Grid.Column="1" Text="{DynamicResource NavAccess}" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" />
+            </Grid>
+          </ListBoxItem>
+          <ListBoxItem>
+            <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="30" /><ColumnDefinition /></Grid.ColumnDefinitions>
+              <TextBlock Text="&#xE713;" FontFamily="Segoe Fluent Icons" FontSize="16" VerticalAlignment="Center" />
+              <TextBlock Grid.Column="1" Text="{DynamicResource NavTools}" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" />
+            </Grid>
+          </ListBoxItem>
+        </ListBox>
+
+        <StackPanel Grid.Row="3" Margin="8,20,8,0">
+          <TextBlock Text="{DynamicResource VersionLine}" Foreground="#858A98" FontSize="11" TextWrapping="Wrap" />
+          <TextBlock Text="{DynamicResource NavFooter}" Foreground="#A0A4AF" FontSize="11" LineHeight="18" Margin="0,9,0,0" />
         </StackPanel>
-        <Button Grid.Column="2" Content="{DynamicResource Refresh}" Command="{Binding RefreshCommand}" AutomationProperties.Name="Refresh MiraBridge status" />
       </Grid>
     </Border>
 
-    <TabControl Grid.Row="2" Background="White" BorderBrush="#DCE2EA">
-      <TabItem Header="{DynamicResource SetupTab}">
-        <ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel Margin="22">
-          <TextBlock Text="{DynamicResource SetupStep1Title}" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,8" />
-          <TextBlock Text="{DynamicResource SetupStep1Description}" TextWrapping="Wrap" Foreground="#4E5865" />
-          <TextBlock Text="{DynamicResource DefaultRoot}" FontWeight="SemiBold" Margin="0,18,0,0" />
-          <TextBox Text="{Binding DefaultRoot, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.Name="Default allowed root" />
-          <Button Content="{DynamicResource Repair}" Command="{Binding RepairCommand}" HorizontalAlignment="Left" />
-          <Separator Margin="0,20" />
-          <TextBlock Text="{DynamicResource SetupStep2Title}" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,8" />
-          <TextBlock Text="{DynamicResource PairRequest}" FontWeight="SemiBold" />
-          <TextBox Text="{Binding PairRequestCode, UpdateSourceTrigger=PropertyChanged}" Height="88" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" AutomationProperties.Name="Mac pairing request code" />
-          <Button Content="{DynamicResource Pair}" Command="{Binding PairCommand}" HorizontalAlignment="Left" />
-          <TextBlock Text="{DynamicResource PairResponse}" FontWeight="SemiBold" Margin="0,14,0,0" />
-          <TextBox Text="{Binding PairResponseCode, Mode=OneWay}" Height="88" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" AutomationProperties.Name="Windows pairing response code" />
-          <Button Content="{DynamicResource CopyResponse}" Command="{Binding CopyResponseCommand}" HorizontalAlignment="Left" />
-        </StackPanel></ScrollViewer>
-      </TabItem>
+    <Grid Grid.Column="1">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="72" />
+        <RowDefinition Height="*" />
+        <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
 
-      <TabItem Header="{DynamicResource StatusTab}">
-        <Grid Margin="22">
-          <TextBox Text="{Binding Details, Mode=OneWay}" IsReadOnly="True" FontFamily="Consolas" FontSize="13" AcceptsReturn="True" TextWrapping="NoWrap" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" AutomationProperties.Name="MiraBridge readiness details" />
-        </Grid>
-      </TabItem>
-
-      <TabItem Header="{DynamicResource ConfigTab}">
-        <ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel Margin="22">
-          <TextBlock Text="{DynamicResource AllowedRoots}" FontSize="18" FontWeight="SemiBold" />
-          <TextBlock Text="{DynamicResource AllowedRootsDescription}" TextWrapping="Wrap" Foreground="#4E5865" Margin="0,4,0,10" />
-          <TextBox Text="{Binding DefaultRoot, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.Name="Allowed root to add" />
-          <WrapPanel>
-            <Button Content="{DynamicResource AddRoot}" Command="{Binding AddRootCommand}" />
-            <Button Content="{DynamicResource RemoveRoot}" Command="{Binding RemoveRootCommand}" />
-          </WrapPanel>
-          <Separator Margin="0,20" />
-          <TextBlock Text="{DynamicResource Capabilities}" FontSize="18" FontWeight="SemiBold" />
-          <StackPanel Orientation="Horizontal" Margin="0,12,0,8">
-            <TextBlock Text="{DynamicResource Desktop}" Width="180" VerticalAlignment="Center" />
-            <ComboBox SelectedValue="{Binding DesktopAccess}" SelectedValuePath="Content" Width="170" AutomationProperties.Name="Desktop access">
-              <ComboBoxItem Content="disabled" /><ComboBoxItem Content="read-only" /><ComboBoxItem Content="read-write" />
-            </ComboBox>
+      <Border Grid.Row="0" Background="{StaticResource CanvasBrush}" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+        <Grid Margin="42,0,10,0">
+          <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+          <StackPanel VerticalAlignment="Center">
+            <TextBlock Text="{DynamicResource Subtitle}" Foreground="{StaticResource PrimaryTextBrush}" FontSize="13" FontWeight="SemiBold" />
+            <TextBlock Foreground="{StaticResource SecondaryTextBrush}" FontSize="11" Margin="0,3,0,0">
+              <TextBlock.Style><Style TargetType="TextBlock"><Setter Property="Text" Value="{DynamicResource ServiceAttention}" /><Style.Triggers><DataTrigger Binding="{Binding IsReady}" Value="True"><Setter Property="Text" Value="{DynamicResource ServiceReady}" /></DataTrigger></Style.Triggers></Style></TextBlock.Style>
+            </TextBlock>
           </StackPanel>
-          <CheckBox Content="{DynamicResource Recycle}" IsChecked="{Binding RecycleBin}" Margin="0,8" />
-          <CheckBox Content="{DynamicResource WebSnapshot}" IsChecked="{Binding WebSnapshot}" Margin="0,8" />
-          <TextBlock Text="{DynamicResource CapabilityDescription}" TextWrapping="Wrap" Foreground="#4E5865" Margin="0,4,0,10" />
-          <Button Content="{DynamicResource ApplyCapabilities}" Command="{Binding SaveCapabilitiesCommand}" HorizontalAlignment="Left" />
-          <Separator Margin="0,20" />
-          <TextBlock Text="{DynamicResource PairedMacs}" FontSize="18" FontWeight="SemiBold" />
-          <TextBox Text="{Binding PairedMacs, Mode=OneWay}" IsReadOnly="True" MinHeight="70" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" AutomationProperties.Name="Paired Mac computers" />
-          <TextBlock Text="{DynamicResource RevokeFingerprint}" FontWeight="SemiBold" Margin="0,12,0,0" />
-          <TextBox Text="{Binding RevokeFingerprint, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.Name="Paired Mac public key fingerprint to revoke" />
-          <Button Content="{DynamicResource RevokePairing}" Command="{Binding RevokePairingCommand}" HorizontalAlignment="Left" />
-        </StackPanel></ScrollViewer>
-      </TabItem>
+          <Button Grid.Column="1" Content="{DynamicResource Help}" Command="{Binding HelpCommand}" Style="{StaticResource CompactButtonStyle}" Margin="0,0,10,0" VerticalAlignment="Center" />
+          <ComboBox x:Name="LanguageSelector" Grid.Column="2" Width="132" SelectedIndex="0" VerticalAlignment="Center" Style="{StaticResource LanguageSelectorStyle}" AutomationProperties.Name="Language">
+            <ComboBoxItem Content="简体中文" Tag="zh-CN" />
+            <ComboBoxItem Content="English" Tag="en-US" />
+          </ComboBox>
+          <StackPanel Grid.Column="3" Orientation="Horizontal" Margin="12,0,0,0" VerticalAlignment="Center">
+            <Button Content="&#xE921;" Style="{StaticResource WindowCommandButtonStyle}" Click="Minimize_Click" ToolTip="{DynamicResource MinimizeWindow}" />
+            <Button Content="&#xE922;" Style="{StaticResource WindowCommandButtonStyle}" Click="MaximizeRestore_Click" ToolTip="{DynamicResource MaximizeWindow}" />
+            <Button Content="&#xE8BB;" Style="{StaticResource CloseWindowButtonStyle}" Click="Close_Click" ToolTip="{DynamicResource CloseToTray}" />
+          </StackPanel>
+        </Grid>
+      </Border>
 
-      <TabItem Header="{DynamicResource MaintenanceTab}">
-        <ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel Margin="22">
-          <TextBlock Text="{DynamicResource UpdateSupport}" FontSize="18" FontWeight="SemiBold" />
-          <TextBlock Text="{DynamicResource UnsignedWarning}" TextWrapping="Wrap" Foreground="#A24B00" Margin="0,8,0,10" />
-          <WrapPanel>
-            <Button Content="{DynamicResource CheckUpdate}" Command="{Binding CheckUpdateCommand}" />
-            <Button Content="{DynamicResource Diagnostics}" Command="{Binding DiagnosticsCommand}" />
-            <Button Content="{DynamicResource ReportIssue}" Command="{Binding OpenIssueCommand}" ToolTip="Generate and review a redacted diagnostic preview first." />
-            <Button Content="{DynamicResource Help}" Command="{Binding HelpCommand}" />
-          </WrapPanel>
-          <Separator Margin="0,20" />
-          <TextBlock Text="{DynamicResource OptionalTools}" FontSize="18" FontWeight="SemiBold" />
-          <TextBlock Text="{DynamicResource OptionalToolsDescription}" TextWrapping="Wrap" Foreground="#4E5865" Margin="0,4,0,10" />
-          <WrapPanel>
-            <Button Content="Git" Command="{Binding InstallGitCommand}" />
-            <Button Content="PowerShell 7" Command="{Binding InstallPowerShellCommand}" />
-            <Button Content="Python" Command="{Binding InstallPythonCommand}" />
-            <Button Content="Node.js SDK" Command="{Binding InstallNodeCommand}" />
-            <Button Content=".NET 10 SDK" Command="{Binding InstallDotNetCommand}" />
-            <Button Content="FFmpeg" Command="{Binding InstallFfmpegCommand}" />
-          </WrapPanel>
-          <Separator Margin="0,20" />
-          <TextBlock Text="{DynamicResource UninstallTitle}" FontSize="18" FontWeight="SemiBold" />
-          <TextBlock Text="{DynamicResource UninstallDescription}" TextWrapping="Wrap" Foreground="#4E5865" Margin="0,4,0,10" />
-          <WrapPanel>
-            <Button Content="{DynamicResource UninstallPreserve}" Command="{Binding UninstallPreserveCommand}" />
-            <Button Content="{DynamicResource UninstallAll}" Command="{Binding UninstallAllCommand}" />
-          </WrapPanel>
-        </StackPanel></ScrollViewer>
-      </TabItem>
-    </TabControl>
+      <Grid Grid.Row="1">
+        <!-- Overview -->
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+          <ScrollViewer.Style>
+            <Style TargetType="ScrollViewer">
+              <Setter Property="Visibility" Value="Collapsed" />
+              <Style.Triggers><DataTrigger Binding="{Binding SelectedIndex, ElementName=Navigation}" Value="0"><Setter Property="Visibility" Value="Visible" /></DataTrigger></Style.Triggers>
+            </Style>
+          </ScrollViewer.Style>
+          <StackPanel Margin="42,34,42,38" MaxWidth="980">
+            <TextBlock Text="{DynamicResource OverviewEyebrow}" Foreground="{StaticResource MiraBlueDark}" FontWeight="SemiBold" FontSize="12" />
+            <Border Style="{StaticResource SurfaceBorderStyle}" Margin="0,12,0,28" Padding="28">
+              <Grid>
+                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                <Ellipse Width="15" Height="15" Margin="0,7,18,0" VerticalAlignment="Top">
+                  <Ellipse.Style>
+                    <Style TargetType="Ellipse">
+                      <Setter Property="Fill" Value="{StaticResource WarningBrush}" />
+                      <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsReady}" Value="True">
+                          <Setter Property="Fill" Value="{StaticResource SuccessBrush}" />
+                          <DataTrigger.EnterActions>
+                            <BeginStoryboard>
+                              <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0.56" Duration="0:0:1.1" />
+                              </Storyboard>
+                            </BeginStoryboard>
+                          </DataTrigger.EnterActions>
+                        </DataTrigger>
+                      </Style.Triggers>
+                    </Style>
+                  </Ellipse.Style>
+                </Ellipse>
+                <StackPanel Grid.Column="1" Margin="0,0,28,0">
+                  <TextBlock FontSize="28">
+                    <TextBlock.Style>
+                      <Style TargetType="TextBlock" BasedOn="{StaticResource PageTitleStyle}">
+                        <Setter Property="Text" Value="{DynamicResource AttentionTitle}" />
+                        <Style.Triggers><DataTrigger Binding="{Binding IsReady}" Value="True"><Setter Property="Text" Value="{DynamicResource ReadyTitle}" /></DataTrigger></Style.Triggers>
+                      </Style>
+                    </TextBlock.Style>
+                  </TextBlock>
+                  <TextBlock MaxWidth="560" Margin="0,5,0,0">
+                    <TextBlock.Style>
+                      <Style TargetType="TextBlock" BasedOn="{StaticResource PageDescriptionStyle}">
+                        <Setter Property="Text" Value="{DynamicResource AttentionDescription}" />
+                        <Style.Triggers><DataTrigger Binding="{Binding IsReady}" Value="True"><Setter Property="Text" Value="{DynamicResource ReadyDescription}" /></DataTrigger></Style.Triggers>
+                      </Style>
+                    </TextBlock.Style>
+                  </TextBlock>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                  <Button Content="{DynamicResource Refresh}" Command="{Binding RefreshCommand}" Style="{StaticResource QuietButtonStyle}" Margin="0,0,10,0" />
+                  <Button Content="{DynamicResource Repair}" Command="{Binding RepairCommand}" Style="{StaticResource PrimaryButtonStyle}" />
+                </StackPanel>
+              </Grid>
+            </Border>
 
-    <Grid Grid.Row="3" Margin="0,12,0,0">
-      <ProgressBar IsIndeterminate="True" Visibility="{Binding Busy, Converter={StaticResource BooleanToVisibilityConverter}}" Height="3" VerticalAlignment="Top" />
-      <TextBlock Text="{Binding Message}" TextWrapping="Wrap" Foreground="#3B4652" Margin="0,8,0,0" />
+            <Grid Margin="0,0,0,28">
+              <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="24" /><ColumnDefinition /></Grid.ColumnDefinitions>
+              <Border Grid.Column="0" Style="{StaticResource SurfaceBorderStyle}">
+                <StackPanel>
+                  <TextBlock Text="{DynamicResource CurrentConnection}" Style="{StaticResource SectionTitleStyle}" Margin="0,0,0,12" />
+                  <Grid Margin="0,6"><Grid.ColumnDefinitions><ColumnDefinition Width="26" /><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                    <TextBlock Text="&#xE968;" FontFamily="Segoe Fluent Icons" Foreground="{StaticResource SecondaryTextBrush}" />
+                    <TextBlock Grid.Column="1" Text="{DynamicResource SshService}" />
+                    <TextBlock Grid.Column="2">
+                      <TextBlock.Style><Style TargetType="TextBlock"><Setter Property="Text" Value="{DynamicResource ServiceAttention}" /><Setter Property="Foreground" Value="{StaticResource WarningBrush}" /><Setter Property="FontWeight" Value="SemiBold" /><Style.Triggers><DataTrigger Binding="{Binding SshReady}" Value="True"><Setter Property="Text" Value="{DynamicResource ServiceReady}" /><Setter Property="Foreground" Value="{StaticResource SuccessBrush}" /></DataTrigger></Style.Triggers></Style></TextBlock.Style>
+                    </TextBlock>
+                  </Grid>
+                  <Separator Background="{StaticResource DividerBrush}" Margin="0,8" />
+                  <Grid Margin="0,6"><Grid.ColumnDefinitions><ColumnDefinition Width="26" /><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                    <TextBlock Text="&#xE756;" FontFamily="Segoe Fluent Icons" Foreground="{StaticResource SecondaryTextBrush}" />
+                    <TextBlock Grid.Column="1" Text="{DynamicResource WorkerService}" />
+                    <TextBlock Grid.Column="2">
+                      <TextBlock.Style><Style TargetType="TextBlock"><Setter Property="Text" Value="{DynamicResource ServiceAttention}" /><Setter Property="Foreground" Value="{StaticResource WarningBrush}" /><Setter Property="FontWeight" Value="SemiBold" /><Style.Triggers><DataTrigger Binding="{Binding WorkerReady}" Value="True"><Setter Property="Text" Value="{DynamicResource ServiceReady}" /><Setter Property="Foreground" Value="{StaticResource SuccessBrush}" /></DataTrigger></Style.Triggers></Style></TextBlock.Style>
+                    </TextBlock>
+                  </Grid>
+                  <Separator Background="{StaticResource DividerBrush}" Margin="0,8" />
+                  <Grid Margin="0,6"><Grid.ColumnDefinitions><ColumnDefinition Width="26" /><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                    <TextBlock Text="&#xE774;" FontFamily="Segoe Fluent Icons" Foreground="{StaticResource SecondaryTextBrush}" />
+                    <TextBlock Grid.Column="1" Text="{DynamicResource EdgeService}" />
+                    <TextBlock Grid.Column="2">
+                      <TextBlock.Style><Style TargetType="TextBlock"><Setter Property="Text" Value="{DynamicResource ServiceAttention}" /><Setter Property="Foreground" Value="{StaticResource WarningBrush}" /><Setter Property="FontWeight" Value="SemiBold" /><Style.Triggers><DataTrigger Binding="{Binding BrowserReady}" Value="True"><Setter Property="Text" Value="{DynamicResource ServiceReady}" /><Setter Property="Foreground" Value="{StaticResource SuccessBrush}" /></DataTrigger></Style.Triggers></Style></TextBlock.Style>
+                    </TextBlock>
+                  </Grid>
+                  <Separator Background="{StaticResource DividerBrush}" Margin="0,8" />
+                  <Grid Margin="0,6"><Grid.ColumnDefinitions><ColumnDefinition Width="26" /><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                    <TextBlock Text="&#xE756;" FontFamily="Segoe Fluent Icons" Foreground="{StaticResource SecondaryTextBrush}" />
+                    <TextBlock Grid.Column="1" Text="{DynamicResource TerminalService}" />
+                    <TextBlock Grid.Column="2">
+                      <TextBlock.Style><Style TargetType="TextBlock"><Setter Property="Text" Value="{DynamicResource ServiceAttention}" /><Setter Property="Foreground" Value="{StaticResource WarningBrush}" /><Setter Property="FontWeight" Value="SemiBold" /><Style.Triggers><DataTrigger Binding="{Binding TerminalReady}" Value="True"><Setter Property="Text" Value="{DynamicResource ServiceReady}" /><Setter Property="Foreground" Value="{StaticResource SuccessBrush}" /></DataTrigger></Style.Triggers></Style></TextBlock.Style>
+                    </TextBlock>
+                  </Grid>
+                </StackPanel>
+              </Border>
+
+              <Border Grid.Column="2" Style="{StaticResource SurfaceBorderStyle}">
+                <StackPanel>
+                  <TextBlock Text="{DynamicResource ConnectionInfo}" Style="{StaticResource SectionTitleStyle}" Margin="0,0,0,14" />
+                  <TextBlock Text="{DynamicResource Addresses}" Style="{StaticResource LabelStyle}" />
+                  <TextBlock Text="{Binding Addresses}" Style="{StaticResource ValueStyle}" Margin="0,3,0,13" />
+                  <TextBlock Text="{DynamicResource HostFingerprint}" Style="{StaticResource LabelStyle}" />
+                  <Grid Margin="0,3,0,13"><Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                    <TextBlock Text="{Binding HostFingerprint}" Style="{StaticResource ValueStyle}" FontFamily="Cascadia Mono, Consolas" TextTrimming="CharacterEllipsis" />
+                    <Button Grid.Column="1" Content="{DynamicResource Copy}" Command="{Binding CopyFingerprintCommand}" Style="{StaticResource CompactButtonStyle}" Margin="10,0,0,0" />
+                  </Grid>
+                  <Grid><Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition /></Grid.ColumnDefinitions>
+                    <StackPanel><TextBlock Text="{DynamicResource Architecture}" Style="{StaticResource LabelStyle}" /><TextBlock Text="{Binding Architecture}" Style="{StaticResource ValueStyle}" Margin="0,3,0,0" /></StackPanel>
+                    <StackPanel Grid.Column="1"><TextBlock Text="{DynamicResource ActiveJobs}" Style="{StaticResource LabelStyle}" /><TextBlock Text="{Binding ActiveJobs}" Style="{StaticResource ValueStyle}" Margin="0,3,0,0" /></StackPanel>
+                  </Grid>
+                  <TextBlock Text="{DynamicResource Storage}" Style="{StaticResource LabelStyle}" Margin="0,13,0,0" />
+                  <TextBlock Text="{Binding StorageSummary}" Style="{StaticResource ValueStyle}" Margin="0,3,0,0" />
+                </StackPanel>
+              </Border>
+            </Grid>
+
+            <TextBlock Text="{DynamicResource CapabilityOverview}" Style="{StaticResource SectionTitleStyle}" Margin="0,0,0,14" />
+            <Grid Margin="0,0,0,28">
+              <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="28" /><ColumnDefinition /></Grid.ColumnDefinitions>
+              <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="22" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+              <Grid Grid.Column="0"><Grid.ColumnDefinitions><ColumnDefinition Width="42" /><ColumnDefinition /></Grid.ColumnDefinitions>
+                <Border Width="34" Height="34" CornerRadius="9" Background="#EFF6FF" VerticalAlignment="Top"><TextBlock Text="&#xE8B7;" FontFamily="Segoe Fluent Icons" Foreground="{StaticResource MiraBlueDark}" HorizontalAlignment="Center" VerticalAlignment="Center" /></Border>
+                <StackPanel Grid.Column="1"><TextBlock Text="{DynamicResource FilesCapabilityTitle}" FontWeight="SemiBold" FontSize="14" /><TextBlock Text="{DynamicResource FilesCapabilityDescription}" Style="{StaticResource PageDescriptionStyle}" Margin="0,3,0,0" /></StackPanel>
+              </Grid>
+              <Grid Grid.Column="2"><Grid.ColumnDefinitions><ColumnDefinition Width="42" /><ColumnDefinition /></Grid.ColumnDefinitions>
+                <Border Width="34" Height="34" CornerRadius="9" Background="#EEFDF7" VerticalAlignment="Top"><TextBlock Text="&#xE756;" FontFamily="Segoe Fluent Icons" Foreground="{StaticResource SuccessBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" /></Border>
+                <StackPanel Grid.Column="1"><TextBlock Text="{DynamicResource ProcessCapabilityTitle}" FontWeight="SemiBold" FontSize="14" /><TextBlock Text="{DynamicResource ProcessCapabilityDescription}" Style="{StaticResource PageDescriptionStyle}" Margin="0,3,0,0" /></StackPanel>
+              </Grid>
+              <Grid Grid.Row="2" Grid.Column="0"><Grid.ColumnDefinitions><ColumnDefinition Width="42" /><ColumnDefinition /></Grid.ColumnDefinitions>
+                <Border Width="34" Height="34" CornerRadius="9" Background="#F5F3FF" VerticalAlignment="Top"><TextBlock Text="&#xE774;" FontFamily="Segoe Fluent Icons" Foreground="#7C3AED" HorizontalAlignment="Center" VerticalAlignment="Center" /></Border>
+                <StackPanel Grid.Column="1"><TextBlock Text="{DynamicResource WebCapabilityTitle}" FontWeight="SemiBold" FontSize="14" /><TextBlock Text="{DynamicResource WebCapabilityDescription}" Style="{StaticResource PageDescriptionStyle}" Margin="0,3,0,0" /></StackPanel>
+              </Grid>
+              <Grid Grid.Row="2" Grid.Column="2"><Grid.ColumnDefinitions><ColumnDefinition Width="42" /><ColumnDefinition /></Grid.ColumnDefinitions>
+                <Border Width="34" Height="34" CornerRadius="9" Background="#FFF7ED" VerticalAlignment="Top"><TextBlock Text="&#xE9D9;" FontFamily="Segoe Fluent Icons" Foreground="#EA580C" HorizontalAlignment="Center" VerticalAlignment="Center" /></Border>
+                <StackPanel Grid.Column="1"><TextBlock Text="{DynamicResource MaintenanceCapabilityTitle}" FontWeight="SemiBold" FontSize="14" /><TextBlock Text="{DynamicResource MaintenanceCapabilityDescription}" Style="{StaticResource PageDescriptionStyle}" Margin="0,3,0,0" /></StackPanel>
+              </Grid>
+            </Grid>
+
+            <Border Background="#EAF2FF" CornerRadius="14" Padding="24">
+              <Grid><Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                <StackPanel><TextBlock Text="{DynamicResource FirstUseTitle}" FontSize="16" FontWeight="SemiBold" Foreground="#173B77" /><TextBlock Text="{DynamicResource FirstUseDescription}" Foreground="#49658F" Margin="0,4,0,0" /></StackPanel>
+                <Button Grid.Column="1" Content="{DynamicResource GoPairing}" Style="{StaticResource PrimaryButtonStyle}" Click="NavigateToPairing_Click" VerticalAlignment="Center" />
+              </Grid>
+            </Border>
+            <Expander Header="{DynamicResource TechnicalDetails}" Margin="0,18,0,0" Foreground="{StaticResource SecondaryTextBrush}">
+              <TextBox Text="{Binding Details, Mode=OneWay}" IsReadOnly="True" FontFamily="Cascadia Mono, Consolas" FontSize="12" AcceptsReturn="True" TextWrapping="NoWrap" Height="240" Margin="0,10,0,0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" AutomationProperties.Name="MiraBridge technical details" />
+            </Expander>
+          </StackPanel>
+        </ScrollViewer>
+
+        <!-- Pairing -->
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+          <ScrollViewer.Style>
+            <Style TargetType="ScrollViewer"><Setter Property="Visibility" Value="Collapsed" /><Style.Triggers><DataTrigger Binding="{Binding SelectedIndex, ElementName=Navigation}" Value="1"><Setter Property="Visibility" Value="Visible" /></DataTrigger></Style.Triggers></Style>
+          </ScrollViewer.Style>
+          <StackPanel Margin="42,34,42,38" MaxWidth="900">
+            <TextBlock Text="{DynamicResource ConnectTitle}" Style="{StaticResource PageTitleStyle}" />
+            <TextBlock Text="{DynamicResource ConnectDescription}" Style="{StaticResource PageDescriptionStyle}" Margin="0,7,0,30" />
+
+            <Grid Margin="0,0,0,24"><Grid.ColumnDefinitions><ColumnDefinition Width="46" /><ColumnDefinition /></Grid.ColumnDefinitions>
+              <Border Width="34" Height="34" CornerRadius="17" Background="#EAF2FF" VerticalAlignment="Top"><TextBlock Text="{DynamicResource PairStep1}" Foreground="{StaticResource MiraBlueDark}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" /></Border>
+              <StackPanel Grid.Column="1"><TextBlock Text="{DynamicResource PairStep1Title}" Style="{StaticResource SectionTitleStyle}" /><TextBlock Text="{DynamicResource PairStep1Description}" Style="{StaticResource PageDescriptionStyle}" Margin="0,4,0,0" /></StackPanel>
+            </Grid>
+
+            <Border Style="{StaticResource SurfaceBorderStyle}" Margin="0,0,0,24">
+              <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="46" /><ColumnDefinition /></Grid.ColumnDefinitions>
+                <Border Width="34" Height="34" CornerRadius="17" Background="#EAF2FF" VerticalAlignment="Top"><TextBlock Text="{DynamicResource PairStep2}" Foreground="{StaticResource MiraBlueDark}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" /></Border>
+                <StackPanel Grid.Column="1">
+                  <TextBlock Text="{DynamicResource PairStep2Title}" Style="{StaticResource SectionTitleStyle}" />
+                  <TextBlock Text="{DynamicResource PairStep2Description}" Style="{StaticResource PageDescriptionStyle}" Margin="0,4,0,16" />
+                  <Grid><Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                    <TextBlock Text="{DynamicResource PairRequest}" FontWeight="SemiBold" VerticalAlignment="Center" />
+                    <Button Grid.Column="1" Content="{DynamicResource Paste}" Command="{Binding PasteRequestCommand}" Style="{StaticResource CompactButtonStyle}" />
+                  </Grid>
+                  <TextBox Text="{Binding PairRequestCode, UpdateSourceTrigger=PropertyChanged}" Height="106" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" FontFamily="Cascadia Mono, Consolas" FontSize="12" AutomationProperties.Name="Mac pairing request code" />
+                  <Button Content="{DynamicResource Pair}" Command="{Binding PairCommand}" Style="{StaticResource PrimaryButtonStyle}" HorizontalAlignment="Left" />
+                </StackPanel>
+              </Grid>
+            </Border>
+
+            <Border Style="{StaticResource SurfaceBorderStyle}" Margin="0,0,0,24" Visibility="{Binding HasPairResponse, Converter={StaticResource BooleanToVisibilityConverter}}">
+              <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="46" /><ColumnDefinition /></Grid.ColumnDefinitions>
+                <Border Width="34" Height="34" CornerRadius="17" Background="#DCFCE7" VerticalAlignment="Top"><TextBlock Text="{DynamicResource PairStep3}" Foreground="#047857" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" /></Border>
+                <StackPanel Grid.Column="1">
+                  <TextBlock Text="{DynamicResource PairStep3Title}" Style="{StaticResource SectionTitleStyle}" />
+                  <TextBlock Text="{DynamicResource PairStep3Description}" Style="{StaticResource PageDescriptionStyle}" Margin="0,4,0,16" />
+                  <TextBlock Text="{DynamicResource PairResponse}" FontWeight="SemiBold" />
+                  <TextBox Text="{Binding PairResponseCode, Mode=OneWay}" Height="106" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" FontFamily="Cascadia Mono, Consolas" FontSize="12" AutomationProperties.Name="Windows pairing response code" />
+                  <Button Content="{DynamicResource CopyResponse}" Command="{Binding CopyResponseCommand}" Style="{StaticResource PrimaryButtonStyle}" HorizontalAlignment="Left" />
+                </StackPanel>
+              </Grid>
+            </Border>
+
+            <Border Background="#FFF8E7" CornerRadius="10" Padding="16" Margin="0,0,0,28">
+              <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="30" /><ColumnDefinition /></Grid.ColumnDefinitions>
+                <TextBlock Text="&#xE72E;" FontFamily="Segoe Fluent Icons" Foreground="#A16207" FontSize="16" />
+                <TextBlock Grid.Column="1" Text="{DynamicResource PairingSecurity}" Foreground="#7C5A16" TextWrapping="Wrap" LineHeight="20" />
+              </Grid>
+            </Border>
+
+            <TextBlock Text="{DynamicResource PairedMacs}" Style="{StaticResource SectionTitleStyle}" />
+            <TextBlock Text="{DynamicResource SelectToRevoke}" Style="{StaticResource PageDescriptionStyle}" Margin="0,4,0,12" />
+            <TextBlock Text="{DynamicResource NoPairedMacs}" Foreground="{StaticResource SecondaryTextBrush}" Margin="0,12">
+              <TextBlock.Style><Style TargetType="TextBlock"><Setter Property="Visibility" Value="Visible" /><Style.Triggers><DataTrigger Binding="{Binding HasPairings}" Value="True"><Setter Property="Visibility" Value="Collapsed" /></DataTrigger></Style.Triggers></Style></TextBlock.Style>
+            </TextBlock>
+            <ListBox ItemsSource="{Binding Pairings}" SelectedItem="{Binding SelectedPairing}" Background="Transparent" BorderThickness="0" Margin="0,0,0,12">
+              <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                  <Setter Property="HorizontalContentAlignment" Value="Stretch" /><Setter Property="Padding" Value="14" /><Setter Property="Margin" Value="0,0,0,8" />
+                  <Style.Triggers><Trigger Property="IsSelected" Value="True"><Setter Property="Background" Value="#EAF2FF" /></Trigger></Style.Triggers>
+                </Style>
+              </ListBox.ItemContainerStyle>
+              <ListBox.ItemTemplate>
+                <DataTemplate>
+                  <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="44" /><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                    <Border Width="34" Height="34" CornerRadius="17" Background="#EEF2F7"><TextBlock Text="&#xE77B;" FontFamily="Segoe Fluent Icons" Foreground="#526173" HorizontalAlignment="Center" VerticalAlignment="Center" /></Border>
+                    <StackPanel Grid.Column="1"><TextBlock Text="{Binding MacName}" FontWeight="SemiBold" /><TextBlock Text="{Binding NodeId}" Foreground="{StaticResource SecondaryTextBrush}" FontSize="12" Margin="0,2,0,0" /><TextBlock Text="{Binding PublicKeyFingerprint}" Foreground="{StaticResource SecondaryTextBrush}" FontFamily="Cascadia Mono, Consolas" FontSize="11" TextTrimming="CharacterEllipsis" /></StackPanel>
+                    <TextBlock Grid.Column="2" Text="{Binding PairedAt}" Foreground="{StaticResource SecondaryTextBrush}" FontSize="11" VerticalAlignment="Center" />
+                  </Grid>
+                </DataTemplate>
+              </ListBox.ItemTemplate>
+            </ListBox>
+            <Button Content="{DynamicResource RevokePairing}" Command="{Binding RevokePairingCommand}" Style="{StaticResource DangerButtonStyle}" HorizontalAlignment="Left" />
+          </StackPanel>
+        </ScrollViewer>
+
+        <!-- Access -->
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+          <ScrollViewer.Style>
+            <Style TargetType="ScrollViewer"><Setter Property="Visibility" Value="Collapsed" /><Style.Triggers><DataTrigger Binding="{Binding SelectedIndex, ElementName=Navigation}" Value="2"><Setter Property="Visibility" Value="Visible" /></DataTrigger></Style.Triggers></Style>
+          </ScrollViewer.Style>
+          <StackPanel Margin="42,34,42,38" MaxWidth="900">
+            <TextBlock Text="{DynamicResource AccessTitle}" Style="{StaticResource PageTitleStyle}" />
+            <TextBlock Text="{DynamicResource AccessDescription}" Style="{StaticResource PageDescriptionStyle}" Margin="0,7,0,30" />
+
+            <Border Style="{StaticResource SurfaceBorderStyle}" Margin="0,0,0,24">
+              <StackPanel>
+                <TextBlock Text="{DynamicResource AllowedRoots}" Style="{StaticResource SectionTitleStyle}" />
+                <TextBlock Text="{DynamicResource AllowedRootsDescription}" Style="{StaticResource PageDescriptionStyle}" Margin="0,4,0,16" />
+                <TextBlock Text="{DynamicResource NoAllowedRoots}" Foreground="{StaticResource WarningBrush}" Margin="0,8">
+                  <TextBlock.Style><Style TargetType="TextBlock"><Setter Property="Visibility" Value="Collapsed" /><Style.Triggers><DataTrigger Binding="{Binding HasAllowedRoots}" Value="False"><Setter Property="Visibility" Value="Visible" /></DataTrigger></Style.Triggers></Style></TextBlock.Style>
+                </TextBlock>
+                <ItemsControl ItemsSource="{Binding AllowedRoots}" Margin="0,0,0,14">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <Border Background="#F7F8FB" CornerRadius="8" Padding="12,10" Margin="0,0,0,7">
+                        <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="28" /><ColumnDefinition /></Grid.ColumnDefinitions>
+                          <TextBlock Text="&#xE8B7;" FontFamily="Segoe Fluent Icons" Foreground="{StaticResource MiraBlueDark}" />
+                          <TextBlock Grid.Column="1" Text="{Binding}" FontFamily="Cascadia Mono, Consolas" FontSize="12" TextWrapping="Wrap" />
+                        </Grid>
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <TextBlock Text="{DynamicResource RootInput}" FontWeight="SemiBold" />
+                <TextBox Text="{Binding DefaultRoot, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.Name="Allowed folder path" />
+                <StackPanel Orientation="Horizontal">
+                  <Button Content="{DynamicResource AddRoot}" Command="{Binding AddRootCommand}" Style="{StaticResource PrimaryButtonStyle}" Margin="0,0,10,0" />
+                  <Button Content="{DynamicResource RemoveRoot}" Command="{Binding RemoveRootCommand}" Style="{StaticResource DangerButtonStyle}" />
+                </StackPanel>
+              </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource SurfaceBorderStyle}">
+              <StackPanel>
+                <TextBlock Text="{DynamicResource CapabilitySettings}" Style="{StaticResource SectionTitleStyle}" Margin="0,0,0,18" />
+                <Grid Margin="0,0,0,18"><Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="240" /></Grid.ColumnDefinitions>
+                  <StackPanel><TextBlock Text="{DynamicResource Desktop}" FontWeight="SemiBold" /><TextBlock Text="{DynamicResource DesktopDescription}" Style="{StaticResource PageDescriptionStyle}" FontSize="12" Margin="0,3,26,0" /></StackPanel>
+                  <ComboBox Grid.Column="1" SelectedValue="{Binding DesktopAccess}" SelectedValuePath="Tag" AutomationProperties.Name="Desktop access">
+                    <ComboBoxItem Content="{DynamicResource Disabled}" Tag="disabled" />
+                    <ComboBoxItem Content="{DynamicResource ReadOnly}" Tag="read-only" />
+                    <ComboBoxItem Content="{DynamicResource ReadWrite}" Tag="read-write" />
+                  </ComboBox>
+                </Grid>
+                <Separator Background="{StaticResource DividerBrush}" />
+                <Grid Margin="0,18"><Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                  <StackPanel><TextBlock Text="{DynamicResource Recycle}" FontWeight="SemiBold" /><TextBlock Text="{DynamicResource RecycleDescription}" Style="{StaticResource PageDescriptionStyle}" FontSize="12" Margin="0,3,26,0" /></StackPanel>
+                  <CheckBox Grid.Column="1" IsChecked="{Binding RecycleBin}" VerticalAlignment="Center" AutomationProperties.Name="Allow Recycle Bin scans" />
+                </Grid>
+                <Separator Background="{StaticResource DividerBrush}" />
+                <Grid Margin="0,18"><Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                  <StackPanel><TextBlock Text="{DynamicResource WebSnapshot}" FontWeight="SemiBold" /><TextBlock Text="{DynamicResource WebSnapshotDescription}" Style="{StaticResource PageDescriptionStyle}" FontSize="12" Margin="0,3,26,0" /></StackPanel>
+                  <CheckBox Grid.Column="1" IsChecked="{Binding WebSnapshot}" VerticalAlignment="Center" AutomationProperties.Name="Allow local web verification" />
+                </Grid>
+                <Button Content="{DynamicResource ApplyCapabilities}" Command="{Binding SaveCapabilitiesCommand}" Style="{StaticResource PrimaryButtonStyle}" HorizontalAlignment="Left" />
+              </StackPanel>
+            </Border>
+            <Border Background="#EEF6FF" CornerRadius="10" Padding="16" Margin="0,18,0,0">
+              <TextBlock Text="{DynamicResource SafetyBoundary}" Foreground="#38577D" TextWrapping="Wrap" LineHeight="20" />
+            </Border>
+          </StackPanel>
+        </ScrollViewer>
+
+        <!-- Tools and maintenance -->
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+          <ScrollViewer.Style>
+            <Style TargetType="ScrollViewer"><Setter Property="Visibility" Value="Collapsed" /><Style.Triggers><DataTrigger Binding="{Binding SelectedIndex, ElementName=Navigation}" Value="3"><Setter Property="Visibility" Value="Visible" /></DataTrigger></Style.Triggers></Style>
+          </ScrollViewer.Style>
+          <StackPanel Margin="42,34,42,38" MaxWidth="900">
+            <TextBlock Text="{DynamicResource ToolsTitle}" Style="{StaticResource PageTitleStyle}" />
+            <TextBlock Text="{DynamicResource ToolsDescription}" Style="{StaticResource PageDescriptionStyle}" Margin="0,7,0,30" />
+
+            <Border Style="{StaticResource SurfaceBorderStyle}" Margin="0,0,0,24">
+              <Grid><Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                <StackPanel>
+                  <TextBlock Text="{DynamicResource CoreRuntime}" Style="{StaticResource SectionTitleStyle}" />
+                  <TextBlock Text="{DynamicResource CoreRuntimeDescription}" Style="{StaticResource PageDescriptionStyle}" Margin="0,4,0,16" />
+                  <WrapPanel>
+                    <Border Background="#EEFDF7" CornerRadius="13" Padding="10,6" Margin="0,0,8,6"><TextBlock Text="Worker" Foreground="#047857" FontWeight="SemiBold" FontSize="12" /></Border>
+                    <Border Background="#EEFDF7" CornerRadius="13" Padding="10,6" Margin="0,0,8,6"><TextBlock Text="Node 24" Foreground="#047857" FontWeight="SemiBold" FontSize="12" /></Border>
+                    <Border Background="#EEFDF7" CornerRadius="13" Padding="10,6" Margin="0,0,8,6"><TextBlock Text="Edge" Foreground="#047857" FontWeight="SemiBold" FontSize="12" /></Border>
+                    <Border Background="#EEFDF7" CornerRadius="13" Padding="10,6" Margin="0,0,8,6"><TextBlock Text="ConPTY" Foreground="#047857" FontWeight="SemiBold" FontSize="12" /></Border>
+                  </WrapPanel>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Margin="28,0,0,0">
+                  <TextBlock Text="{DynamicResource ActiveJobs}" Style="{StaticResource LabelStyle}" /><TextBlock Text="{Binding ActiveJobs}" FontSize="24" FontWeight="SemiBold" />
+                  <TextBlock Text="{DynamicResource Storage}" Style="{StaticResource LabelStyle}" Margin="0,12,0,0" /><TextBlock Text="{Binding StorageSummary}" FontSize="14" FontWeight="SemiBold" />
+                </StackPanel>
+              </Grid>
+            </Border>
+
+            <TextBlock Text="{DynamicResource OptionalTools}" Style="{StaticResource SectionTitleStyle}" />
+            <TextBlock Text="{DynamicResource OptionalToolsDescription}" Style="{StaticResource PageDescriptionStyle}" Margin="0,4,0,14" />
+            <Border Style="{StaticResource SurfaceBorderStyle}" Margin="0,0,0,24" Padding="0">
+              <StackPanel>
+                <Grid Margin="22,16"><Grid.ColumnDefinitions><ColumnDefinition Width="150" /><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions><TextBlock Text="Git" FontWeight="SemiBold" VerticalAlignment="Center" /><TextBlock Grid.Column="1" Text="{DynamicResource GitDescription}" Foreground="{StaticResource SecondaryTextBrush}" VerticalAlignment="Center" /><Button Grid.Column="2" Content="{DynamicResource InstallOrRepair}" Command="{Binding InstallGitCommand}" Style="{StaticResource CompactButtonStyle}" /></Grid>
+                <Separator Background="{StaticResource DividerBrush}" />
+                <Grid Margin="22,16"><Grid.ColumnDefinitions><ColumnDefinition Width="150" /><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions><TextBlock Text="PowerShell 7" FontWeight="SemiBold" VerticalAlignment="Center" /><TextBlock Grid.Column="1" Text="{DynamicResource PowerShellDescription}" Foreground="{StaticResource SecondaryTextBrush}" VerticalAlignment="Center" /><Button Grid.Column="2" Content="{DynamicResource InstallOrRepair}" Command="{Binding InstallPowerShellCommand}" Style="{StaticResource CompactButtonStyle}" /></Grid>
+                <Separator Background="{StaticResource DividerBrush}" />
+                <Grid Margin="22,16"><Grid.ColumnDefinitions><ColumnDefinition Width="150" /><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions><TextBlock Text="Python" FontWeight="SemiBold" VerticalAlignment="Center" /><TextBlock Grid.Column="1" Text="{DynamicResource PythonDescription}" Foreground="{StaticResource SecondaryTextBrush}" VerticalAlignment="Center" /><Button Grid.Column="2" Content="{DynamicResource InstallOrRepair}" Command="{Binding InstallPythonCommand}" Style="{StaticResource CompactButtonStyle}" /></Grid>
+                <Separator Background="{StaticResource DividerBrush}" />
+                <Grid Margin="22,16"><Grid.ColumnDefinitions><ColumnDefinition Width="150" /><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions><TextBlock Text="Node.js SDK" FontWeight="SemiBold" VerticalAlignment="Center" /><TextBlock Grid.Column="1" Text="{DynamicResource NodeDescription}" Foreground="{StaticResource SecondaryTextBrush}" VerticalAlignment="Center" /><Button Grid.Column="2" Content="{DynamicResource InstallOrRepair}" Command="{Binding InstallNodeCommand}" Style="{StaticResource CompactButtonStyle}" /></Grid>
+                <Separator Background="{StaticResource DividerBrush}" />
+                <Grid Margin="22,16"><Grid.ColumnDefinitions><ColumnDefinition Width="150" /><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions><TextBlock Text=".NET 10 SDK" FontWeight="SemiBold" VerticalAlignment="Center" /><TextBlock Grid.Column="1" Text="{DynamicResource DotNetDescription}" Foreground="{StaticResource SecondaryTextBrush}" VerticalAlignment="Center" /><Button Grid.Column="2" Content="{DynamicResource InstallOrRepair}" Command="{Binding InstallDotNetCommand}" Style="{StaticResource CompactButtonStyle}" /></Grid>
+                <Separator Background="{StaticResource DividerBrush}" />
+                <Grid Margin="22,16"><Grid.ColumnDefinitions><ColumnDefinition Width="150" /><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions><TextBlock Text="FFmpeg" FontWeight="SemiBold" VerticalAlignment="Center" /><TextBlock Grid.Column="1" Text="{DynamicResource FfmpegDescription}" Foreground="{StaticResource SecondaryTextBrush}" VerticalAlignment="Center" /><Button Grid.Column="2" Content="{DynamicResource InstallOrRepair}" Command="{Binding InstallFfmpegCommand}" Style="{StaticResource CompactButtonStyle}" /></Grid>
+              </StackPanel>
+            </Border>
+
+            <TextBlock Text="{DynamicResource UpdateSupport}" Style="{StaticResource SectionTitleStyle}" Margin="0,0,0,14" />
+            <Border Style="{StaticResource SurfaceBorderStyle}" Margin="0,0,0,16">
+              <WrapPanel>
+                <Button Content="{DynamicResource CheckUpdate}" Command="{Binding CheckUpdateCommand}" Style="{StaticResource PrimaryButtonStyle}" Margin="0,0,10,8" />
+                <Button Content="{DynamicResource Diagnostics}" Command="{Binding DiagnosticsCommand}" Style="{StaticResource QuietButtonStyle}" Margin="0,0,10,8" />
+                <Button Content="{DynamicResource ReportIssue}" Command="{Binding OpenIssueCommand}" Style="{StaticResource QuietButtonStyle}" Margin="0,0,10,8" />
+                <Button Content="{DynamicResource Help}" Command="{Binding HelpCommand}" Style="{StaticResource QuietButtonStyle}" Margin="0,0,10,8" />
+              </WrapPanel>
+            </Border>
+            <Border Background="#FFF8E7" CornerRadius="10" Padding="16" Margin="0,0,0,16"><TextBlock Text="{DynamicResource UnsignedWarning}" Foreground="#7C5A16" TextWrapping="Wrap" LineHeight="20" /></Border>
+            <TextBlock Text="{DynamicResource AdvancedUninstall}" Style="{StaticResource SectionTitleStyle}" Margin="0,8,0,12" />
+            <Border Style="{StaticResource SurfaceBorderStyle}">
+              <StackPanel><TextBlock Text="{DynamicResource UninstallDescription}" Style="{StaticResource PageDescriptionStyle}" Margin="0,0,0,14" /><StackPanel Orientation="Horizontal"><Button Content="{DynamicResource UninstallPreserve}" Command="{Binding UninstallPreserveCommand}" Style="{StaticResource QuietButtonStyle}" Margin="0,0,10,0" /><Button Content="{DynamicResource UninstallAll}" Command="{Binding UninstallAllCommand}" Style="{StaticResource DangerButtonStyle}" /></StackPanel></StackPanel>
+            </Border>
+          </StackPanel>
+        </ScrollViewer>
+      </Grid>
+
+      <Grid Grid.Row="2" Margin="42,0,42,18">
+        <Border Background="#EAF2FF" CornerRadius="9" Padding="14,10" Visibility="{Binding HasMessage, Converter={StaticResource BooleanToVisibilityConverter}}">
+          <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="28" /><ColumnDefinition /></Grid.ColumnDefinitions>
+            <TextBlock Text="&#xE946;" FontFamily="Segoe Fluent Icons" Foreground="{StaticResource MiraBlueDark}" />
+            <TextBlock Grid.Column="1" Text="{Binding Message}" Foreground="#294D7A" TextWrapping="Wrap" />
+          </Grid>
+        </Border>
+      </Grid>
+
+      <ProgressBar Grid.Row="0" Height="3" VerticalAlignment="Bottom" IsIndeterminate="True" Foreground="{StaticResource MiraBlue}" Visibility="{Binding Busy, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
   </Grid>
 </Window>

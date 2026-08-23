@@ -8,14 +8,26 @@ namespace MiraBridge.Windows;
 
 internal static class Program
 {
-    private const string ProductVersion = "2.0.0-rc.1";
+    private const string ProductVersion = "2.0.0-rc.2";
     private const string UpdateMaintenanceOwner = "windows-app-update";
     private const string UninstallMaintenanceOwner = "windows-app-uninstall";
+    private const string InstanceMutexName = @"Local\MiraBridge.Windows.Instance";
+    private const string ActivationSignalName = @"Local\MiraBridge.Windows.Activate";
 
     [STAThread]
-    public static void Main()
+    public static void Main(string[] args)
     {
+        bool startInTray = args.Contains("--tray", StringComparer.Ordinal);
         VelopackApp.Build().Run();
+
+        using var instanceMutex = new Mutex(true, InstanceMutexName, out bool isPrimaryInstance);
+        if (!isPrimaryInstance)
+        {
+            if (!startInTray) SignalPrimaryInstance();
+            return;
+        }
+        using var activationSignal = new EventWaitHandle(false, EventResetMode.AutoReset, ActivationSignalName);
+
         var recovery = new UpdateRecoveryStore();
         try
         {
@@ -34,9 +46,65 @@ internal static class Program
                 System.Windows.MessageBoxButton.OK,
                 System.Windows.MessageBoxImage.Error);
         }
-        var application = new App();
+        var application = new App(startInTray);
         application.InitializeComponent();
+        using var activationStop = new CancellationTokenSource();
+        var activationThread = new Thread(() => WaitForActivation(application, activationSignal, activationStop.Token))
+        {
+            IsBackground = true,
+            Name = "MiraBridge activation listener"
+        };
+        activationThread.Start();
+        application.Exit += (_, _) =>
+        {
+            activationStop.Cancel();
+            activationSignal.Set();
+        };
         application.Run();
+        activationStop.Cancel();
+        activationSignal.Set();
+        if (activationThread.IsAlive) activationThread.Join(TimeSpan.FromSeconds(1));
+    }
+
+    private static void SignalPrimaryInstance()
+    {
+        for (int attempt = 0; attempt < 20; attempt++)
+        {
+            if (EventWaitHandle.TryOpenExisting(ActivationSignalName, out EventWaitHandle? activationSignal))
+            {
+                using (activationSignal) activationSignal.Set();
+                return;
+            }
+            Thread.Sleep(50);
+        }
+    }
+
+    private static void WaitForActivation(App application, EventWaitHandle activationSignal, CancellationToken cancellationToken)
+    {
+        while (!cancellationToken.IsCancellationRequested)
+        {
+            activationSignal.WaitOne();
+            if (cancellationToken.IsCancellationRequested) return;
+            for (int attempt = 0; attempt < 100 && !cancellationToken.IsCancellationRequested; attempt++)
+            {
+                bool activated = false;
+                try
+                {
+                    application.Dispatcher.Invoke(() =>
+                    {
+                        if (application.MainWindow is not MainWindow window) return;
+                        window.ShowFromTray();
+                        activated = true;
+                    });
+                }
+                catch (InvalidOperationException) when (application.Dispatcher.HasShutdownStarted)
+                {
+                    return;
+                }
+                if (activated) break;
+                Thread.Sleep(50);
+            }
+        }
     }
 
     private static async Task ReleaseMaintenanceWhenHealthyAsync()

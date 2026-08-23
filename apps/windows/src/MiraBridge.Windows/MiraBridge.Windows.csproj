@@ -18,5 +18,6 @@
   <ItemGroup>
     <Content Include="Help\**\*" CopyToOutputDirectory="PreserveNewest" />
     <Resource Include="Assets\mirabridge.ico" />
+    <Resource Include="Assets\mirabridge.png" />
   </ItemGroup>
 </Project>

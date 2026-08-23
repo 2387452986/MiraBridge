@@ -5,7 +5,7 @@ MiraBridge exposes a Windows computer as a remote native tool runtime for an Age
 ```text
 reasoning_host = Mac
 tool_host = Windows
-product         = 2.0.0-rc.1
+product         = 2.0.0-rc.2
 RPC             = 2.0
 MCP tools       = 28
 SQLite          = v5
