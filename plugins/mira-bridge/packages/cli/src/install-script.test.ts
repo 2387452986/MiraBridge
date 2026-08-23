@@ -10,6 +10,12 @@ describe("Mac installer", () => {
     expect(script).toContain('managed_node_version=$("$node_bin" --version)');
     expect(script).not.toMatch(/\$\(\$node_bin\s/u);
     expect(script).toContain('Refusing an unsafe MiraBridge install root');
+    expect(script).toContain('plugin marketplace remove mirabridge');
+    expect(script).toContain('plugin marketplace add "$marketplace_source" --ref "v$version"');
+    expect(script.indexOf('plugin remove mira-bridge@mirabridge')).toBeLessThan(script.indexOf('plugin marketplace remove mirabridge'));
+    expect(script).toContain('final_link="$install_root/.current.final.$$"');
+    expect(script.match(/mv -fh .*\$install_root\/current/g)).toHaveLength(3);
+    expect(script).not.toMatch(/mv -f [^\n]*\$install_root\/current/u);
   });
 
   it("rejects broad uninstall roots before recursive removal", async () => {

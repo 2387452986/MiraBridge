@@ -2,7 +2,7 @@ name: Prerelease
 
 on:
   push:
-    tags: ["v2.0.0-rc.2"]
+    tags: ["v2.0.0-rc.3"]
   workflow_dispatch:
 
 permissions:
@@ -40,7 +40,7 @@ jobs:
         with:
           path: artifacts/windows/${{ matrix.rid }}/app
           format: cyclonedx-json
-          output-file: artifacts/windows/${{ matrix.rid }}/MiraBridge.Windows-${{ matrix.rid }}-2.0.0-rc.2.sbom.cdx.json
+          output-file: artifacts/windows/${{ matrix.rid }}/MiraBridge.Windows-${{ matrix.rid }}-2.0.0-rc.3.sbom.cdx.json
       - uses: actions/attest-build-provenance@v3
         with:
           subject-path: artifacts/windows/${{ matrix.rid }}/releases/*
@@ -49,8 +49,8 @@ jobs:
           name: release-${{ matrix.rid }}
           path: |
             artifacts/windows/${{ matrix.rid }}/releases/*
-            artifacts/windows/${{ matrix.rid }}/MiraBridge.Windows-${{ matrix.rid }}-2.0.0-rc.2.sha256.json
-            artifacts/windows/${{ matrix.rid }}/MiraBridge.Windows-${{ matrix.rid }}-2.0.0-rc.2.sbom.cdx.json
+            artifacts/windows/${{ matrix.rid }}/MiraBridge.Windows-${{ matrix.rid }}-2.0.0-rc.3.sha256.json
+            artifacts/windows/${{ matrix.rid }}/MiraBridge.Windows-${{ matrix.rid }}-2.0.0-rc.3.sbom.cdx.json
 
   mac:
     strategy:
@@ -79,19 +79,19 @@ jobs:
           cp packages/mcp-server/dist/index.mjs ../../artifacts/mac-${{ matrix.arch }}/mcp/
           cp packages/cli/dist/index.mjs ../../artifacts/mac-${{ matrix.arch }}/cli/
           cp scripts/*-mac.sh scripts/run-mcp.sh ../../artifacts/mac-${{ matrix.arch }}/scripts/
-          tar -czf ../../artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.2.tar.gz -C ../../artifacts/mac-${{ matrix.arch }} .
-          (cd ../../artifacts && shasum -a 256 MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.2.tar.gz) > ../../artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.2.tar.gz.sha256
-          npm sbom --omit=dev --sbom-format cyclonedx > ../../artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.2.sbom.cdx.json
+          tar -czf ../../artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.3.tar.gz -C ../../artifacts/mac-${{ matrix.arch }} .
+          (cd ../../artifacts && shasum -a 256 MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.3.tar.gz) > ../../artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.3.tar.gz.sha256
+          npm sbom --omit=dev --sbom-format cyclonedx > ../../artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.3.sbom.cdx.json
       - uses: actions/attest-build-provenance@v3
         with:
-          subject-path: artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.2.tar.gz
+          subject-path: artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.3.tar.gz
       - uses: actions/upload-artifact@v7
         with:
           name: release-mac-${{ matrix.arch }}
           path: |
-            artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.2.tar.gz
-            artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.2.tar.gz.sha256
-            artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.2.sbom.cdx.json
+            artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.3.tar.gz
+            artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.3.tar.gz.sha256
+            artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.3.sbom.cdx.json
 
   publish:
     needs: [windows, mac]
@@ -119,4 +119,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "${GITHUB_REF_NAME}" release-assets/* --prerelease --verify-tag --title "MiraBridge ${GITHUB_REF_NAME#v}" --notes-file docs/release-notes-v2.0.0-rc.2.md
+          gh release create "${GITHUB_REF_NAME}" release-assets/* --prerelease --verify-tag --title "MiraBridge ${GITHUB_REF_NAME#v}" --notes-file docs/release-notes-v2.0.0-rc.3.md

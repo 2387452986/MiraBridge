@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "product": "MiraBridge",
-  "version": "2.0.0-rc.2",
-  "generated_at": "2026-08-23T07:59:52.397Z",
+  "version": "2.0.0-rc.3",
+  "generated_at": "2026-08-23T08:29:05.763Z",
   "files": [
     {
       "path": ".agents/plugins/marketplace.json",
@@ -27,7 +27,7 @@
     {
       "path": ".github/workflows/release.yml",
       "bytes": 5078,
-      "sha256": "65501984b9a51aab07aaf5a37d8c17f95c4059f6120795dc5fc614a07f8a7f8e"
+      "sha256": "c1be62745a933645f69c6eabbc8734c467c1e54b25ab03d8700398c982fc6236"
     },
     {
       "path": ".gitignore",
@@ -37,7 +37,7 @@
     {
       "path": "apps/windows/Directory.Build.props",
       "bytes": 544,
-      "sha256": "da76c4dd093208c2a736090a7a28f5b63cc5923a0bd061aba3a2f807d306b067"
+      "sha256": "fc5ae998bd6209ae1d163f427da8929e301e9e8a3a41e8a4c0a310f586e91684"
     },
     {
       "path": "apps/windows/MiraBridge.Windows.slnx",
@@ -57,7 +57,7 @@
     {
       "path": "apps/windows/src/MiraBridge.Elevated/Program.cs",
       "bytes": 13432,
-      "sha256": "e788ec080226cbae1957f7dbe83c65884e6b48d676bfd0d7ca10c630129494d8"
+      "sha256": "21d7d7aec15641aeac2e9fb65eeb6bb036b55e012f11d52049ac61112d744e24"
     },
     {
       "path": "apps/windows/src/MiraBridge.Host/MiraBridge.Host.csproj",
@@ -97,12 +97,12 @@
     {
       "path": "apps/windows/src/MiraBridge.Windows/Help/HELP.en-US.html",
       "bytes": 3677,
-      "sha256": "a208904c3b89731517a4485dbc00f35f44bc70ff7d0ea9e74a1e409b45be6b0e"
+      "sha256": "a730bcda0aba26363b5b3c79ab04393c7a4fefd0215544d69a518e7219c8c932"
     },
     {
       "path": "apps/windows/src/MiraBridge.Windows/Help/HELP.zh-CN.html",
       "bytes": 3641,
-      "sha256": "c92254ea097a3bc6894e1f0ae1a8b11028a5dca8f91d18189e170e6148312e0f"
+      "sha256": "1d30c6589997a0859052aa423d7e54e7f4495e06e37f5ce1dc0b4c0c2c291bbe"
     },
     {
       "path": "apps/windows/src/MiraBridge.Windows/IWindowsOperations.cs",
@@ -132,22 +132,22 @@
     {
       "path": "apps/windows/src/MiraBridge.Windows/Program.cs",
       "bytes": 6823,
-      "sha256": "e27428e1a74f06676b9d63b926789d04aa30d98b041d19dddda9ed890b03db75"
+      "sha256": "ca00ac8e5ace01915ea7962e373582e52797273b812f95b0a4ac03e0a2a4e77d"
     },
     {
       "path": "apps/windows/src/MiraBridge.Windows/Resources/Strings.en-US.xaml",
       "bytes": 9648,
-      "sha256": "7ad8d528abbec7cd449f5a32d99b1e66fa5a929e0c9092059693f601a9d940a7"
+      "sha256": "79bf2b4523dff30bd98cfde233cd3439038edc14f9db4ec094e6dc36298025ee"
     },
     {
       "path": "apps/windows/src/MiraBridge.Windows/Resources/Strings.zh-CN.xaml",
       "bytes": 9506,
-      "sha256": "fa2aeb136f7be6feba86066ff1e1e5a0729a4db88d8c0f624cff582c6c2f2b7e"
+      "sha256": "9d3fb93a9fff281950c4ea7fa69fa3a7e6622801a76f4328f97ddbd5824c4f03"
     },
     {
       "path": "apps/windows/src/MiraBridge.Windows/WindowsOperations.cs",
       "bytes": 20210,
-      "sha256": "6b7a929357535f733e308ced61fa74b3f4ae08fec14e3bea8418c6952230c035"
+      "sha256": "298f5402fcc84a139efc48aec54fb3c7a8bc2abc334e4b36e1beb46cea1e568a"
     },
     {
       "path": "apps/windows/src/MiraBridge.Windows.Core/AppPaths.cs",
@@ -227,7 +227,7 @@
     {
       "path": "apps/windows/tests/MiraBridge.Windows.Tests/Program.cs",
       "bytes": 11942,
-      "sha256": "19087fde3da7c7077c54b88e0de3204fdd838432c9496a5698202d39e5c67f20"
+      "sha256": "6b062c5d091bfca251c4bb0a745a8ee3388f866ed0d050b9fd37497d24d9104b"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -236,13 +236,13 @@
     },
     {
       "path": "docs/INSTALL_MAC.md",
-      "bytes": 1935,
-      "sha256": "9eb0d2b57f8d71fae975bc2c3d29469b458a21c5053d1729de70788e40c233e2"
+      "bytes": 2357,
+      "sha256": "4a6e3e9fe9f77c8c89164eaf8f655ebe8a37c2c25ad101ef1b7769d452d5c8f4"
     },
     {
       "path": "docs/INSTALL_WINDOWS.md",
       "bytes": 3858,
-      "sha256": "ab66f5187408ec19da0368c57395c5cb9f2de732186cbf1ff161f5d56f8223e4"
+      "sha256": "84e3874b53cf363448fb5fe02f9ed23013d0407ed7f8a8e08ec456187b156a40"
     },
     {
       "path": "docs/MIGRATION_1X.md",
@@ -265,9 +265,14 @@
       "sha256": "8c70eae4da5189640575dbb90c20f5f296b07eacd1a2e1b1c44877647bf3d7fe"
     },
     {
+      "path": "docs/release-notes-v2.0.0-rc.3.md",
+      "bytes": 1732,
+      "sha256": "b758497a3192896e9dbf0b736fb32d691e812b20b0994e62fef2e73d6177c670"
+    },
+    {
       "path": "docs/TEST_REPORT.md",
-      "bytes": 17936,
-      "sha256": "3f84f09a0b94975a978761589905525089ee3adfe168d84b9de65cbc020a2bb6"
+      "bytes": 19618,
+      "sha256": "ca66131e35efcc7b5fa50107545f583e46cbd40258e523afc05f98b556b7bed4"
     },
     {
       "path": "LICENSE",
@@ -277,7 +282,7 @@
     {
       "path": "plugins/mira-bridge/.codex-plugin/plugin.json",
       "bytes": 1524,
-      "sha256": "d6e80dd3cc3d0546fba9daea15f86d6a930d1b0e97948d59da95972b47d1178b"
+      "sha256": "75788c922544fdde8d45898eaae149883359af79eb39201ae34f3f5179c7b8c3"
     },
     {
       "path": "plugins/mira-bridge/.env.example",
@@ -312,42 +317,42 @@
     {
       "path": "plugins/mira-bridge/docs/ARCHITECTURE.md",
       "bytes": 12784,
-      "sha256": "6f732d8f4fe6e6b7db6979f1913463419240a4955c188e23e6adaf83dd8bc2ae"
+      "sha256": "bacf4393da52e681cd92e95bfb003494d20deac27208f41e6a8933ab78385131"
     },
     {
       "path": "plugins/mira-bridge/docs/MAC_SETUP.md",
       "bytes": 903,
-      "sha256": "4cda49aafa58f617d21c4459b3b5cf547d187ef92a1d5e938e05b26b73962c0d"
+      "sha256": "832dc1e91bb07b1e3450d067c338a7e0f0ea460f0a0af65ab9db971313df23c4"
     },
     {
       "path": "plugins/mira-bridge/docs/mira-bridge-threat-model.md",
       "bytes": 25792,
-      "sha256": "d4454aade1fdc07584ffb6f3dff8ed6e2fdf95161a2240486254ba281ba84714"
+      "sha256": "63cba8c40fcb09e8454fdd3daf9d53b7392508e73999cc6280a728485faacd5b"
     },
     {
       "path": "plugins/mira-bridge/docs/PROTOCOL.md",
       "bytes": 10948,
-      "sha256": "65cdf1e33b26b8d5ebb989cc01ead66bdfa86a58a5cf9bc8182443d1a3548678"
+      "sha256": "ed3719659ad4c51854872d6211e420b833349d0c9473070b65b084a3f3ca561f"
     },
     {
       "path": "plugins/mira-bridge/docs/SECURITY.md",
       "bytes": 11225,
-      "sha256": "7b7be594adab0ae55db0eeacf02c5e44890eee28eb30efc2607f85630f6fdfbc"
+      "sha256": "7e6ab8d2c408088e8849fdb20046ca1e18102039eecc6d2ade730fb848b7b122"
     },
     {
       "path": "plugins/mira-bridge/docs/TOOL_PARITY.md",
       "bytes": 4675,
-      "sha256": "461add7c1d3a9cacc80c5a346a2390294d6fa9def27df15050ec00afb8d6993c"
+      "sha256": "9b171e8c44b80c5d7c64f08b1130be0af777e1e5a236596a1eca69a74267dfa6"
     },
     {
       "path": "plugins/mira-bridge/docs/TROUBLESHOOTING.md",
       "bytes": 9246,
-      "sha256": "f5fd8ca0daa440b2c9d977a304457cd79bc40f2835955f095a0b721fa609c387"
+      "sha256": "edf9d4d93c7c4b8aca18ba8e97ce70df65e8228aafaca0094bd5181f26e87e43"
     },
     {
       "path": "plugins/mira-bridge/docs/WINDOWS_SETUP.md",
       "bytes": 1286,
-      "sha256": "e2a28ca1f0b7c7b82fd6ed2bd213b61d132d0ae0833047ff53c1a1fd3b84a927"
+      "sha256": "19d0a1594fab385ec66af4a580dcc85d561620efcedfa38b584e6ad0a7816b4b"
     },
     {
       "path": "plugins/mira-bridge/integration-tests/cli-smoke.mjs",
@@ -362,17 +367,17 @@
     {
       "path": "plugins/mira-bridge/integration-tests/installed-plugin-smoke.mjs",
       "bytes": 2772,
-      "sha256": "8eaecb82f83f8c14540d5907447923ba00b2100a4c55111875f53dc4cb42a26c"
+      "sha256": "c54c673693cd479d9a80734bcf34d532d08c04577d3456a34ef2921a8bbf8a7c"
     },
     {
       "path": "plugins/mira-bridge/integration-tests/mcp-server.test.ts",
       "bytes": 5923,
-      "sha256": "91dafa7393ec2305a220ae88be83264ff6fbb354b1ea6f39b84ee3e8c4581c66"
+      "sha256": "df36afaee74240dc34765d614dc59c2b40bf9f8515414f1dd7ce58bf5f049cbc"
     },
     {
       "path": "plugins/mira-bridge/integration-tests/mcp-stdio-smoke.mjs",
       "bytes": 1615,
-      "sha256": "aee4ec7e6b48cae99195a380b1ef43dff2119cca7eaadfd90e02a15a823482a8"
+      "sha256": "7f16d5f2bb4472df9f100399a78428ff7d1f8d82a928fda589a9f8384d4e3dd7"
     },
     {
       "path": "plugins/mira-bridge/integration-tests/package-smoke.mjs",
@@ -392,12 +397,12 @@
     {
       "path": "plugins/mira-bridge/integration-tests/real-lan-e2e.mjs",
       "bytes": 21851,
-      "sha256": "7129548dffa6b76444120a2730c7fe68f55e877b471330060d7ede2809564ee3"
+      "sha256": "c39d5d6aa28351dfc11972563ec6046f5468602196bbf54ad891cf2b31b6a708"
     },
     {
       "path": "plugins/mira-bridge/integration-tests/real-mcp-call.mjs",
       "bytes": 1497,
-      "sha256": "75c7cca3797b11ab6689adbc8fb6355e106e5a7d73b638be4c8ff6481aab6beb"
+      "sha256": "b50ae0bd5a7db94bf8980d4eef0d4ab57caa27b21d79c91ac58b41cb03e86134"
     },
     {
       "path": "plugins/mira-bridge/integration-tests/ssh-rpc.test.ts",
@@ -417,22 +422,22 @@
     {
       "path": "plugins/mira-bridge/package-lock.json",
       "bytes": 110598,
-      "sha256": "49cb44e9608e02642edd41fa6db4fb1e8f31700f6e5483c5ef267d91d6323717"
+      "sha256": "5ce3a5c1ca88defe597b6730175c3780584d6273bc4655534c5e0292c5cf67b1"
     },
     {
       "path": "plugins/mira-bridge/package.json",
       "bytes": 1722,
-      "sha256": "189f996aed676a8e2cea50efa6b76c554f0e8ba3b9c47f1dbd7a3670dfcbcf3c"
+      "sha256": "2d5b82fc5a908a3721d1920dfed1c1e8fc6d7198d41f0de27bebbe6420478c27"
     },
     {
       "path": "plugins/mira-bridge/packages/cli/package.json",
       "bytes": 234,
-      "sha256": "251d750a87b09c044f8e476eb758b113039da65ddfbc4bb5f996eb671e6509fa"
+      "sha256": "018e0e76fc30d1f7266b08ff876dfa30257259639944614746a9dc9462989f51"
     },
     {
       "path": "plugins/mira-bridge/packages/cli/README.md",
       "bytes": 391,
-      "sha256": "d63ff6a7b84aee51a6059032cdd33c52e8d21d82bd1bd1fbffa318f414c3ef05"
+      "sha256": "d79dfd5985a99f458c607ab4d8e71c58b33f98ed0648ee1835e29f0fb5fe6e7e"
     },
     {
       "path": "plugins/mira-bridge/packages/cli/src/host-keys.test.ts",
@@ -451,8 +456,8 @@
     },
     {
       "path": "plugins/mira-bridge/packages/cli/src/install-script.test.ts",
-      "bytes": 1132,
-      "sha256": "15e97aaf0c1890f7ef5db899b8d1f2197f787cdb21fb8a9de4ee71f3489877c2"
+      "bytes": 1664,
+      "sha256": "a0deffb8376939aea5f568890c432162a741ebafc9764d43244f233925320fbe"
     },
     {
       "path": "plugins/mira-bridge/packages/cli/src/installation.ts",
@@ -462,7 +467,7 @@
     {
       "path": "plugins/mira-bridge/packages/cli/src/pairing-client.test.ts",
       "bytes": 4046,
-      "sha256": "9ba74707d2a8a81920a1975b4b72cc9434ed5010c104bb0cdf790477dd14094e"
+      "sha256": "cdc99f278b3a86c430d04d47cb1b1fa119b9aa08f27447c5d284fda9957dafc2"
     },
     {
       "path": "plugins/mira-bridge/packages/cli/src/pairing-client.ts",
@@ -482,7 +487,7 @@
     {
       "path": "plugins/mira-bridge/packages/mcp-server/package.json",
       "bytes": 131,
-      "sha256": "8c57f899fcfddd7689fe63c635a92b99e8b5cf58d0a47528e117674b9b99cf4e"
+      "sha256": "30e5c934dcd538fb2eaded2282af49b61fcf661672e1c407a9b25acdf082d4e6"
     },
     {
       "path": "plugins/mira-bridge/packages/mcp-server/src/config.ts",
@@ -517,12 +522,12 @@
     {
       "path": "plugins/mira-bridge/packages/protocol/package.json",
       "bytes": 112,
-      "sha256": "18bf5992c09b78d47cd5603fef9d5430bf4965908acc7f1c18c33f14e63d74cd"
+      "sha256": "0a84aeff4ac1826fc1e3cb44500df56a97fb5893040413a5be0eec901c3507e2"
     },
     {
       "path": "plugins/mira-bridge/packages/protocol/src/constants.ts",
       "bytes": 2084,
-      "sha256": "4418ccea3921df1a4422ad5934bedcd3609a8bd5b659210d187f864504b94716"
+      "sha256": "d757fed85f5c76d00737e81307919e7e6b06b2b39ebf38485bdd52da28e03235"
     },
     {
       "path": "plugins/mira-bridge/packages/protocol/src/errors.ts",
@@ -547,7 +552,7 @@
     {
       "path": "plugins/mira-bridge/packages/protocol/src/pairing.test.ts",
       "bytes": 2837,
-      "sha256": "f535cef00a291895644c0efa1a8e9338000d9e4e8279c473ad53616efe3425b1"
+      "sha256": "cc224d405ccd9ad79b51358b8f9a9ce5760682fe3fa89567dcc38745522a2b08"
     },
     {
       "path": "plugins/mira-bridge/packages/protocol/src/pairing.ts",
@@ -572,12 +577,12 @@
     {
       "path": "plugins/mira-bridge/packages/windows-worker/package.json",
       "bytes": 365,
-      "sha256": "a14af71edadda1f82146300d34122496182da07206ab17afd33a19322e974671"
+      "sha256": "c5c8df4027ab57842b98ede1a4a23547b1ac4ccfb5412a5347153acb83b2bf5d"
     },
     {
       "path": "plugins/mira-bridge/packages/windows-worker/README.md",
       "bytes": 599,
-      "sha256": "03166bcecb1d0ed082869f1669a6156c7e07dafa5a7618e348709bb72873e1fd"
+      "sha256": "d7038775c39a66eb04ee2e17fe403c5bc735259dcbd21755e6ad3555ff075667"
     },
     {
       "path": "plugins/mira-bridge/packages/windows-worker/src/audit.ts",
@@ -782,7 +787,7 @@
     {
       "path": "plugins/mira-bridge/README.md",
       "bytes": 2239,
-      "sha256": "5613eae6a31daeb10adceac77e5ee8984043a47d138222524a83139e20869c73"
+      "sha256": "f494e17ac515096d4771fd1c74dd20e488fd5844ee95cf488198ca5ff28c4bf2"
     },
     {
       "path": "plugins/mira-bridge/scripts/backup-worker-state.mjs",
@@ -796,8 +801,8 @@
     },
     {
       "path": "plugins/mira-bridge/scripts/install-mac.sh",
-      "bytes": 5678,
-      "sha256": "bf2adf4ad6b0413c9017ba093486ae78c917245b2261fdcea4d4213d3c7338d5"
+      "bytes": 6546,
+      "sha256": "ec3e260cc9f0496bf74f16602e2aa9ade1f4a14e70dea1b297eefa9e9e3a963e"
     },
     {
       "path": "plugins/mira-bridge/scripts/run-mcp.sh",
@@ -817,12 +822,12 @@
     {
       "path": "plugins/mira-bridge/scripts/update-mac.sh",
       "bytes": 862,
-      "sha256": "e23652367904797ec47515e61f42cb25f6c3e9059c3cb073b8b505e8f674b212"
+      "sha256": "0aae81035239bd65e2c81c8c52826127ed7e9a975dcb9c3ed1d287ddbeb6484c"
     },
     {
       "path": "plugins/mira-bridge/scripts/validate-release.mjs",
       "bytes": 3092,
-      "sha256": "9aa441127d61c00f18a2e94623750544f4e0b0b286ed7c6d3789639edebf41b8"
+      "sha256": "4bb8c500d8fef2cb95791fdf74b8df666f5055813fdd26ba6fd07ca5edaf1eef"
     },
     {
       "path": "plugins/mira-bridge/skills/mira-bridge/agents/openai.yaml",
@@ -857,42 +862,42 @@
     {
       "path": "README.md",
       "bytes": 8112,
-      "sha256": "7e77190e6eca04adafab45218a9cea9aa9f501334cc2c9f385bc853df6b38b6c"
+      "sha256": "be6dff38a5b7ce5e35b9d042503b345fa5e3dc571dea831b01616fc50004a688"
     },
     {
       "path": "scripts/build-windows-release.ps1",
       "bytes": 9414,
-      "sha256": "3ac06c085c258f2bbc1976301e8a9b0344a0b892b7107a8eb9be9e0c101aa85a"
+      "sha256": "cb3738078454617cf21f0638ad647e5557f5d871032803adb2f1cd4002715c64"
     },
     {
       "path": "scripts/generate-release-manifest.mjs",
       "bytes": 1716,
-      "sha256": "9277a6149386fceb466021918355baddf749b159af9e07b90322b447a5aef305"
+      "sha256": "e168f6c8c89e3cb291cc071acdd40c30268e21ea719533638c745a37a1e3fc8a"
     },
     {
       "path": "scripts/test-installed-windows-package.ps1",
       "bytes": 6840,
-      "sha256": "1dc866158541d0cf0f59fd77e6299d5b61e3181edaa840af34d675a6da48f64a"
+      "sha256": "04cb40453367c9f2db7efbe04824a27356191a7df607edae7e7f60bc6ae9d30c"
     },
     {
       "path": "scripts/verify-release-manifest.mjs",
       "bytes": 1662,
-      "sha256": "b0c2bd8121e7c7358dbe37a7d2a44e1f8b39293c2285cf50d702bc9824075be1"
+      "sha256": "c71acc33d67ecdcadebd060aa6355549255e692a711f5bcceaebb0b262a4085b"
     },
     {
       "path": "SECURITY.md",
       "bytes": 1760,
-      "sha256": "1123d6b8c87524786990d480a21584b3eba88d0d9bbf7d83edf77dfca45bd74d"
+      "sha256": "2f1b1f0631d57d0ff79e5daaee2fa9455ff01ec8ae22328da3a3888dc7a24c5a"
     },
     {
       "path": "SUPPORT_MATRIX.md",
       "bytes": 1020,
-      "sha256": "758bbacbeb0718368fd3f1403cd7f5c969479bc19457cce0145d44946e184eee"
+      "sha256": "08b123b30c60d51eedaced72f01247d4b54647861bc10f1cb8fc0aed66bf3445"
     },
     {
       "path": "THIRD_PARTY_NOTICES.md",
       "bytes": 1299,
-      "sha256": "749f13842be3c47d4f9027afb392c8ab9cb69472afe795d97f48e60c45024805"
+      "sha256": "59d7bad5eb60d052972e214d0f8a707fb457470690e0a3435a72f16087f2a478"
     }
   ]
 }

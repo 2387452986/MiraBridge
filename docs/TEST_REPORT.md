@@ -6,7 +6,31 @@ Status vocabulary is intentionally closed: `PASS_REAL`,
 `PASS_SAFE_REJECTION`, `FAIL_PRODUCT`, `FAIL_ENVIRONMENT`, and `NOT_RUN`.
 Mock, compile-only, CI-targeted, and real-LAN evidence are kept separate.
 
-## 2.0.0-rc.2 current release candidate
+## 2.0.0-rc.3 current release candidate
+
+| Contract | Observed |
+|---|---|
+| Product/packages | `2.0.0-rc.3` |
+| RPC / MCP surface | `2.0` / exactly 28 tools (unchanged) |
+| Worker database | SQLite `user_version=5` (unchanged) |
+| Scope | Mac runtime and fixed-ref marketplace upgrade correctness; rc.2 Windows UI/single-instance behavior retained |
+
+### Error-before and repair
+
+| Gate | Result | Evidence |
+|---|---|---|
+| rc.1 → rc.2 runtime switch | FAIL_PRODUCT | installer printed rc.2 success, but `current`, CLI doctor and managed runtime still resolved to rc.1 |
+| Root cause: runtime link | PASS_REAL | macOS `mv -f` followed the destination directory symlink and moved the candidate link inside the rc.1 directory; `mv -fh` replaced the link itself |
+| Root cause: marketplace ref | PASS_REAL | Codex marketplace metadata remained pinned to `v2.0.0-rc.1`; a snapshot upgrade correctly refreshed that same ref and therefore could not advance the plugin |
+| Patched local upgrade | PASS_REAL | exact rc.2 repair moved `current` to rc.2, doctor returned rc.2, plugin cache returned rc.2 and the new public Logo SHA-256 `40608748bbb8ebeedefb4a7dd06ce3493faff659f8ee3b4fa3f9c9d5c210e325` |
+
+The corrected installer removes only `mira-bridge@mirabridge` and its own
+marketplace registration, re-adds the requested immutable tag, installs the
+plugin, reasserts the selected runtime using `mv -fh`, and runs a final doctor.
+The source/CI/release and real rc.3 Windows replacement evidence is recorded
+after those gates complete; no rc.2 result is inherited as rc.3 proof.
+
+## Historical UI/product baseline: 2.0.0-rc.2
 
 | Contract | Observed |
 |---|---|
@@ -60,8 +84,8 @@ part of the public README or release assets.
 
 | Gate | Result | Notes |
 |---|---|---|
-| Public main/tag/prerelease | NOT_RUN | recorded only after the final manifest, commit, tag and GitHub workflow complete |
-| Windows ARM64 native CI | NOT_RUN | rc.1 passed the native ARM runner; rc.2 must rerun rather than inherit that result |
+| Public main/tag/prerelease | PASS_REAL | commit `e19f6fe`, annotated `v2.0.0-rc.2`, prerelease and 27 assets published; GitHub release workflow run `32627470315` passed |
+| Windows ARM64 native CI | PASS_REAL | GitHub native `windows-11-arm` CI and prerelease build both passed; this remains build/smoke evidence, not physical GUI evidence |
 | Physical Windows 10 / ARM64 GUI | NOT_RUN | stable `2.0.0` gate |
 | Windows code signing | NOT_RUN | rc.2 remains explicitly unsigned |
 

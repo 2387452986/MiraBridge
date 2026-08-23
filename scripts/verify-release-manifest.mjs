@@ -15,7 +15,7 @@ const localOnly = new Set([
   "plugins/mira-bridge/docs/IMPLEMENTATION_CHECKLIST.md",
   "plugins/mira-bridge/docs/TEST_REPORT.md",
 ]);
-if (manifest.schema_version !== 1 || manifest.product !== "MiraBridge" || manifest.version !== "2.0.0-rc.2" || !Array.isArray(manifest.files)) {
+if (manifest.schema_version !== 1 || manifest.product !== "MiraBridge" || manifest.version !== "2.0.0-rc.3" || !Array.isArray(manifest.files)) {
   throw new Error("Release manifest identity or schema is invalid.");
 }
 for (const entry of manifest.files) {

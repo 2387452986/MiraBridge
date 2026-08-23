@@ -1,4 +1,4 @@
-# Support matrix — 2.0.0-rc.2
+# Support matrix — 2.0.0-rc.3
 
 | Host | Supported | Release evidence |
 |---|---|---|
@@ -11,4 +11,4 @@
 | NVIDIA / AMD / Intel GPU | Capability-detected | No driver is installed or upgraded |
 | No discrete GPU | Yes | Process, file, job, transfer and local Edge features remain available |
 
-Core operation requires a Mac running Codex and a Windows computer reachable on the same trusted LAN or an existing secure SSH network. `2.0.0-rc.2` is unsigned; stable `2.0.0` is blocked on code signing plus physical Windows 10 and ARM64 GUI acceptance.
+Core operation requires a Mac running Codex and a Windows computer reachable on the same trusted LAN or an existing secure SSH network. `2.0.0-rc.3` is unsigned; stable `2.0.0` is blocked on code signing plus physical Windows 10 and ARM64 GUI acceptance.

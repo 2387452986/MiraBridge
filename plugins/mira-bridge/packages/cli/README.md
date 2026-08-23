@@ -1,6 +1,6 @@
 # @mirabridge/cli
 
-Mac configuration and diagnostics CLI for MiraBridge 2.0.0-rc.2. It manages node TOML and a dedicated `known_hosts`; it does not contain the Agent loop or Windows execution logic.
+Mac configuration and diagnostics CLI for MiraBridge 2.0.0-rc.3. It manages node TOML and a dedicated `known_hosts`; it does not contain the Agent loop or Windows execution logic.
 
 ```text
 mirabridge init

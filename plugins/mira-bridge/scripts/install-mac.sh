@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-version="2.0.0-rc.2"
+version="2.0.0-rc.3"
 node_version="24.19.0"
 script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 module_root=$(CDPATH= cd -- "$script_dir/.." && pwd)
@@ -78,7 +78,9 @@ rm -rf "$release_root"
 mv "$staging_root" "$release_root"
 new_link="$install_root/.current.$$"
 ln -s "$release_root" "$new_link"
-mv -f "$new_link" "$install_root/current"
+# On macOS, plain `mv -f` follows a destination symlink to a directory and
+# moves the new link inside the old release. `-h` replaces the link itself.
+mv -fh "$new_link" "$install_root/current"
 
 wrapper="$bin_root/mirabridge"
 wrapper_tmp="$wrapper.$$"
@@ -100,7 +102,7 @@ rollback() {
   if [ -n "$previous" ] && [ -d "$previous" ]; then
     rollback_link="$install_root/.current.rollback.$$"
     ln -s "$previous" "$rollback_link"
-    mv -f "$rollback_link" "$install_root/current"
+    mv -fh "$rollback_link" "$install_root/current"
   fi
 }
 
@@ -113,14 +115,29 @@ fi
 if [ "${MIRABRIDGE_SKIP_PLUGIN_INSTALL:-0}" != "1" ]; then
   [ -n "$codex_bin" ] || { rollback; echo "Codex CLI was not found. Set MIRABRIDGE_CODEX and rerun." >&2; exit 69; }
   marketplace_source="${MIRABRIDGE_MARKETPLACE_SOURCE:-2387452986/MiraBridge}"
-  if [ -d "$marketplace_source" ]; then
-    "$codex_bin" plugin marketplace add "$marketplace_source" --json >/dev/null 2>&1 || true
-  else
-    "$codex_bin" plugin marketplace add "$marketplace_source" --ref "v$version" --json >/dev/null 2>&1 || \
-      "$codex_bin" plugin marketplace upgrade mirabridge --json >/dev/null
-  fi
+  # A Git marketplace remembers the ref used when it was first added. Merely
+  # upgrading that snapshot therefore keeps an rc.1 installation pinned to
+  # rc.1. Replace only MiraBridge's own registration so an explicit product
+  # update also advances the marketplace and plugin cache to the same tag.
   "$codex_bin" plugin remove mira-bridge@mirabridge --json >/dev/null 2>&1 || true
+  "$codex_bin" plugin marketplace remove mirabridge --json >/dev/null 2>&1 || true
+  if [ -d "$marketplace_source" ]; then
+    "$codex_bin" plugin marketplace add "$marketplace_source" --json >/dev/null
+  else
+    "$codex_bin" plugin marketplace add "$marketplace_source" --ref "v$version" --json >/dev/null
+  fi
   "$codex_bin" plugin add mira-bridge@mirabridge --json >/dev/null
+fi
+
+# Reassert the selected runtime after Codex has replaced its marketplace and
+# plugin cache, then verify the user-visible CLI rather than trusting staging.
+final_link="$install_root/.current.final.$$"
+ln -s "$release_root" "$final_link"
+mv -fh "$final_link" "$install_root/current"
+if ! "$wrapper" doctor >/dev/null; then
+  rollback
+  echo "MiraBridge final doctor failed; the previous runtime was restored." >&2
+  exit 70
 fi
 
 trap - EXIT HUP INT TERM
