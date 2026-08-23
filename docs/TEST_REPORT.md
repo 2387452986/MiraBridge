@@ -55,6 +55,7 @@ with hostname, address and Host Fingerprint redacted from public evidence.
 | Upgrade backup | PASS_REAL | no active Job; `worker.toml` SHA-256 `6c68cce62a430ac387ff2f1abe80b8d40a5c3edb4b2aab4bdc9fb80d1db2c920`; SQLite `VACUUM INTO` SHA-256 `afdc84fe4d1ac90d434b434731283affbef04c280e50644fecbea965781e2291` |
 | Incorrect account refusal | PASS_SAFE_REJECTION | the first scheduled install used an unresolved account name and Windows rejected it before application mutation; the harness then used the identity returned by `WindowsIdentity` |
 | Installed replacement | PASS_REAL | receipt SHA-256 `b3cfd8f9e768cd5516986ab1e40f72ab7c76b1f7a59e3989d4d6063481a243f9`; uninstall 0, install 0, Worker Ready, one app process after five duplicate launches, immediate and settled activation both true, zero new crashes |
+| Current installed UI | PASS_REAL | the rc.3 interactive session reactivated the existing window through a duplicate launch, retained one `current` process and captured the current task-oriented UI; 85,833-byte PNG / SHA-256 `79a2bc4373e2bf210d4dcc0f9252b616c70d89126cba8abad67ab44b475aa2ad`; the capture remains ignored locally because it contains LAN and Host Fingerprint data |
 | Durable state | PASS_REAL | live Worker reported rc.3 / RPC 2.0 and retained 129 Jobs, 95 Workspaces and the existing request/output/tombstone history in SQLite v5 |
 | SSH and reconnect | PASS_REAL | SSH remained Running/Automatic; Mac `mirabridge node test windows-main` completed a real rc.3 handshake after replacement |
 
