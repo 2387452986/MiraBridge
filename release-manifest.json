@@ -2,7 +2,7 @@
   "schema_version": 1,
   "product": "MiraBridge",
   "version": "2.0.0-rc.5",
-  "generated_at": "2026-08-23T12:08:56.759Z",
+  "generated_at": "2026-08-23T12:23:23.999Z",
   "files": [
     {
       "path": ".agents/plugins/marketplace.json",
@@ -281,8 +281,8 @@
     },
     {
       "path": "docs/TEST_REPORT.md",
-      "bytes": 35525,
-      "sha256": "e659a7e7610527dff8456296809b3d5be0656e4f2fe29091a3f9af6c75a2cc35"
+      "bytes": 36754,
+      "sha256": "578cadeead92aee18b7114d6da1b3cd3a026a7583e0e7ed86291c3601a6b352c"
     },
     {
       "path": "LICENSE",

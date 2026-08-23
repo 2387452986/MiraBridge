@@ -31,6 +31,7 @@ Mock, compile-only, CI-targeted, and real-LAN evidence are kept separate.
 | Gate | Result | Evidence |
 |---|---|---|
 | Mac strict/type/unit/integration | PASS_REAL | managed Node 24.19.0; `npm ci` reported zero vulnerabilities, 26 Vitest files / 130 tests passed, strict typecheck, build, MCP/plugin and Skill validation passed |
+| Four-platform source CI | PASS_REAL | GitHub Actions run `32638577441` passed the tagged commit on macOS Apple Silicon/Intel, Windows x64 and native Windows ARM64 |
 | Native Windows release build | PASS_REAL | final durable Job `job_d2luZG93cy1tYWlu_086b6d3a-26d5-4fb2-91eb-fb387c179985`, exit 0; 109 cross-platform tests, Windows-native 102/102 and WPF client 8/8 passed |
 | x64 Setup | PASS_REAL | 251,233,250 bytes; SHA-256 `34b9d2ed90593ea8d04f9431e75d2b47417002d13a43c12592cd784bde5da51f` |
 | Installed replacement | PASS_REAL | receipt SHA-256 `450db4bbf3e00c86530105243ffbb429d38f3ff5cf6e781cac5dcb6c2fd427fb`; uninstall 0, install 0, Worker Ready, one real app process after five duplicate launches, immediate/settled activation true, zero crashes and durable data preserved |
@@ -39,7 +40,15 @@ Mock, compile-only, CI-targeted, and real-LAN evidence are kept separate.
 | Installed pairing UI | PASS_REAL | real interactive 1180x780 capture is 65,688 bytes / SHA-256 `9b7634efe013872b2c93910ee351efa6671a7bb0123cda22b0f3bcc019d8c0dc`; it shows rc.5, the new mascot, consistent language control, the full Mac command and its copy action |
 | English/Chinese public guide | PASS_REAL | `README.md` and `README.zh-CN.md` provide equivalent product positioning, real productivity cases and the explicit create → authorize → accept command flow |
 | Acceptance cleanup | PASS_REAL | all three exact RC5 one-shot Scheduled Tasks were unregistered (`remaining=0`), and their remote scripts, receipts and screenshots were removed after local evidence was hash-verified |
-| Public tag / prerelease / published-tag pickup | NOT_RUN | performed only after the final manifest, source hygiene and local package gates pass; local Windows bytes are not represented as future CI release bytes |
+| Public tag and prerelease | PASS_REAL | annotated `v2.0.0-rc.5` resolves to commit `e9ca216`; prerelease workflow `32638804965` passed both Macs, Windows x64/native ARM64, provenance, SBOM, collision and publish jobs |
+| Public release integrity | PASS_REAL | 27 assets published; aggregate `SHA256SUMS` SHA-256 `aaf4ca99d3f469bdd79d945c6fde3babe9d07cfbc3a27dca71cb57ac06ae95d5`; public x64 Setup `e727eb7cdfca4addf120231000b1f4337b282777d30995689aecc1e690c47a8d`; public ARM64 Setup `c5971ffe34bc4b3e72dabb25f9462bc0f1037098ae7380c804a9901fe4003873` |
+| Public-tag Mac upgrade | PASS_REAL | updater downloaded `v2.0.0-rc.5`, byte-verified all 182 manifest files, installed with zero dependency vulnerabilities and switched CLI/runtime/plugin cache to rc.5 |
+| Installed-plugin closure | PASS_REAL | public-tag plugin cache preserved Logo SHA-256 `40608748bbb8ebeedefb4a7dd06ce3493faff659f8ee3b4fa3f9c9d5c210e325`, exposed exactly 28 tools and completed a real handshake with physical Worker `2.0.0-rc.5`, RPC `2.0`, x64 |
+
+Release: `https://github.com/2387452986/MiraBridge/releases/tag/v2.0.0-rc.5`.
+The physical x64 replacement used a local exact-source build; the separately
+published CI Setup has its own recorded byte identity and is not represented as
+the same binary.
 
 ## 2.0.0-rc.4 current release candidate
 
