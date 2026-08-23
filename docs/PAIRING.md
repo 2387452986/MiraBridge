@@ -2,6 +2,16 @@
 
 Pairing uses two clipboard codes and one live network verification. A code is versioned base64url JSON, no larger than 16 KiB and valid for at most 30 minutes.
 
+## Guided copy flow
+
+The Windows app's **Connect Mac** page presents the complete commands, so the normal path does not require remembering CLI syntax:
+
+1. Click **Copy command** and give `~/.local/bin/mirabridge pair create` to Codex on the Mac.
+2. Paste the request code produced on the Mac into Windows and click **Authorize & create response**.
+3. Click **Copy completion command** and give the complete `~/.local/bin/mirabridge pair accept …` command back to Codex on the Mac.
+
+The Windows authorization click already installs the validated public key. It does not require a separate SSH command, private-key copy, password, or manually entered fingerprint.
+
 ## Request: Mac to Windows
 
 The request contains the Mac Ed25519 **public** key, its SHA-256 fingerprint, a random nonce, node ID, creation/expiry time and basic Mac/version metadata. The private key stays in `~/.config/mirabridge/identities` with mode 0600. There is no password or token.

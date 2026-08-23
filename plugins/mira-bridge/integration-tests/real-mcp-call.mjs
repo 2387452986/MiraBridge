@@ -21,7 +21,7 @@ const transport = new StdioClientTransport({
   },
   stderr: "pipe",
 });
-const client = new Client({ name: "mirabridge-real-mcp-call", version: "2.0.0-rc.4" });
+const client = new Client({ name: "mirabridge-real-mcp-call", version: "2.0.0-rc.5" });
 try {
   await client.connect(transport);
   const response = await client.callTool(

@@ -270,10 +270,22 @@
             <TextBlock Text="{DynamicResource ConnectTitle}" Style="{StaticResource PageTitleStyle}" />
             <TextBlock Text="{DynamicResource ConnectDescription}" Style="{StaticResource PageDescriptionStyle}" Margin="0,7,0,30" />
 
-            <Grid Margin="0,0,0,24"><Grid.ColumnDefinitions><ColumnDefinition Width="46" /><ColumnDefinition /></Grid.ColumnDefinitions>
-              <Border Width="34" Height="34" CornerRadius="17" Background="#EAF2FF" VerticalAlignment="Top"><TextBlock Text="{DynamicResource PairStep1}" Foreground="{StaticResource MiraBlueDark}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" /></Border>
-              <StackPanel Grid.Column="1"><TextBlock Text="{DynamicResource PairStep1Title}" Style="{StaticResource SectionTitleStyle}" /><TextBlock Text="{DynamicResource PairStep1Description}" Style="{StaticResource PageDescriptionStyle}" Margin="0,4,0,0" /></StackPanel>
-            </Grid>
+            <Border Style="{StaticResource SurfaceBorderStyle}" Margin="0,0,0,24">
+              <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="46" /><ColumnDefinition /></Grid.ColumnDefinitions>
+                <Border Width="34" Height="34" CornerRadius="17" Background="#EAF2FF" VerticalAlignment="Top"><TextBlock Text="{DynamicResource PairStep1}" Foreground="{StaticResource MiraBlueDark}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" /></Border>
+                <StackPanel Grid.Column="1">
+                  <TextBlock Text="{DynamicResource PairStep1Title}" Style="{StaticResource SectionTitleStyle}" />
+                  <TextBlock Text="{DynamicResource PairStep1Description}" Style="{StaticResource PageDescriptionStyle}" Margin="0,4,0,16" />
+                  <TextBlock Text="{DynamicResource PairCreateCommand}" FontWeight="SemiBold" />
+                  <Grid Margin="0,8,0,0"><Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                    <Border Height="42" Background="White" BorderBrush="#D7DCE5" BorderThickness="1" CornerRadius="10" Padding="12,0" Margin="0,0,10,0">
+                      <TextBlock Text="{Binding PairCreateCommandText}" Foreground="{StaticResource PrimaryTextBrush}" VerticalAlignment="Center" FontFamily="Cascadia Mono, Consolas" FontSize="12" AutomationProperties.Name="Mac pairing request command" />
+                    </Border>
+                    <Button Grid.Column="1" Content="{DynamicResource CopyCommand}" Command="{Binding CopyPairCreateCommand}" Style="{StaticResource PrimaryButtonStyle}" />
+                  </Grid>
+                </StackPanel>
+              </Grid>
+            </Border>
 
             <Border Style="{StaticResource SurfaceBorderStyle}" Margin="0,0,0,24">
               <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="46" /><ColumnDefinition /></Grid.ColumnDefinitions>
@@ -287,6 +299,7 @@
                   </Grid>
                   <TextBox Text="{Binding PairRequestCode, UpdateSourceTrigger=PropertyChanged}" Height="106" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" FontFamily="Cascadia Mono, Consolas" FontSize="12" AutomationProperties.Name="Mac pairing request code" />
                   <Button Content="{DynamicResource Pair}" Command="{Binding PairCommand}" Style="{StaticResource PrimaryButtonStyle}" HorizontalAlignment="Left" />
+                  <TextBlock Text="{DynamicResource PairAuthorizationHint}" Style="{StaticResource PageDescriptionStyle}" Margin="0,10,0,0" />
                 </StackPanel>
               </Grid>
             </Border>
@@ -297,9 +310,16 @@
                 <StackPanel Grid.Column="1">
                   <TextBlock Text="{DynamicResource PairStep3Title}" Style="{StaticResource SectionTitleStyle}" />
                   <TextBlock Text="{DynamicResource PairStep3Description}" Style="{StaticResource PageDescriptionStyle}" Margin="0,4,0,16" />
-                  <TextBlock Text="{DynamicResource PairResponse}" FontWeight="SemiBold" />
-                  <TextBox Text="{Binding PairResponseCode, Mode=OneWay}" Height="106" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" FontFamily="Cascadia Mono, Consolas" FontSize="12" AutomationProperties.Name="Windows pairing response code" />
-                  <Button Content="{DynamicResource CopyResponse}" Command="{Binding CopyResponseCommand}" Style="{StaticResource PrimaryButtonStyle}" HorizontalAlignment="Left" />
+                  <TextBlock Text="{DynamicResource PairAcceptCommand}" FontWeight="SemiBold" />
+                  <Border Height="106" Background="White" BorderBrush="#D7DCE5" BorderThickness="1" CornerRadius="10" Padding="12,10">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                      <TextBlock Text="{Binding PairAcceptCommandText}" Foreground="{StaticResource PrimaryTextBrush}" TextWrapping="Wrap" FontFamily="Cascadia Mono, Consolas" FontSize="12" AutomationProperties.Name="Mac pairing completion command" />
+                    </ScrollViewer>
+                  </Border>
+                  <StackPanel Orientation="Horizontal">
+                    <Button Content="{DynamicResource CopyAcceptCommand}" Command="{Binding CopyPairAcceptCommand}" Style="{StaticResource PrimaryButtonStyle}" />
+                    <Button Content="{DynamicResource CopyResponse}" Command="{Binding CopyResponseCommand}" Style="{StaticResource CompactButtonStyle}" Margin="10,0,0,0" />
+                  </StackPanel>
                 </StackPanel>
               </Grid>
             </Border>

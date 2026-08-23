@@ -1,7 +1,7 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
   <sys:String x:Key="AppTitle">MiraBridge for Windows</sys:String>
   <sys:String x:Key="Subtitle">让 Mac 上的 Codex 使用这台 Windows</sys:String>
-  <sys:String x:Key="VersionLine">2.0.0-rc.4 · RPC 2.0 · 28 个工具</sys:String>
+  <sys:String x:Key="VersionLine">2.0.0-rc.5 · RPC 2.0 · 28 个工具</sys:String>
   <sys:String x:Key="NavOverview">总览</sys:String>
   <sys:String x:Key="NavConnect">连接 Mac</sys:String>
   <sys:String x:Key="NavAccess">权限与目录</sys:String>
@@ -45,16 +45,21 @@
   <sys:String x:Key="ConnectDescription">配对只需要往返复制两段代码。私钥不会离开 Mac。</sys:String>
   <sys:String x:Key="PairStep1">1</sys:String>
   <sys:String x:Key="PairStep1Title">在 Mac 上生成请求码</sys:String>
-  <sys:String x:Key="PairStep1Description">让 Codex 运行 mirabridge pair create，然后复制输出的请求码。</sys:String>
+  <sys:String x:Key="PairStep1Description">把下面整条命令复制给 Mac 上的 Codex 执行，再把它生成的请求码带回第 2 步。</sys:String>
+  <sys:String x:Key="PairCreateCommand">需要在 Mac 上运行的命令</sys:String>
+  <sys:String x:Key="CopyCommand">复制整条命令</sys:String>
   <sys:String x:Key="PairStep2">2</sys:String>
   <sys:String x:Key="PairStep2Title">粘贴请求并授权</sys:String>
   <sys:String x:Key="PairStep2Description">MiraBridge 只会添加这个 Mac 的公钥，并保留已有 SSH 密钥。</sys:String>
   <sys:String x:Key="PairRequest">Mac 配对请求码</sys:String>
   <sys:String x:Key="Paste">从剪贴板粘贴</sys:String>
-  <sys:String x:Key="Pair">授权这台 Mac</sys:String>
+  <sys:String x:Key="Pair">授权并生成响应</sys:String>
+  <sys:String x:Key="PairAuthorizationHint">授权已在这里一次完成，无需手动配置 SSH 文件、输入指纹或运行额外命令。</sys:String>
   <sys:String x:Key="PairStep3">3</sys:String>
   <sys:String x:Key="PairStep3Title">把响应码带回 Mac</sys:String>
-  <sys:String x:Key="PairStep3Description">复制响应码，让 Codex 运行 mirabridge pair accept &lt;响应码&gt; 完成主机指纹验证。</sys:String>
+  <sys:String x:Key="PairStep3Description">把下面整条命令复制回 Mac 上的 Codex。它会实时核验这台电脑并保存连接。</sys:String>
+  <sys:String x:Key="PairAcceptCommand">在 Mac 上完成配对的命令</sys:String>
+  <sys:String x:Key="CopyAcceptCommand">复制完成命令</sys:String>
   <sys:String x:Key="PairResponse">Windows 配对响应码</sys:String>
   <sys:String x:Key="CopyResponse">复制响应码</sys:String>
   <sys:String x:Key="PairedMacs">已连接的 Mac</sys:String>

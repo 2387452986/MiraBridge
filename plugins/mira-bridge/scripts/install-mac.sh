@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-version="2.0.0-rc.4"
+version="2.0.0-rc.5"
 node_version="24.19.0"
 script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 module_root=$(CDPATH= cd -- "$script_dir/.." && pwd)

@@ -8,7 +8,7 @@ namespace MiraBridge.Windows;
 
 internal static class Program
 {
-    private const string ProductVersion = "2.0.0-rc.4";
+    private const string ProductVersion = "2.0.0-rc.5";
     private const string UpdateMaintenanceOwner = "windows-app-update";
     private const string UninstallMaintenanceOwner = "windows-app-uninstall";
     private const string InstanceMutexName = @"Local\MiraBridge.Windows.Instance";

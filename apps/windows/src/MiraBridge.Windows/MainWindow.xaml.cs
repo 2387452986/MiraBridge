@@ -1,5 +1,7 @@
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -11,6 +13,7 @@ public partial class MainWindow : Window
 {
     private readonly MainViewModel _viewModel;
     private readonly NotifyIcon _tray;
+    private readonly System.Drawing.Icon _trayIcon;
     private readonly bool _startInTray;
     private bool _exitRequested;
 
@@ -26,11 +29,12 @@ public partial class MainWindow : Window
         InitializeComponent();
         DataContext = _viewModel;
         LanguageSelector.SelectionChanged += LanguageChanged;
-        System.Drawing.Icon? appIcon = System.Drawing.Icon.ExtractAssociatedIcon(Environment.ProcessPath ?? string.Empty);
+        RefreshShellIcons();
+        _trayIcon = LoadPackagedIcon();
         _tray = new NotifyIcon
         {
             Text = "MiraBridge for Windows",
-            Icon = appIcon ?? SystemIcons.Application,
+            Icon = _trayIcon,
             Visible = true,
             ContextMenuStrip = BuildTrayMenu()
         };
@@ -58,6 +62,7 @@ public partial class MainWindow : Window
         }
         _tray.Visible = false;
         _tray.Dispose();
+        _trayIcon.Dispose();
         base.OnClosing(eventArgs);
     }
 
@@ -113,4 +118,17 @@ public partial class MainWindow : Window
         else dictionaries.Add(dictionary);
         _viewModel.Language = language;
     }
+
+    private static System.Drawing.Icon LoadPackagedIcon()
+    {
+        using Stream stream = System.Windows.Application.GetResourceStream(new Uri("pack://application:,,,/Assets/mirabridge.ico"))?.Stream
+            ?? throw new InvalidOperationException("The packaged MiraBridge icon is missing.");
+        using var icon = new System.Drawing.Icon(stream);
+        return (System.Drawing.Icon)icon.Clone();
+    }
+
+    private static void RefreshShellIcons() => SHChangeNotify(0x08000000, 0, IntPtr.Zero, IntPtr.Zero);
+
+    [DllImport("shell32.dll")]
+    private static extern void SHChangeNotify(uint eventId, uint flags, IntPtr item1, IntPtr item2);
 }

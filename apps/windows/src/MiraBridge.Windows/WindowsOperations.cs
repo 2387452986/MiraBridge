@@ -22,7 +22,7 @@ public sealed class WindowsOperations : IWindowsOperations
         string[] addresses = WindowsHostInfo.AddressCandidates();
         var details = new Dictionary<string, object?>
         {
-            ["version"] = "2.0.0-rc.4",
+            ["version"] = "2.0.0-rc.5",
             ["os"] = RuntimeInformation.OSDescription,
             ["architecture"] = WindowsHostInfo.Architecture,
             ["addresses"] = addresses
@@ -198,7 +198,7 @@ public sealed class WindowsOperations : IWindowsOperations
         try
         {
             await BackupWorkerStateAsync(cancellationToken);
-            recovery = await _updateRecovery.PrepareAsync("2.0.0-rc.4", update.TargetFullRelease.Version.ToString(), cancellationToken);
+            recovery = await _updateRecovery.PrepareAsync("2.0.0-rc.5", update.TargetFullRelease.Version.ToString(), cancellationToken);
             cancellationToken.ThrowIfCancellationRequested();
             await manager.DownloadUpdatesAsync(update);
             manager.ApplyUpdatesAndRestart(update);
@@ -220,7 +220,7 @@ public sealed class WindowsOperations : IWindowsOperations
         {
             generated_at = DateTimeOffset.UtcNow,
             product = "MiraBridge for Windows",
-            version = "2.0.0-rc.4",
+            version = "2.0.0-rc.5",
             status = status.Summary,
             architecture = WindowsHostInfo.Architecture,
             paired_mac_count = pairings.Count,

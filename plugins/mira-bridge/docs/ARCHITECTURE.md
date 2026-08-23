@@ -1,4 +1,4 @@
-# MiraBridge 2.0.0-rc.4 architecture
+# MiraBridge 2.0.0-rc.5 architecture
 
 ## Non-negotiable invariant
 
@@ -19,7 +19,7 @@ Codex on macOS owns the only Agent loop, LLM, user-goal interpretation, planning
 | `packages/windows-worker` | Windows path policy, files, processes, output decoding, Jobs/ConPTY, SQLite, audit, GC, Recycle Bin, Edge, transfer commit | Agent behavior or goal completion |
 | `packages/cli` | Mac enrollment/config diagnostics | Duplicating Worker or MCP runtime logic |
 
-MiraBridge is an independent `2.0.0-rc.4` release boundary. It does not register with or modify PAF/Mira's existing runtime MCP owner.
+MiraBridge is an independent `2.0.0-rc.5` release boundary. It does not register with or modify PAF/Mira's existing runtime MCP owner.
 
 ## Runtime flow
 
@@ -109,4 +109,4 @@ A Windows Agent would duplicate context, authorization, model credentials, compl
 
 ## Compatibility
 
-All packages and CLIs are `2.0.0-rc.4`; RPC remains `2.0` and the public surface remains 28 tools. The 2.0 major changes source, installation, pairing and update ownership without introducing a protocol-major break. SQLite migrates in one transaction to `user_version=5` while retaining earlier state; the maintenance lease reuses that schema's existing maintenance table. A different protocol major returns `PROTOCOL_MISMATCH`; unknown optional fields within major 2 are ignored. Scoped opaque IDs retain the node identity so workspaces, Jobs, outputs, transfers and scan receipts route correctly after MCP restart.
+All packages and CLIs are `2.0.0-rc.5`; RPC remains `2.0` and the public surface remains 28 tools. The 2.0 major changes source, installation, pairing and update ownership without introducing a protocol-major break. SQLite migrates in one transaction to `user_version=5` while retaining earlier state; the maintenance lease reuses that schema's existing maintenance table. A different protocol major returns `PROTOCOL_MISMATCH`; unknown optional fields within major 2 are ignored. Scoped opaque IDs retain the node identity so workspaces, Jobs, outputs, transfers and scan receipts route correctly after MCP restart.

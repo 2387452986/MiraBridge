@@ -5,8 +5,8 @@ import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js"
 
 const nodeId = process.env.MIRABRIDGE_E2E_NODE ?? "windows-main";
 const configPath = process.env.MIRABRIDGE_CONFIG;
-const expectedWorkerVersion = process.env.MIRABRIDGE_E2E_EXPECTED_WORKER ?? "2.0.0-rc.4";
-const projectName = process.env.MIRABRIDGE_E2E_PROJECT ?? "MiraBridge-Release-Acceptance-2.0.0-rc.4";
+const expectedWorkerVersion = process.env.MIRABRIDGE_E2E_EXPECTED_WORKER ?? "2.0.0-rc.5";
+const projectName = process.env.MIRABRIDGE_E2E_PROJECT ?? "MiraBridge-Release-Acceptance-2.0.0-rc.5";
 const localDestination = process.env.MIRABRIDGE_E2E_PULL_DESTINATION
   ?? resolve("artifacts", "real-lan", projectName);
 const remoteParent = "D:\\MiraBridgeRoot";
@@ -41,7 +41,7 @@ async function connect() {
     },
     stderr: "pipe",
   });
-  const client = new Client({ name: "mirabridge-real-lan-e2e", version: "2.0.0-rc.4" });
+  const client = new Client({ name: "mirabridge-real-lan-e2e", version: "2.0.0-rc.5" });
   await client.connect(transport);
   return client;
 }
@@ -93,7 +93,7 @@ async function waitForHttp(client, workspaceId) {
 const packageJson = `${JSON.stringify({
   name: "mirabridge-windows-studio",
   private: true,
-  version: "2.0.0-rc.4",
+  version: "2.0.0-rc.5",
   type: "module",
   scripts: { dev: "vite", build: "vite build", preview: "vite preview" },
   devDependencies: { vite: "7.1.3" },

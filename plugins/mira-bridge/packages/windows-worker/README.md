@@ -1,6 +1,6 @@
 # @mirabridge/windows-worker
 
-Deterministic Windows executor for MiraBridge 2.0.0-rc.4 / RPC 2.0. It contains no LLM, Agent planner, dialogue memory, or semantic task-completion logic. The same package supports Windows x64 and ARM64 with the matching Node 24/.NET 10 runtimes; hardware GPU acceleration is optional.
+Deterministic Windows executor for MiraBridge 2.0.0-rc.5 / RPC 2.0. It contains no LLM, Agent planner, dialogue memory, or semantic task-completion logic. The same package supports Windows x64 and ARM64 with the matching Node 24/.NET 10 runtimes; hardware GPU acceleration is optional.
 
 ```text
 mirabridge-worker --version

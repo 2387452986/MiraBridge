@@ -8,8 +8,10 @@
 
 <p align="center">MiraBridge 将 Windows 电脑变成 Mac 上 Codex 可直接使用的远程原生工具环境。</p>
 
+<p align="center"><strong>English</strong> · <a href="./README.zh-CN.md">简体中文</a></p>
+
 <p align="center">
-  <a href="https://github.com/2387452986/MiraBridge/releases/tag/v2.0.0-rc.4">Download 2.0.0-rc.4</a>
+  <a href="https://github.com/2387452986/MiraBridge/releases/tag/v2.0.0-rc.5">Download 2.0.0-rc.5</a>
   · <a href="#install-in-one-conversation">Install</a>
   · <a href="./docs/TEST_REPORT.md">Real test evidence</a>
   · <a href="./SECURITY.md">Security</a>
@@ -68,17 +70,23 @@ This is an unsigned release candidate. Windows SmartScreen may show **Unknown pu
 
 Tell Codex on the Mac:
 
-> 请从 `https://github.com/2387452986/MiraBridge` 安装 `v2.0.0-rc.4`，完成 doctor 并生成 Windows 配对码。
+> 请从 `https://github.com/2387452986/MiraBridge` 安装 `v2.0.0-rc.5`，完成 doctor 并生成 Windows 配对码。
 
 Codex verifies the fixed tag and release manifest, installs the managed Node 24 runtime, MCP server and CLI without Homebrew, and registers `mira-bridge@mirabridge`.
 
-On Windows, download the matching x64 or ARM64 Setup from the same Release, run it, and use **Connect Mac** to paste the request and return the response. The normal path requires no password, private-key copy, TOML edit, or manually typed host fingerprint.
+On Windows, download the matching x64 or ARM64 Setup from the same Release and run it. The **Connect Mac** page gives you both complete commands:
+
+1. Click **Copy command** and give `~/.local/bin/mirabridge pair create` to Codex on the Mac.
+2. Paste the request code into Windows and click **Authorize & create response**.
+3. Click **Copy completion command** and give the complete `~/.local/bin/mirabridge pair accept …` command back to Codex.
+
+Authorization is already included in step 2. The normal path requires no password, private-key copy, TOML edit, SSH file edit, or manually typed host fingerprint.
 
 <details>
 <summary>Explicit Mac commands</summary>
 
 ```sh
-git clone --branch v2.0.0-rc.4 --depth 1 https://github.com/2387452986/MiraBridge.git
+git clone --branch v2.0.0-rc.5 --depth 1 https://github.com/2387452986/MiraBridge.git
 cd MiraBridge
 ./plugins/mira-bridge/scripts/install-mac.sh
 ~/.local/bin/mirabridge doctor

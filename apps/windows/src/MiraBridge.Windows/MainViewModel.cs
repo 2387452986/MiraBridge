@@ -8,6 +8,7 @@ namespace MiraBridge.Windows;
 
 public sealed class MainViewModel : INotifyPropertyChanged
 {
+    private const string PairCreateCommandTextValue = "~/.local/bin/mirabridge pair create";
     private readonly IWindowsOperations _operations;
     private string _status = "Checking...";
     private string _details = string.Empty;
@@ -42,8 +43,10 @@ public sealed class MainViewModel : INotifyPropertyChanged
         RefreshCommand = Command(RefreshAsync);
         RepairCommand = Command(RepairAsync);
         PairCommand = Command(PairAsync, () => !string.IsNullOrWhiteSpace(PairRequestCode));
+        CopyPairCreateCommand = Command(CopyPairCreateAsync);
         PasteRequestCommand = Command(PasteRequestAsync);
         RevokePairingCommand = Command(RevokePairingAsync, () => !string.IsNullOrWhiteSpace(RevokeFingerprint));
+        CopyPairAcceptCommand = Command(CopyPairAcceptAsync, () => !string.IsNullOrWhiteSpace(PairResponseCode));
         CopyResponseCommand = Command(CopyResponseAsync, () => !string.IsNullOrWhiteSpace(PairResponseCode));
         CopyFingerprintCommand = Command(CopyFingerprintAsync, () => !string.IsNullOrWhiteSpace(HostFingerprint) && HostFingerprint != "—");
         AddRootCommand = Command(AddRootAsync, () => !string.IsNullOrWhiteSpace(DefaultRoot));
@@ -67,8 +70,10 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public ICommand RefreshCommand { get; }
     public ICommand RepairCommand { get; }
     public ICommand PairCommand { get; }
+    public ICommand CopyPairCreateCommand { get; }
     public ICommand PasteRequestCommand { get; }
     public ICommand RevokePairingCommand { get; }
+    public ICommand CopyPairAcceptCommand { get; }
     public ICommand CopyResponseCommand { get; }
     public ICommand CopyFingerprintCommand { get; }
     public ICommand AddRootCommand { get; }
@@ -90,8 +95,10 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public string Status { get => _status; private set => Set(ref _status, value); }
     public string Details { get => _details; private set => Set(ref _details, value); }
     public string PairRequestCode { get => _pairRequestCode; set { Set(ref _pairRequestCode, value); RefreshCommands(); } }
-    public string PairResponseCode { get => _pairResponseCode; private set { Set(ref _pairResponseCode, value); OnPropertyChanged(nameof(HasPairResponse)); RefreshCommands(); } }
+    public string PairResponseCode { get => _pairResponseCode; private set { Set(ref _pairResponseCode, value); OnPropertyChanged(nameof(HasPairResponse)); OnPropertyChanged(nameof(PairAcceptCommandText)); RefreshCommands(); } }
     public bool HasPairResponse => !string.IsNullOrWhiteSpace(PairResponseCode);
+    public string PairCreateCommandText => PairCreateCommandTextValue;
+    public string PairAcceptCommandText => HasPairResponse ? $"~/.local/bin/mirabridge pair accept {PairResponseCode}" : string.Empty;
     public string PairedMacs { get => _pairedMacs; private set => Set(ref _pairedMacs, value); }
     public string RevokeFingerprint { get => _revokeFingerprint; set { Set(ref _revokeFingerprint, value); RefreshCommands(); } }
     public string DefaultRoot { get => _defaultRoot; set { Set(ref _defaultRoot, value); RefreshCommands(); } }
@@ -187,8 +194,15 @@ public sealed class MainViewModel : INotifyPropertyChanged
     private async Task PairAsync()
     {
         PairResponseCode = await _operations.PairAsync(PairRequestCode.Trim());
-        Message = "Pairing response is ready. Copy it back to the Mac.";
+        Message = "Mac completion command is ready.";
         await RefreshAsync();
+    }
+
+    private Task CopyPairCreateAsync()
+    {
+        System.Windows.Clipboard.SetText(PairCreateCommandText);
+        Message = "Mac request command copied.";
+        return Task.CompletedTask;
     }
 
     private Task PasteRequestAsync()
@@ -208,6 +222,13 @@ public sealed class MainViewModel : INotifyPropertyChanged
     {
         System.Windows.Clipboard.SetText(PairResponseCode);
         Message = "Pairing response copied.";
+        return Task.CompletedTask;
+    }
+
+    private Task CopyPairAcceptAsync()
+    {
+        System.Windows.Clipboard.SetText(PairAcceptCommandText);
+        Message = "Mac completion command copied.";
         return Task.CompletedTask;
     }
 
@@ -256,7 +277,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
 
     private void RefreshCommands()
     {
-        foreach (ICommand command in new[] { PairCommand, RevokePairingCommand, CopyResponseCommand, CopyFingerprintCommand, AddRootCommand, RemoveRootCommand, OpenIssueCommand }) (command as AsyncCommand)?.Refresh();
+        foreach (ICommand command in new[] { PairCommand, CopyPairCreateCommand, RevokePairingCommand, CopyPairAcceptCommand, CopyResponseCommand, CopyFingerprintCommand, AddRootCommand, RemoveRootCommand, OpenIssueCommand }) (command as AsyncCommand)?.Refresh();
     }
 
     private static string FormatBytes(long bytes)

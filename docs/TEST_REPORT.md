@@ -6,6 +6,41 @@ Status vocabulary is intentionally closed: `PASS_REAL`,
 `PASS_SAFE_REJECTION`, `FAIL_PRODUCT`, `FAIL_ENVIRONMENT`, and `NOT_RUN`.
 Mock, compile-only, CI-targeted, and real-LAN evidence are kept separate.
 
+## 2.0.0-rc.5 current release candidate
+
+| Contract | Observed |
+|---|---|
+| Product/packages | `2.0.0-rc.5` |
+| RPC / MCP surface | `2.0` / exactly 28 tools (unchanged) |
+| Worker database | SQLite `user_version=5` (unchanged) |
+| Scope | installed Windows icon ownership, visible pairing commands, bilingual public onboarding; runtime execution contract unchanged |
+
+### Error-before and repair
+
+| Gate | Result | Evidence |
+|---|---|---|
+| Running application icon | FAIL_PRODUCT | the packaged executable contained the requested mascot, but the tray owner loaded `ExtractAssociatedIcon(Environment.ProcessPath)` and could continue to receive a stale shell-associated icon |
+| Icon repair | PASS_REAL | the tray now clones the packaged `Assets/mirabridge.ico` resource directly, startup sends the documented shell association-change notification, and the ICO has optically tuned 16/20/24/32-pixel frames rather than relying on one automatic downscale |
+| First physical Windows build | FAIL_PRODUCT | durable Job `job_d2luZG93cy1tYWlu_10f3432f-5b69-467d-b394-9be9622d1e84` failed because the WPF source used `Stream` without explicitly importing `System.IO` |
+| Compile repair | PASS_REAL | the owner added the missing framework namespace; final durable Job `job_d2luZG93cy1tYWlu_086b6d3a-26d5-4fb2-91eb-fb387c179985` exited 0 and repeated the complete native release build |
+| Pairing command visibility | FAIL_PRODUCT | the first installed capture exposed the correct command through UI Automation, but the custom read-only `TextBox` rendered its visible text blank; automation-only assertions would have missed the user-facing defect |
+| Pairing visibility repair | PASS_REAL | copy-only commands use a plain bordered `TextBlock`; the second physical installed capture visibly shows `~/.local/bin/mirabridge pair create` beside the localized primary copy button |
+
+### rc.5 Mac and real Windows gates
+
+| Gate | Result | Evidence |
+|---|---|---|
+| Mac strict/type/unit/integration | PASS_REAL | managed Node 24.19.0; `npm ci` reported zero vulnerabilities, 26 Vitest files / 130 tests passed, strict typecheck, build, MCP/plugin and Skill validation passed |
+| Native Windows release build | PASS_REAL | final durable Job `job_d2luZG93cy1tYWlu_086b6d3a-26d5-4fb2-91eb-fb387c179985`, exit 0; 109 cross-platform tests, Windows-native 102/102 and WPF client 8/8 passed |
+| x64 Setup | PASS_REAL | 251,233,250 bytes; SHA-256 `34b9d2ed90593ea8d04f9431e75d2b47417002d13a43c12592cd784bde5da51f` |
+| Installed replacement | PASS_REAL | receipt SHA-256 `450db4bbf3e00c86530105243ffbb429d38f3ff5cf6e781cac5dcb6c2fd427fb`; uninstall 0, install 0, Worker Ready, one real app process after five duplicate launches, immediate/settled activation true, zero crashes and durable data preserved |
+| Installed version and handshake | PASS_REAL | live CLI handshake reports Worker `2.0.0-rc.5`, RPC `2.0`, x64, Edge, self-contained ConPTY, 28-tool capability owners and retained SQLite v5 history |
+| Installed icon | PASS_REAL | icon extracted from the newly installed executable is the requested multicolour mascot; 2,672-byte PNG / SHA-256 `878773e73d7c210b35d29e598e25f20c712492736a75302bce18a3dd4075b649` |
+| Installed pairing UI | PASS_REAL | real interactive 1180x780 capture is 65,688 bytes / SHA-256 `9b7634efe013872b2c93910ee351efa6671a7bb0123cda22b0f3bcc019d8c0dc`; it shows rc.5, the new mascot, consistent language control, the full Mac command and its copy action |
+| English/Chinese public guide | PASS_REAL | `README.md` and `README.zh-CN.md` provide equivalent product positioning, real productivity cases and the explicit create → authorize → accept command flow |
+| Acceptance cleanup | PASS_REAL | all three exact RC5 one-shot Scheduled Tasks were unregistered (`remaining=0`), and their remote scripts, receipts and screenshots were removed after local evidence was hash-verified |
+| Public tag / prerelease / published-tag pickup | NOT_RUN | performed only after the final manifest, source hygiene and local package gates pass; local Windows bytes are not represented as future CI release bytes |
+
 ## 2.0.0-rc.4 current release candidate
 
 | Contract | Observed |
