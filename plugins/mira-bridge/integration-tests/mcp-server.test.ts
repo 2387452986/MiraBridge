@@ -38,7 +38,7 @@ describe.skipIf(process.platform === "win32")("MCP consumer contract (Mac MCP ow
     await writeFile(config, `[nodes.windows-main]\nhost="192.0.2.1"\nport=22\nuser="mirabridge"\nidentity_file="/tmp/fake"\nhost_fingerprint="${fakeFingerprint}"\nworker_command="mirabridge-worker serve --stdio"\nconnect_timeout_ms=1000\n`);
     const remote = new FakeRemote();
     const runtime = createServer(remote, config);
-    const client = new Client({ name: "mirabridge-test", version: "2.0.0-rc.3" });
+    const client = new Client({ name: "mirabridge-test", version: "2.0.0-rc.4" });
     const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
     await Promise.all([runtime.server.connect(serverTransport), client.connect(clientTransport)]);
     try {
@@ -83,7 +83,7 @@ describe.skipIf(process.platform === "win32")("MCP consumer contract (Mac MCP ow
     await writeFile(join(root, "known_hosts"), `192.0.2.1 ssh-ed25519 ${fakeKeyText}\n`);
     const pool = new SshPool(config, resolve("integration-tests/fixtures/fake-ssh.mjs"));
     const runtime = createServer(pool, config);
-    const client = new Client({ name: "mirabridge-vertical-test", version: "2.0.0-rc.3" });
+    const client = new Client({ name: "mirabridge-vertical-test", version: "2.0.0-rc.4" });
     const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
     await Promise.all([runtime.server.connect(serverTransport), client.connect(clientTransport)]);
     try {

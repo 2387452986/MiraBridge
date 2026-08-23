@@ -83,7 +83,7 @@ The Worker hashes protocol version, node, operation, and canonical arguments. It
 
 ## Public MCP tools
 
-MiraBridge 2.0.0-rc.3 over protocol 2.0 exposes exactly 28 public names:
+MiraBridge 2.0.0-rc.4 over protocol 2.0 exposes exactly 28 public names:
 
 ```text
 mira_bridge_list_nodes          mira_bridge_describe_node
@@ -201,4 +201,4 @@ Only genuine transport/offline conditions are normally retryable. Side-effect re
 
 ## Compatibility
 
-Versions are `major.minor`. RPC 2.0 intentionally breaks RPC 1.0; matching plugin and Worker generations should still be deployed together. MiraBridge 2.0.0-rc.3 keeps the same 28 tools and Job states while restructuring installation, pairing, update and source ownership. Existing RPC 2.0 consumers remain wire-compatible and ignore new optional result fields; retained state migrates transactionally to SQLite v5. A protocol-major mismatch returns `PROTOCOL_MISMATCH` and is never auto-bridged. Removing required fields, changing types/semantics, renaming tools, or changing Job states requires a new protocol major.
+Versions are `major.minor`. RPC 2.0 intentionally breaks RPC 1.0; matching plugin and Worker generations should still be deployed together. MiraBridge 2.0.0-rc.4 keeps the same 28 tools and Job states while restructuring installation, pairing, update and source ownership. Existing RPC 2.0 consumers remain wire-compatible and ignore new optional result fields; retained state migrates transactionally to SQLite v5. A protocol-major mismatch returns `PROTOCOL_MISMATCH` and is never auto-bridged. Removing required fields, changing types/semantics, renaming tools, or changing Job states requires a new protocol major.

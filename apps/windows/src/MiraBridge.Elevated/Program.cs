@@ -112,7 +112,7 @@ internal static class Program
         var response = new PairingResponse(
             "response", 1, created, created.Add(PairingCodec.TimeToLive), PairingCodec.NewNonce(), request.Nonce,
             request.NodeId, request.PublicKeyFingerprint,
-            new PairingWindows(Environment.MachineName, WindowsHostInfo.Architecture, Environment.UserName, "2.0.0-rc.3"),
+            new PairingWindows(Environment.MachineName, WindowsHostInfo.Architecture, Environment.UserName, "2.0.0-rc.4"),
             new PairingSsh(addresses, 22, await WindowsHostInfo.HostFingerprintAsync(), "ssh-ed25519"),
             quotedHost + " serve --stdio", quotedHost, defaultRoot,
             capabilities.ToArray());

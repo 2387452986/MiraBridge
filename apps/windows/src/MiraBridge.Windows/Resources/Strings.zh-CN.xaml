@@ -1,7 +1,7 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
   <sys:String x:Key="AppTitle">MiraBridge for Windows</sys:String>
   <sys:String x:Key="Subtitle">让 Mac 上的 Codex 使用这台 Windows</sys:String>
-  <sys:String x:Key="VersionLine">2.0.0-rc.3 · RPC 2.0 · 28 个工具</sys:String>
+  <sys:String x:Key="VersionLine">2.0.0-rc.4 · RPC 2.0 · 28 个工具</sys:String>
   <sys:String x:Key="NavOverview">总览</sys:String>
   <sys:String x:Key="NavConnect">连接 Mac</sys:String>
   <sys:String x:Key="NavAccess">权限与目录</sys:String>

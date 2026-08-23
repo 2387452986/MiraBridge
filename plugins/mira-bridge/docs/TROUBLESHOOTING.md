@@ -1,4 +1,4 @@
-# MiraBridge 2.0.0-rc.3 troubleshooting
+# MiraBridge 2.0.0-rc.4 troubleshooting
 
 Start with `mirabridge doctor` on Mac and `mirabridge-worker doctor` plus `storage status` under the SSH account on Windows. Preserve exact error codes/details.
 
@@ -51,7 +51,7 @@ host is missing; do not fall back to an npm-global Worker or shell translation.
 
 ## `PROTOCOL_MISMATCH`
 
-MiraBridge product/packages should both be 2.0.0-rc.3 and RPC must be 2.0. RPC 1.0 and 2.0 are intentionally incompatible; MiraBridge 1.0–1.4 share RPC 2.0, while older products may lack later Job input, encoding, ConPTY, complete hardware inventory, or reliability metadata. Implicit 1.4 defaults are omitted for unchanged rolling-upgrade calls, but an explicitly requested 1.4-only field can be rejected by an older strict Worker. Stop MCP sessions, back up Worker state, upgrade/rollback Mac plugin and Windows Worker together, then run `node test`/`describe_node`.
+MiraBridge product/packages should both be 2.0.0-rc.4 and RPC must be 2.0. RPC 1.0 and 2.0 are intentionally incompatible; MiraBridge 1.0–1.4 share RPC 2.0, while older products may lack later Job input, encoding, ConPTY, complete hardware inventory, or reliability metadata. Implicit 1.4 defaults are omitted for unchanged rolling-upgrade calls, but an explicitly requested 1.4-only field can be rejected by an older strict Worker. Stop MCP sessions, back up Worker state, upgrade/rollback Mac plugin and Windows Worker together, then run `node test`/`describe_node`.
 
 ## `WORKSPACE_OUT_OF_BOUNDS` / `WORKSPACE_READ_ONLY`
 

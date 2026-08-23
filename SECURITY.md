@@ -6,7 +6,7 @@ Do not open a public issue for an unpatched vulnerability. Use GitHub's private 
 
 ## Supported versions
 
-Security fixes target the latest `2.x` release candidate and, after stable release, the latest `2.x` stable line. The unsigned `2.0.0-rc.3` is for evaluation and is not a stable security baseline.
+Security fixes target the latest `2.x` release candidate and, after stable release, the latest `2.x` stable line. The unsigned `2.0.0-rc.4` is for evaluation and is not a stable security baseline.
 
 ## Product trust boundary
 

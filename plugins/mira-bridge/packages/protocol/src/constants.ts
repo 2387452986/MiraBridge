@@ -1,7 +1,7 @@
 declare const __MIRABRIDGE_VERSION__: string | undefined;
 
 export const MIRABRIDGE_VERSION =
-  typeof __MIRABRIDGE_VERSION__ === "string" ? __MIRABRIDGE_VERSION__ : "2.0.0-rc.3";
+  typeof __MIRABRIDGE_VERSION__ === "string" ? __MIRABRIDGE_VERSION__ : "2.0.0-rc.4";
 export const PROTOCOL_VERSION = "2.0";
 export const PAIRING_FORMAT_VERSION = 1;
 export const PAIRING_CODE_PREFIX = "MBPAIR1.";

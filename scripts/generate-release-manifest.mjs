@@ -31,6 +31,6 @@ for (const path of files) {
   const bytes = await readFile(path);
   entries.push({ path: releasePath, bytes: bytes.length, sha256: createHash("sha256").update(bytes).digest("hex") });
 }
-const manifest = { schema_version: 1, product: "MiraBridge", version: "2.0.0-rc.3", generated_at: new Date().toISOString(), files: entries };
+const manifest = { schema_version: 1, product: "MiraBridge", version: "2.0.0-rc.4", generated_at: new Date().toISOString(), files: entries };
 await writeFile(resolve(root, "release-manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
 process.stdout.write(`${entries.length} files recorded.\n`);

@@ -106,7 +106,7 @@ function processIsAlive(pid: number): boolean {
   catch { return false; }
 }
 
-async function windowsProcessStartedAt(pid: number): Promise<string | null | undefined> {
+async function queryWindowsProcessStartedAt(pid: number): Promise<string | null | undefined> {
   const script = `try { $p=[Diagnostics.Process]::GetProcessById(${pid}); [Console]::Write($p.StartTime.ToUniversalTime().ToString('o')) } catch [ArgumentException] { exit 3 }`;
   return await new Promise((resolve) => {
     const child = nodeSpawn("powershell.exe", ["-NoLogo", "-NoProfile", "-NonInteractive", "-EncodedCommand", encodePowerShell(script)], { windowsHide: true, stdio: ["ignore", "pipe", "ignore"] });
@@ -135,6 +135,17 @@ async function windowsProcessStartedAt(pid: number): Promise<string | null | und
       else finish(undefined);
     });
   });
+}
+
+async function windowsProcessStartedAt(pid: number): Promise<string | null | undefined> {
+  // A saturated Windows host can delay the first cold PowerShell process past
+  // the bounded probe timeout. Retry only an unavailable probe; a missing PID
+  // or a real timestamp mismatch must remain a fail-closed identity result.
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    const startedAt = await queryWindowsProcessStartedAt(pid);
+    if (startedAt !== undefined) return startedAt;
+  }
+  return undefined;
 }
 
 export async function processMatchesStart(pid: number, expectedStartedAt?: string): Promise<boolean> {

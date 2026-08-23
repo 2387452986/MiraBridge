@@ -6,7 +6,29 @@ Status vocabulary is intentionally closed: `PASS_REAL`,
 `PASS_SAFE_REJECTION`, `FAIL_PRODUCT`, `FAIL_ENVIRONMENT`, and `NOT_RUN`.
 Mock, compile-only, CI-targeted, and real-LAN evidence are kept separate.
 
-## 2.0.0-rc.3 current release candidate
+## 2.0.0-rc.4 current release candidate
+
+| Contract | Observed |
+|---|---|
+| Product/packages | `2.0.0-rc.4` |
+| RPC / MCP surface | `2.0` / exactly 28 tools (unchanged) |
+| Worker database | SQLite `user_version=5` (unchanged) |
+| Scope | transient Windows process-identity probe recovery; rc.3 installation/UI behavior retained |
+
+### Error-before and repair
+
+| Gate | Result | Evidence |
+|---|---|---|
+| Post-release Windows x64 gate | FAIL_PRODUCT | GitHub Actions run `32630052562` failed `jobs.test.ts` after 10.637 seconds: a live Job cancellation was rejected as a PID identity mismatch |
+| Root cause | PASS_REAL | the expected PID timestamp was created 10.321 seconds before the failure and the identity probe has a 10-second bound; under full parallel hosted-runner load, cold `powershell.exe` did not complete before that bound, returning “probe unavailable” rather than a real mismatch |
+| Physical Windows baseline | PASS_REAL | the same targeted cancellation scenario passed 12/12 sequential runs on the physical x64 node, confirming the failure is load-sensitive rather than deterministic PID reuse |
+| Repair | PASS_REAL | the identity owner retries exactly once only when the bounded probe is unavailable; a missing PID or parsed timestamp mismatch still fails closed without retry |
+
+Source, Windows-native, four-platform CI, package and installed-upgrade evidence is
+recorded after those gates complete. A green rerun without this owner repair is
+not accepted as a fix.
+
+## Historical baseline: 2.0.0-rc.3
 
 | Contract | Observed |
 |---|---|
