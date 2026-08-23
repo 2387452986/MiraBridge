@@ -57,6 +57,21 @@ future GitHub Release byte stream because Velopack packages are not reproducible
 byte-for-byte. Public-tag pickup and published hashes are recorded only after
 the annotated tag and release workflow finish.
 
+### rc.4 public distribution
+
+| Gate | Result | Evidence |
+|---|---|---|
+| Annotated tag and prerelease | PASS_REAL | annotated `v2.0.0-rc.4` points to commit `2071440`; prerelease workflow `32631910741` passed Mac Apple Silicon/Intel, Windows x64/native ARM64, SBOM, provenance, collision checking and publish jobs |
+| Release assets | PASS_REAL | 27 assets published; aggregate `SHA256SUMS` SHA-256 `7d874c7d94b5aab52dbf52b8e2439cebad691a1cf6bfb6e7d4da13cce5b429af`; x64 Setup `d9ac2234cd934a865fd59d32752f7ea613202e47b27418525f7b5f1049cade01`; ARM64 Setup `5ef0ba7c8baee31454e5761233896ccb389935b6c72b9690973d4048c346bbfd` |
+| Public-tag Mac upgrade | PASS_REAL | updater downloaded `v2.0.0-rc.4`, verified all 180 manifest files, installed with zero dependency vulnerabilities, built and switched the managed `current` runtime plus CLI doctor to rc.4 |
+| Marketplace/plugin pickup | PASS_REAL | live plugin cache reports `2.0.0-rc.4`; cached Figure-2 Logo SHA-256 is `40608748bbb8ebeedefb4a7dd06ce3493faff659f8ee3b4fa3f9c9d5c210e325` |
+| Installed-plugin closure | PASS_REAL | MCP launched from the installed public-tag cache exposed exactly 28 tools and completed a real handshake with the physical Worker `2.0.0-rc.4`, RPC `2.0`, x64 |
+
+Release: `https://github.com/2387452986/MiraBridge/releases/tag/v2.0.0-rc.4`.
+The exact public Setup is CI-built from the tagged source and hash-published;
+the physical x64 replacement used a separately produced build from the same
+source state, so the report preserves their distinct byte identities.
+
 ## Historical baseline: 2.0.0-rc.3
 
 | Contract | Observed |
