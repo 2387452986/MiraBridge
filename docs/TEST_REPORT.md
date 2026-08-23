@@ -63,6 +63,22 @@ as an in-place replacement. The Mac published-tag pickup is performed only
 after the annotated tag and release exist; a local snapshot is not substituted
 for that final distribution test.
 
+### rc.3 public distribution
+
+| Gate | Result | Evidence |
+|---|---|---|
+| Annotated tag and prerelease | PASS_REAL | `v2.0.0-rc.3` points to commit `af634a1`; prerelease workflow `32629076713` completed all four build jobs plus publishing and created 27 assets |
+| Release integrity | PASS_REAL | aggregate `SHA256SUMS` SHA-256 `db8d6d70ff7798e4298d92a6964ff738a075b1ee4fb14d9ea06af61901a42d04`; x64 Setup `f8348b8c64fb45dbb63c0eea8ef5614efdb7302dbf085c5b22114b0be1df2246`; ARM64 Setup `10f710bec5705c55b28917c83126f7de4b411ae575d72a9fe8c33c19cae2ae66` |
+| Public-tag Mac upgrade | PASS_REAL | updater downloaded `v2.0.0-rc.3`, verified all 179 files, installed dependencies with zero vulnerabilities, built, and changed both the `current` link and CLI doctor from rc.2 to rc.3 |
+| Marketplace/plugin pickup | PASS_REAL | the live `mirabridge` marketplace and plugin cache report `2.0.0-rc.3`; cached Logo SHA-256 is `40608748bbb8ebeedefb4a7dd06ce3493faff659f8ee3b4fa3f9c9d5c210e325` |
+| Installed-plugin closure | PASS_REAL | MCP launched from the installed plugin cache exposed exactly 28 tools and completed a real `windows-main` handshake with Worker `2.0.0-rc.3`, RPC `2.0`, x64 |
+
+Release: `https://github.com/2387452986/MiraBridge/releases/tag/v2.0.0-rc.3`.
+The exact public Setup is CI-built from the tagged source and hash-published;
+the physical x64 replacement used a separately produced build from that exact
+source commit, so this report does not misstate those two nondeterministic
+package byte streams as identical.
+
 ## Historical UI/product baseline: 2.0.0-rc.2
 
 | Contract | Observed |
