@@ -27,8 +27,41 @@ Mock, compile-only, CI-targeted, and real-LAN evidence are kept separate.
 The corrected installer removes only `mira-bridge@mirabridge` and its own
 marketplace registration, re-adds the requested immutable tag, installs the
 plugin, reasserts the selected runtime using `mv -fh`, and runs a final doctor.
-The source/CI/release and real rc.3 Windows replacement evidence is recorded
-after those gates complete; no rc.2 result is inherited as rc.3 proof.
+
+### rc.3 Mac and public CI gate
+
+| Gate | Result | Evidence |
+|---|---|---|
+| Strict/type/unit/integration | PASS_REAL | Node 24.19.0; 26 Vitest files / 130 tests, strict typecheck, build, MCP/plugin contract and Skill contract passed |
+| Installer regression | PASS_REAL | the suite now asserts `mv -fh`, exact-ref marketplace replacement, final runtime reassertion and a user-visible doctor |
+| Production dependencies | PASS_REAL | `npm audit --omit=dev --audit-level=high`: 0 vulnerabilities |
+| Package inspection | PASS_REAL | root, `@mirabridge/cli` and `@mirabridge/windows-worker` dry-runs reported `2.0.0-rc.3` with valid payloads |
+| Release manifest | PASS_REAL | 179 public files were regenerated and byte-verified; local Agent/module summaries, checklists and artifacts remain excluded |
+| Apple Silicon CI | PASS_REAL | GitHub Actions run `32628388011`, `macos-15`, completed the runtime gate and isolated managed-runtime install |
+| Intel Mac CI | PASS_REAL | GitHub Actions run `32628388011`, `macos-15-intel`, completed the runtime gate and isolated managed-runtime install |
+| Windows x64 CI | PASS_REAL | GitHub Actions run `32628388011`, `windows-2025`, completed native tests, build and package smoke |
+| Windows ARM64 CI | PASS_REAL | GitHub Actions run `32628388011`, native `windows-11-arm`, completed Worker, Node, ConPTY, SQLite and package smoke; this is not physical ARM64 GUI evidence |
+
+### rc.3 real Windows 11 x64 replacement
+
+Environment: the same physical Administrator acceptance node used for rc.2,
+with hostname, address and Host Fingerprint redacted from public evidence.
+
+| Gate | Result | Evidence |
+|---|---|---|
+| Source delivery under network failure | PASS_REAL | Windows GitHub access reset/timed out; MiraBridge transferred a clean 2,218,327-byte source archive, SHA-256 `30fe28a71ba771486699003e9c366c9fdeca5f29ddb4f40690ee38fd7739353b`, then unpacked it inside the allowed D-drive root |
+| Native release build | PASS_REAL | durable Job `job_d2luZG93cy1tYWlu_03c2ea65-3983-490d-8b92-9ca695d0a063`, exit 0; Windows Worker suite 102/102, WPF client checks 8/8, packaged Worker `2.0.0-rc.3` |
+| x64 Setup | PASS_REAL | 251,094,107 bytes; SHA-256 `f1eda7b1582eab6fb60b739179490fade92f07040e36a55b84baa7be3cb10744` |
+| Upgrade backup | PASS_REAL | no active Job; `worker.toml` SHA-256 `6c68cce62a430ac387ff2f1abe80b8d40a5c3edb4b2aab4bdc9fb80d1db2c920`; SQLite `VACUUM INTO` SHA-256 `afdc84fe4d1ac90d434b434731283affbef04c280e50644fecbea965781e2291` |
+| Incorrect account refusal | PASS_SAFE_REJECTION | the first scheduled install used an unresolved account name and Windows rejected it before application mutation; the harness then used the identity returned by `WindowsIdentity` |
+| Installed replacement | PASS_REAL | receipt SHA-256 `b3cfd8f9e768cd5516986ab1e40f72ab7c76b1f7a59e3989d4d6063481a243f9`; uninstall 0, install 0, Worker Ready, one app process after five duplicate launches, immediate and settled activation both true, zero new crashes |
+| Durable state | PASS_REAL | live Worker reported rc.3 / RPC 2.0 and retained 129 Jobs, 95 Workspaces and the existing request/output/tombstone history in SQLite v5 |
+| SSH and reconnect | PASS_REAL | SSH remained Running/Automatic; Mac `mirabridge node test windows-main` completed a real rc.3 handshake after replacement |
+
+The Windows installer was built from the exact rc.3 source commit and exercised
+as an in-place replacement. The Mac published-tag pickup is performed only
+after the annotated tag and release exist; a local snapshot is not substituted
+for that final distribution test.
 
 ## Historical UI/product baseline: 2.0.0-rc.2
 
