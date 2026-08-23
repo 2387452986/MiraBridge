@@ -40,6 +40,10 @@ publication or stable-release gates; a nearby unit test does not close them.
   8/8 WPF client contract runner and eight-second GUI crash gate.
 - [x] Unsigned Setup install/reinstall with durable data preserved; exact
   artifact and manifest SHA-256 recorded.
+- [x] Exact public GitHub x64 Setup transferred by MiraBridge, hash-matched,
+  installed on the physical node and reconnected; uninstall/install/doctor/tray
+  passed, no new crash event appeared, durable state counts did not decrease and
+  the one-shot scheduled acceptance task was removed.
 - [x] Update recovery owns previous-package copy/hash, persistent receipt,
   post-update Worker/SSH health, external rollback launch and recursion stop;
   healthy/injected-failure states passed Windows tests.

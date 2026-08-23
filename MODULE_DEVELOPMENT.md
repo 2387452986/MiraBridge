@@ -27,12 +27,12 @@ Last updated: 2026-08-23
 - Mac TypeScript strict typecheck: PASS.
 - Mac Vitest: PASS, 26 files / 130 tests after pairing, config, installer-path, public-validator and atomic maintenance-admission additions.
 - Public CI error-before: run `32604692142` proved Windows checkout changed unspecified text bytes and two real Windows process-identity tests exceeded Vitest's unrelated 5-second default. Rerun `32604911050` verified the Manifest and transfer bound, then exposed a cold `Get-CimInstance` PID-identity probe timing out before Job cancellation. The shared probe now reads native `System.Diagnostics.Process.StartTime`; verify-after run `32605195125` passed macOS Apple Silicon/Intel and Windows x64/native ARM64.
-- Public release: annotated `v2.0.0-rc.1`, prerelease run `32605676616` and 27 assets are published. Clean Git-tag install, both Mac downloads, both Windows Setup downloads, aggregate hashes and tag/workflow-scoped provenance passed.
+- Public release: annotated `v2.0.0-rc.1`, prerelease run `32605676616` and 27 assets are published. Clean Git-tag install, both Mac downloads, both Windows Setup downloads, aggregate hashes and tag/workflow-scoped provenance passed; the exact published x64 Setup also passed physical uninstall/install/doctor/tray/reconnect with durable state retained.
 - Isolated Mac managed runtime: PASS with verified Node 24.19.0, build, CLI version and doctor; no Homebrew dependency.
 - Real Windows 11 x64 `.NET 10.0.400` solution build: PASS, 0 warnings / 0 errors.
 - Real Windows client contract runner: PASS, 8/8 (TTL/fingerprint, replay, SSH preservation, authorized keys, redaction, update success/rollback states, ViewModel).
 - Real self-contained x64 Setup: PASS, installed/reinstalled on the physical node; 249,668,318 bytes, SHA-256 `87e954b08e00b03632feaace2aa15280f65c90b3d0c1fd0903edf29e521d3338`.
-- In-place takeover: PASS; baseline 66 Jobs/54 Workspaces/1,876 Requests/419 Outputs and the final acceptance snapshot 99/84/2,344/498 show retained and increasing durable state.
+- In-place takeover: PASS; baseline 66 Jobs/54 Workspaces/1,876 Requests/419 Outputs and the post-public-Setup snapshot 117/85/3,062/589 show retained and increasing durable state.
 - Atomic maintenance admission: PASS on the physical node. An acquired lease rejected a real MCP `start_job` with retryable `NODE_MAINTENANCE`, release allowed the Job, an active Job made lease acquisition fail closed, and the installed v8 Host repeated the block/release result.
 - Stable Host, old global-Worker removal, SSH preservation, reboot Worker recovery, real file/Job/Edge/directory-transfer loop: PASS.
 - Physical ARM64 GUI, Windows 10, clean VM, signing, login-triggered tray and injected update rollback remain `NOT_RUN` in `docs/TEST_REPORT.md`; native ARM64 CI is `PASS_REAL`.

@@ -64,6 +64,7 @@ Edge, mixed NVIDIA/AMD/virtual adapters, LAN SSH.
 | WPF/Host/Elevated/client tests | PASS_REAL | .NET build clean; client contract runner 8/8, including healthy-update completion and injected rollback state paths |
 | GUI startup crash gate | PASS_REAL | package build launches `--tray`, waits eight seconds, requires a live process and rejects new Application/.NET crash events |
 | Self-contained x64 Setup | PASS_REAL | 249,668,318 bytes; SHA-256 `87e954b08e00b03632feaace2aa15280f65c90b3d0c1fd0903edf29e521d3338` |
+| Exact public x64 Setup | PASS_REAL | GitHub asset 249,669,078 bytes / SHA-256 `40e295b2d25a4d3b002fab2d374f999496b595f72daa155de0f5f1696e8402e9` transferred with MiraBridge's chunk/hash protocol, then installed on the physical node: uninstall 0, install 0, Worker Ready, one tray process, zero new crash events and durable data preserved |
 | RID-specific Setup manifest | PASS_REAL | 1,324 bytes; SHA-256 `fbe002baa04d8123e36be86258da5dffb01b6d74e010b54e2b0e525d39a57747` |
 | Unsigned warning | PASS_REAL | RC documentation/Help identify unknown publisher and require release SHA-256; no claim of SmartScreen reputation |
 
@@ -81,11 +82,12 @@ was retained and each owner now has regression coverage.
 | Gate | Result | Evidence |
 |---|---|---|
 | Pre-upgrade backup | PASS_REAL | `worker.toml`, SQLite `VACUUM INTO`, old Worker package and SSH baselines retained under the isolated upgrade backup |
-| Durable data preservation | PASS_REAL | baseline 66 Jobs / 54 Workspaces / 1,876 Requests / 419 Outputs; final live snapshot 99 / 84 / 2,344 / 498 respectively |
+| Durable data preservation | PASS_REAL | baseline 66 Jobs / 54 Workspaces / 1,876 Requests / 419 Outputs; post-public-Setup live snapshot 117 / 85 / 3,062 / 589 respectively; `windows-main` Job discovery stayed at 115 before/after the public replacement |
 | Stable Host takeover | PASS_REAL | Mac node invokes quoted `MiraBridge.Host.exe worker serve --stdio`; Worker `2.0.0-rc.1`, RPC `2.0` |
 | Old npm-global Worker removal | PASS_REAL | removed only after stable Host verification; `where.exe mirabridge-worker` returned not found while Host remained healthy |
 | SSH preservation | PASS_REAL | original Host Fingerprint unchanged; service Running/Automatic; one unrelated administrator key preserved; one managed SSH block; LocalSubnet firewall rule preserved |
 | App install/reinstall with data preserved | PASS_REAL | external acceptance task returned uninstall/install exit 0, Worker runtime Ready, one live GUI process, zero new crash events and data preserved; receipt SHA-256 `89d14e3d4120fdb81ecad6c2cc146fb19b4779e76c1e1e8ef062f76c7f87e407` |
+| Published-asset replacement | PASS_REAL | exact GitHub Setup receipt SHA-256 `ac39606fcfd0ae33f085bbd4d31655d49fceecd1f044d56a3ce24195a6f993e6`; isolated scheduled task ran as the logged-in Administrator and was removed after success |
 | Atomic active-Job maintenance gate | PASS_REAL | a held lease made real MCP `start_job` fail retryably with `NODE_MAINTENANCE`; release restored admission; a live Job made lease acquisition fail closed; the installed v8 Host repeated the block/release result and startup cleared its completed-update lease |
 | Worker after Windows reboot | PASS_REAL | SSH and stable Host recovered; live `describe_node` succeeded with historical state intact |
 | Tray process after an interactive login | NOT_RUN | reboot landed at the Windows login screen with no Explorer session; manual app launch remained alive with no crash, but that is not proof of Run-key behavior after an actual desktop login |
@@ -93,10 +95,10 @@ was retained and each owner now has regression coverage.
 | Old-RC click update plus real package downgrade | NOT_RUN | external same-version reinstall/preservation passed and installed package source is retained; the first public WPF RC has no prior public update feed, so a complete GUI download/apply/downgrade drill is not claimed |
 | Full data-purge uninstall | NOT_RUN | intentionally not run against the only live historical Worker data root; ownership is contract-tested but no production data was destroyed |
 
-Current live `describe_node` after final reinstall on 2026-08-23 reported x64 native/process
+Current live `describe_node` after the exact public-asset reinstall on 2026-08-23 reported x64 native/process
 architecture, CP936 fallback support, self-contained ConPTY, Edge/tar/curl,
-Desktop/recycle/local-web capabilities, 328,740,397 bytes used of the 10 GiB
-quota, 427,416,727,552 free bytes and 2 GiB minimum-free protection. The same
+Desktop/recycle/local-web capabilities, 330,914,851 bytes used of the 10 GiB
+quota, 424,887,939,072 free bytes and 2 GiB minimum-free protection. The same
 snapshot reported zero storage reservations and the installed Host reported no
 remaining execution-maintenance lease.
 
