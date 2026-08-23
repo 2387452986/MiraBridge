@@ -24,9 +24,38 @@ Mock, compile-only, CI-targeted, and real-LAN evidence are kept separate.
 | Physical Windows baseline | PASS_REAL | the same targeted cancellation scenario passed 12/12 sequential runs on the physical x64 node, confirming the failure is load-sensitive rather than deterministic PID reuse |
 | Repair | PASS_REAL | the identity owner retries exactly once only when the bounded probe is unavailable; a missing PID or parsed timestamp mismatch still fails closed without retry |
 
-Source, Windows-native, four-platform CI, package and installed-upgrade evidence is
-recorded after those gates complete. A green rerun without this owner repair is
-not accepted as a fix.
+### rc.4 source and four-platform gate
+
+| Gate | Result | Evidence |
+|---|---|---|
+| Strict/type/unit/integration | PASS_REAL | managed Node 24.19.0; 26 Vitest files / 130 tests, strict typecheck, build, MCP/plugin contract and Skill contract passed |
+| Original failure environment | PASS_REAL | GitHub Actions run `32630720564` passed the exact repaired commit on macOS Apple Silicon/Intel, Windows x64 and native Windows ARM64; the Windows x64 job that reproduced the rc.3 failure completed successfully |
+| Cancellation regression | PASS_REAL | physical Windows targeted regression passed, full Windows release build repeated the live cancellation test in 481 ms and the Windows-native suite repeated it in 353 ms |
+| Production dependencies | PASS_REAL | `npm audit --omit=dev --audit-level=high`: 0 vulnerabilities |
+| Package inspection | PASS_REAL | root, `@mirabridge/cli` and `@mirabridge/windows-worker` dry-runs reported `2.0.0-rc.4` with valid payloads |
+
+### rc.4 real Windows 11 x64 replacement
+
+Environment: physical Administrator node; address, hostname and Host Fingerprint
+are redacted from public evidence. The node uses Windows 11 Pro x64, bundled
+Node 24.19.0, Edge, self-contained ConPTY and mixed NVIDIA/AMD/virtual display
+adapters.
+
+| Gate | Result | Evidence |
+|---|---|---|
+| Clean source delivery | PASS_REAL | MiraBridge transferred and hash-verified a 2,220,986-byte Git-archive, SHA-256 `56d3d88ae02bb864619548e4b98ad574e60d6dbcb757e6a7c27b0266b3e6c48a`, into the allowed D-drive root |
+| Native release build | PASS_REAL | durable Job `job_d2luZG93cy1tYWlu_882ca39b-480f-4528-ba4a-5ef4c324adc3`, exit 0; cross-platform suite 109 passed / 21 environment-routed skips, Windows-native suite 102/102, Windows local integration checks and WPF client checks 8/8 passed |
+| x64 Setup | PASS_REAL | 251,094,169 bytes; SHA-256 `3a4b72ae4371a1666eaeb626ca4abd986f85e880edcfd5c4917b7acce68fb7b6` |
+| Upgrade backup | PASS_REAL | no active Job; `worker.toml` SHA-256 `6c68cce62a430ac387ff2f1abe80b8d40a5c3edb4b2aab4bdc9fb80d1db2c920`; SQLite `VACUUM INTO` snapshot 108,412,928 bytes / SHA-256 `69a1928ccd56a62c985459cd0dba86c8ed3edc40d19c5d2660c196dfed398fe2`; rc.3 rollback Setup retained |
+| Installed replacement | PASS_REAL | receipt SHA-256 `2b5670cfa0c30c8e169675d515f7889673a1b2a5a213b703a48b79a4fce1f4ef`; uninstall 0, install 0, Worker Ready, one actual app process after five duplicate launches, immediate and settled activation true, zero new crashes, durable data root preserved |
+| Installed version and state | PASS_REAL | installed app and Worker report `2.0.0-rc.4`; RPC remains `2.0`; pre-replacement SQLite v5 contained 130 Jobs, 100 Workspaces and 3,433 Requests, and the post-replacement live node retained 130 Jobs plus existing request/output/tombstone history |
+| Current installed UI | PASS_REAL | interactive duplicate launch activated the existing tray owner and retained one process; the real 1180×780 rc.4 capture is 85,861 bytes / SHA-256 `7d9109a7da1a4db9ff4f4ebc261f5e7b0dd11b1c1a3e934cb053b94de8c8be3d`; it remains ignored locally because the status page contains LAN and Host Fingerprint data |
+| Acceptance cleanup | PASS_REAL | one-shot install/UI Scheduled Tasks and capture script/receipt/remote screenshot were removed after evidence was read |
+
+The physical Setup is a local exact-source build. It is not described as the
+future GitHub Release byte stream because Velopack packages are not reproducible
+byte-for-byte. Public-tag pickup and published hashes are recorded only after
+the annotated tag and release workflow finish.
 
 ## Historical baseline: 2.0.0-rc.3
 
