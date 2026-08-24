@@ -2,7 +2,7 @@
 param(
     [ValidateSet("win-x64", "win-arm64")]
     [string]$RuntimeIdentifier = "win-x64",
-    [string]$Version = "2.0.0-rc.5",
+    [string]$Version = "2.0.0-rc.6",
     [switch]$SkipPackage
 )
 

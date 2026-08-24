@@ -38,6 +38,29 @@ export interface StreamCapture {
   omittedBytes: number;
 }
 
+type SettledValue<T> = { ok: true; value: T } | { ok: false; error: unknown };
+
+function settleValue<T>(promise: Promise<T>): Promise<SettledValue<T>> {
+  return promise.then(
+    (value) => ({ ok: true as const, value }),
+    (error: unknown) => ({ ok: false as const, error }),
+  );
+}
+
+function outputFailure(error: unknown, stream: "stdout" | "stderr"): BridgeError {
+  if (error instanceof BridgeError) return error;
+  return new BridgeError("INTERNAL_ERROR", `Windows process ${stream} capture failed.`, {
+    cause: error,
+    details: { stream },
+  });
+}
+
+async function failureOnly<T>(result: Promise<SettledValue<T>>, stream: "stdout" | "stderr"): Promise<{ stream: "stdout" | "stderr"; error: unknown }> {
+  const settled = await result;
+  if (!settled.ok) return { stream, error: settled.error };
+  return await new Promise<never>(() => undefined);
+}
+
 function appendTail(current: Buffer<ArrayBufferLike>, incoming: Buffer<ArrayBufferLike>, limit: number): Buffer<ArrayBufferLike> {
   if (incoming.length >= limit) return Buffer.from(incoming.subarray(incoming.length - limit));
   if (current.length + incoming.length <= limit) return Buffer.concat([current, incoming]);
@@ -281,11 +304,21 @@ export async function executeProcess(
   if (!child.stdout || !child.stderr) throw new BridgeError("PROCESS_START_FAILED", "Windows process output pipes are unavailable.");
   const stdoutOutput = normalizeWindowsOutputStream(child.stdout, requestedEncoding, consoleCodePage);
   const stderrOutput = normalizeWindowsOutputStream(child.stderr, conpty ? "utf-8" : requestedEncoding, consoleCodePage);
-  const stdoutCapture = captureBoundedStream(stdoutOutput.stream, stdoutPath, maxStreamBytes, undefined, onStdoutChunk);
-  const stderrCapture = captureBoundedStream(stderrOutput.stream, stderrPath, maxStreamBytes);
+  // Attach rejection handlers immediately. A decoder or disk error can happen
+  // while the child is still running; leaving that promise unobserved until the
+  // child exits lets Node treat it as an unhandled rejection and kills the
+  // durable runner instead of reporting the real process-output error.
+  const stdoutCapture = settleValue(captureBoundedStream(stdoutOutput.stream, stdoutPath, maxStreamBytes, undefined, onStdoutChunk));
+  const stderrCapture = settleValue(captureBoundedStream(stderrOutput.stream, stderrPath, maxStreamBytes));
+  const stdoutEncoding = settleValue(stdoutOutput.resolvedEncoding);
+  const stderrEncoding = settleValue(stderrOutput.resolvedEncoding);
+  const captureFailure = Promise.race([
+    failureOnly(stdoutCapture, "stdout"),
+    failureOnly(stderrCapture, "stderr"),
+  ]);
   const startedResult = await startedChild;
   if (startedResult instanceof BridgeError) {
-    await Promise.allSettled([stdoutCapture, stderrCapture, completed]);
+    await Promise.all([stdoutCapture, stderrCapture, stdoutEncoding, stderrEncoding, completed]);
     throw startedResult;
   }
   const pid = startedResult;
@@ -317,19 +350,50 @@ export async function executeProcess(
     });
   }, spec.timeoutMs);
 
-  const childResult = await completed.finally(() => clearTimeout(timeoutTimer));
+  const completion = await Promise.race([
+    completed.then((result) => ({ kind: "child" as const, result })),
+    captureFailure.then((failure) => ({ kind: "capture_failure" as const, failure })),
+  ]);
+  clearTimeout(timeoutTimer);
+  if (completion.kind === "capture_failure") {
+    try {
+      await terminateProcessTree(pid);
+    } catch (error) {
+      const captureError = outputFailure(completion.failure.error, completion.failure.stream);
+      throw new BridgeError("INTERNAL_ERROR", "Windows process output failed and its process tree could not be terminated.", {
+        cause: error,
+        details: { pid, output_error: captureError.toJSON() },
+      });
+    }
+    await Promise.all([stdoutCapture, stderrCapture, stdoutEncoding, stderrEncoding]);
+    throw outputFailure(completion.failure.error, completion.failure.stream);
+  }
+  const childResult = completion.result;
   if (timeoutTermination) await timeoutTermination;
   if (childResult.kind === "error") {
-    await Promise.allSettled([stdoutCapture, stderrCapture, stdoutOutput.resolvedEncoding, stderrOutput.resolvedEncoding]);
+    await Promise.all([stdoutCapture, stderrCapture, stdoutEncoding, stderrEncoding]);
     throw childResult.error;
   }
-  const [stdout, stderr, stdoutEncoding, stderrEncoding] = await Promise.all([
+  const [stdoutResult, stderrResult, stdoutEncodingResult, stderrEncodingResult] = await Promise.all([
     stdoutCapture,
     stderrCapture,
-    stdoutOutput.resolvedEncoding,
-    stderrOutput.resolvedEncoding,
+    stdoutEncoding,
+    stderrEncoding,
   ]);
-  return { exitCode: childResult.exitCode, timedOut, durationMs: Date.now() - started, pid, stdout, stderr, stdoutEncoding, stderrEncoding };
+  if (!stdoutResult.ok) throw outputFailure(stdoutResult.error, "stdout");
+  if (!stderrResult.ok) throw outputFailure(stderrResult.error, "stderr");
+  if (!stdoutEncodingResult.ok) throw outputFailure(stdoutEncodingResult.error, "stdout");
+  if (!stderrEncodingResult.ok) throw outputFailure(stderrEncodingResult.error, "stderr");
+  return {
+    exitCode: childResult.exitCode,
+    timedOut,
+    durationMs: Date.now() - started,
+    pid,
+    stdout: stdoutResult.value,
+    stderr: stderrResult.value,
+    stdoutEncoding: stdoutEncodingResult.value,
+    stderrEncoding: stderrEncodingResult.value,
+  };
 }
 
 export async function findPowerShell(): Promise<string> {

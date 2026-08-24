@@ -269,9 +269,23 @@ export async function runJob(serializedBootstrap: string): Promise<void> {
     await terminalRecorder?.finish().catch(() => undefined);
     const current = state.getJob(jobId);
     if (current && !terminalJobStatuses.has(current.executor_status)) {
-      state.setJobStatus(jobId, current.pid ? "lost" : "failed_to_start", {
-        errorJson: JSON.stringify({ code: "PROCESS_START_FAILED", message: error instanceof Error ? error.message : "Job runner failed." }),
+      const bridgeError = error instanceof BridgeError
+        ? error
+        : new BridgeError("INTERNAL_ERROR", "The durable Job runner failed.", { cause: error });
+      const processStillRunning = current.pid
+        ? await processMatchesStart(current.pid, current.pid_started_at ?? undefined).catch(() => true)
+        : false;
+      const [stdoutBytes, stderrBytes] = await Promise.all([
+        stat(current.stdout_path).then((value) => value.size).catch(() => 0),
+        stat(current.stderr_path).then((value) => value.size).catch(() => 0),
+      ]);
+      state.setJobStatus(jobId, current.pid && !processStillRunning ? "exited" : current.pid ? "lost" : "failed_to_start", {
+        errorJson: JSON.stringify(bridgeError.toJSON()),
         finishedAt: new Date().toISOString(),
+        stdoutBytes,
+        stderrBytes,
+        stdoutStoredBytes: stdoutBytes,
+        stderrStoredBytes: stderrBytes,
       });
     }
     throw error;

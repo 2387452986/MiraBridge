@@ -84,7 +84,7 @@ try {
     }
 
     $Result.worker_version = (& $HostExe worker --version | Out-String).Trim()
-    if ($LASTEXITCODE -ne 0 -or $Result.worker_version -ne "mirabridge-worker 2.0.0-rc.5") {
+    if ($LASTEXITCODE -ne 0 -or $Result.worker_version -ne "mirabridge-worker 2.0.0-rc.6") {
         throw "Installed stable Host returned an unexpected Worker version: $($Result.worker_version)"
     }
     $Doctor = (& $HostExe worker doctor | Out-String) | ConvertFrom-Json

@@ -77,6 +77,14 @@ function decoderForCodePage(codePage: number): TextDecoder {
   }
 }
 
+function invalidEncodedData(codePage: number, error: unknown): BridgeError {
+  const encoding = codePage === 65001 ? "utf-8" : `cp${codePage}`;
+  return new BridgeError("UNSUPPORTED_ENCODING", `Process output is not valid ${encoding}; use output_encoding=auto or select the matching Windows code page.`, {
+    cause: error,
+    details: { requested_encoding: encoding },
+  });
+}
+
 export function isWindowsCodePageSupported(codePage: number): boolean {
   try { decoderForCodePage(codePage); return true; }
   catch { return false; }
@@ -94,11 +102,11 @@ function decodeTransform(codePage: number): Transform {
   return new Transform({
     transform(chunk: Buffer, _encoding, callback): void {
       try { callback(null, Buffer.from(decoder.decode(chunk, { stream: true }), "utf8")); }
-      catch (error) { callback(error as Error); }
+      catch (error) { callback(invalidEncodedData(codePage, error)); }
     },
     flush(callback): void {
       try { callback(null, Buffer.from(decoder.decode(), "utf8")); }
-      catch (error) { callback(error as Error); }
+      catch (error) { callback(invalidEncodedData(codePage, error)); }
     },
   });
 }

@@ -2,7 +2,7 @@
 
 ## Supported path
 
-The user asks Codex to install the fixed `v2.0.0-rc.5` tag. Codex should:
+The user asks Codex to install the fixed `v2.0.0-rc.6` tag. Codex should:
 
 1. Clone `https://github.com/2387452986/MiraBridge` at that exact tag.
 2. Run `node scripts/verify-release-manifest.mjs release-manifest.json .` if a suitable Node is already available; `install-mac.sh` repeats the check with its managed Node.
@@ -14,26 +14,26 @@ The installer uses macOS `curl`, `tar`, `shasum` and `sh`. It installs, without 
 ```text
 ~/Library/Application Support/MiraBridge/
 ├── cache/                         # verified official Node archive
-├── releases/2.0.0-rc.5/
+├── releases/2.0.0-rc.6/
 │   ├── node/                      # managed Node 24.19.0
 │   ├── mcp/index.mjs
 │   ├── cli/index.mjs
 │   └── scripts/
-└── current -> releases/2.0.0-rc.5
+└── current -> releases/2.0.0-rc.6
 
 ~/.local/bin/mirabridge
 ~/.config/mirabridge/              # pairing keys, config, managed known_hosts
 ```
 
 It removes only an existing MiraBridge plugin/marketplace registration, registers
-`2387452986/MiraBridge` at the exact `v2.0.0-rc.5` ref using the official Codex
+`2387452986/MiraBridge` at the exact `v2.0.0-rc.6` ref using the official Codex
 marketplace CLI, then installs `mira-bridge@mirabridge`. Replacing the
 registration is intentional: a Git marketplace first added at an immutable RC
 tag remains pinned to that tag when merely refreshed.
 
 ## Update and rollback
 
-`mirabridge update 2.0.0-rc.5` downloads the exact tag archive and invokes the
+`mirabridge update 2.0.0-rc.6` downloads the exact tag archive and invokes the
 same idempotent installer. A new release is staged completely, doctor runs, and
 the macOS directory symlink is replaced with `mv -fh` so the link itself—not
 its old target directory—is updated. After the Codex plugin cache is replaced,

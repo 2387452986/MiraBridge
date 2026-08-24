@@ -9,7 +9,7 @@
 <p align="center"><a href="./README.md">English</a> · <strong>简体中文</strong></p>
 
 <p align="center">
-  <a href="https://github.com/2387452986/MiraBridge/releases/tag/v2.0.0-rc.5">下载 2.0.0-rc.5</a>
+  <a href="https://github.com/2387452986/MiraBridge/releases/tag/v2.0.0-rc.6">下载 2.0.0-rc.6</a>
   · <a href="#一次对话完成安装">安装</a>
   · <a href="./docs/TEST_REPORT.md">真实测试证据</a>
   · <a href="./SECURITY.md">安全说明</a>
@@ -38,6 +38,48 @@ MiraBridge 可以安装依赖，把开发服务器作为持久 Job 运行，用 
 > “检测这台 Windows 的显卡能力，用可用编码器渲染视频；断线也要继续，结束后验证分辨率、帧率和时长。”
 
 节点会真实报告 NVIDIA、AMD、Intel、虚拟显卡或纯 CPU 环境，而不是假设只有某一种显卡。Codex 可以先探测真实编码链路，再启动 FFmpeg 或其他渲染 Job；即使 SSH/MCP 暂时断开，也能重新找回任务、分页读取日志、验证产物并拉回 macOS。
+
+### 真实案例：安装 MiniMax H3 并完成 Windows 原生渲染
+
+> “读取我的 Windows 配置，按质量优先安装完整版 MiniMax H3，生成带声音的视频；遇到问题要查清原因，不要降质量绕过，最后把验收后的成片传回 Mac。”
+
+这项任务已在真实 Windows 11 x64 电脑上完成：Ryzen 7 9700X、32 GiB
+内存、RTX 5070 Ti 16 GiB。完整证据记录在[测试报告](./docs/TEST_REPORT.md)，
+不是 Mock，也不是把 Mac 生成结果冒充成 Windows 执行。
+
+1. Mac 上的 Codex 先调用 `describe_node`，读取真实 GPU、CUDA、内存、
+   架构、磁盘和 Windows 代码页，并取得操作者对 MiniMax H3 Community
+   License 与非排除地区的明确确认。
+2. 保留 C 盘现有的系统管理页面文件，在 D 盘新增 64 GiB 页面文件，
+   重启并核对生效状态。页面文件用于容量准备，不被拿来掩盖运行时缺陷。
+3. 在 Windows 建立隔离目录 `D:\MiraBridgeRoot\AI\MiniMax-H3`。模型从
+   国内 ModelScope 源下载，同时用对应 Hugging Face LFS 对象的 SHA-256
+   校验完整性，避免消耗代理流量又不牺牲可信度。
+4. 安装固定的 ComfyUI 0.33.1 Python 运行环境、完整
+   `minimax_h3_fl2va_int8_convrot`、Qwen3-VL 文本编码器和官方音视频 VAE。
+   四个模型文件共 55,539,098,189 字节；不使用 Turbo LoRA、
+   SageAttention 或 `--fast` 质量捷径。
+5. 验收参数为 1344×768、124 帧、24 fps、20 个采样步骤、非 Turbo
+   工作流、DynamicVRAM 和原生 `convrot_w4a4`。
+6. ComfyUI 通过标准持久 MiraBridge Job 运行，并使用
+   `output_encoding=auto`。Agent 保留 Job ID、分页读取日志、查看 GPU
+   遥测，而不是把数十分钟任务绑在一条脆弱的 SSH 命令上。
+7. 首个进度条字符曾让 Job 误报 `lost`。隔离运行证明 ComfyUI 原生进程
+   正常，真正责任方是 MiraBridge 对 CP936 输出执行 fatal UTF-8 解码后，
+   没有立即接住 Promise 异常。修复的是共享输出生命周期，然后原参数
+   重跑；没有换内核、降低分辨率、减少步数或去掉声音。
+8. 修复后的标准 Job 完成 20/20。`ffprobe` 验证成片为 5.167 秒、
+   1344×768、24 fps、H.264，并带 AAC 双声道；1,940,180 字节文件传回
+   Mac 后 SHA-256 完全一致。
+
+自动验收使用固定、无界面的 ComfyUI 运行时，以保证可复现。
+**Comfy Desktop 是另外安装的用户界面启动器**，不是 MiraBridge 持久 Job
+链路的替代品。它可以接管现有 ComfyUI 或配置共享模型路径，但 MiraBridge
+不会静默改写已验证的生产环境；不同显卡和内存配置仍必须以真实节点探测为准。
+
+参考：[MiniMax H3 模型与许可](https://huggingface.co/MiniMaxAI/MiniMax-H3)、
+[ComfyUI 官方 H3 工作流](https://github.com/Comfy-Org/workflow_templates/blob/main/templates/video_minimax_h3_t2v.json)、
+[Windows Comfy Desktop](https://docs.comfy.org/installation/desktop/windows)。
 
 ### 使用 Windows 专属工程工具链
 
@@ -68,7 +110,7 @@ Codex 插件公开且只公开 28 个 `mira_bridge_*` MCP 工具。普通 Mac �
 
 在 Mac 上告诉 Codex：
 
-> 请从 `https://github.com/2387452986/MiraBridge` 安装 `v2.0.0-rc.5`，完成 doctor 并生成 Windows 配对码。
+> 请从 `https://github.com/2387452986/MiraBridge` 安装 `v2.0.0-rc.6`，完成 doctor 并生成 Windows 配对码。
 
 Codex 会校验固定 tag 和 release manifest，安装受管 Node 24、MCP Server 与 CLI，不依赖 Homebrew，并注册 `mira-bridge@mirabridge`。
 
@@ -84,7 +126,7 @@ Codex 会校验固定 tag 和 release manifest，安装受管 Node 24、MCP Serv
 <summary>明确的 Mac 安装命令</summary>
 
 ```sh
-git clone --branch v2.0.0-rc.5 --depth 1 https://github.com/2387452986/MiraBridge.git
+git clone --branch v2.0.0-rc.6 --depth 1 https://github.com/2387452986/MiraBridge.git
 cd MiraBridge
 ./plugins/mira-bridge/scripts/install-mac.sh
 ~/.local/bin/mirabridge doctor

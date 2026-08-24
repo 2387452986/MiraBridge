@@ -1,4 +1,4 @@
-# MiraBridge 2.0.0-rc.5 Windows setup
+# MiraBridge 2.0.0-rc.6 Windows setup
 
 The supported public installation path is maintained once, at
 [`../../../docs/INSTALL_WINDOWS.md`](../../../docs/INSTALL_WINDOWS.md).

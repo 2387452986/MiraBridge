@@ -1,10 +1,58 @@
 # MiraBridge test report
 
-Date: 2026-08-23
+Date: 2026-08-24
 
 Status vocabulary is intentionally closed: `PASS_REAL`,
 `PASS_SAFE_REJECTION`, `FAIL_PRODUCT`, `FAIL_ENVIRONMENT`, and `NOT_RUN`.
 Mock, compile-only, CI-targeted, and real-LAN evidence are kept separate.
+
+## 2.0.0-rc.6 output-runner repair
+
+This release candidate is a backward-compatible repair on top of
+`2.0.0-rc.5`. RPC `2.0`, the 28-tool MCP surface, SQLite v5, the MiniMax H3
+workflow, native ComfyUI kernels and model-quality settings are unchanged.
+
+| Contract | Observed |
+|---|---|
+| Product/packages | `2.0.0-rc.6` |
+| RPC / MCP surface | `2.0` / exactly 28 tools (unchanged) |
+| Worker database | SQLite `user_version=5` (unchanged) |
+| Scope | fatal output-decoder lifecycle, persistent Job error/state preservation, bilingual MiniMax H3 case study |
+
+### Error-before and root cause
+
+| Gate | Result | Evidence |
+|---|---|---|
+| Deterministic decoder regression | FAIL_PRODUCT | a child wrote `ASCII READY`, delayed CP936 bytes `A8 84`, and stayed alive; Vitest timed out after 5 seconds while Node reported unhandled `ERR_ENCODING_INVALID_ENCODED_DATA` from the fatal UTF-8 decoder |
+| Physical durable Job | FAIL_PRODUCT | `job_d2luZG93cy1tYWlu_bd153be9-b379-4470-84f0-356f7d313e41` became `lost` when the first CP936 progress-bar glyph arrived; the native child was still healthy until runner reconciliation terminated it |
+| Root-cause isolation | PASS_REAL | the exact native H3 process completed 20/20 when detached from the faulty Job capture, and the same delayed bytes completed as `cp936` under `output_encoding=auto` in Job `job_d2luZG93cy1tYWlu_7dfe3fde-faef-4ddc-95f0-e758083ba46a` |
+| Owner | PASS_REAL | `captureBoundedStream()` rejected before child exit, but its promise was not observed until child completion; Node treated the rejection as unhandled and terminated the durable runner. This was a MiraBridge output-lifecycle bug, not a ComfyUI, native-kernel, GPU-driver or page-file failure |
+
+### Repair and verification
+
+| Gate | Result | Evidence |
+|---|---|---|
+| Structured output failure | PASS_REAL | invalid explicit encoding now maps to `UNSUPPORTED_ENCODING`, capture rejections are observed immediately, the exact process tree is terminated, and safe output-prefix byte counts are finalized |
+| Physical bad-encoding replay | PASS_REAL | `job_d2luZG93cy1tYWlu_eb87defa-1b52-4e43-baea-b8edb2ad85f6` ended in about 0.5 seconds as `exited` with `UNSUPPORTED_ENCODING`, preserving 12 stderr bytes instead of becoming `lost` |
+| Physical auto-encoding replay | PASS_REAL | `job_d2luZG93cy1tYWlu_114e37b1-5704-47f1-8bb5-c3c69c17e1b3` exited 0 and resolved stderr as `cp936` |
+| Mac source gate | PASS_REAL | managed Node 24.19.0; strict typecheck; 26 Vitest files / 131 tests; build; plugin and Skill validators; package inspection; production audit with zero vulnerabilities; `git diff --check` |
+| Windows-native integration | PASS_REAL | 34 checks passed in 43.275 seconds, including UTF-8/CP936, invalid-encoding persistent Job, Job restart/list/input, ConPTY screen/Unicode/Ctrl-C/resize, process-tree cancel, traversal/UNC/Junction rejection and storage prune |
+| Diagnostic cleanup | PASS_REAL | the temporary `python.exe` LocalDumps registry key and isolated validation tree were removed; port 8188 had zero listeners and no Job remained queued, starting or running |
+
+### Full native H3 acceptance
+
+| Gate | Result | Evidence |
+|---|---|---|
+| Standard MiraBridge path | PASS_REAL | service Job `job_d2luZG93cy1tYWlu_6ca305d5-f8fc-429b-8519-e9b6415a8ee6` and client Job `job_d2luZG93cy1tYWlu_b051a2d5-984f-4583-8645-6d76d12e7700`; 20/20 steps through the normal durable Job path |
+| Native quality/performance path | PASS_REAL | official/community INT8 H3, 1344x768, 124 frames, 24 fps, 20 steps, non-Turbo, DynamicVRAM, native `convrot_w4a4`, AudioVAE and VideoVAE; no fallback kernel, reduced resolution, lower step count or disabled audio |
+| GPU execution | PASS_REAL | RTX 5070 Ti reached 98% utilization, 11,582/16,303 MiB VRAM, 237.92 W and 63 C during the run |
+| Deliverable | PASS_REAL | `MiniMax_H3_best_quality_train_00002_.mp4`, 1,940,180 bytes, SHA-256 `e4f63b450d6646b0aaa49477ba9ef4d8ac2f1abfdb982afdf4df7d7f16a8a1b3`; H.264 High 1344x768 24 fps 5.167 s plus AAC LC 32 kHz stereo; 331,776 audio samples, mean -23.8 dB and max -10.4 dB |
+| Cross-host transfer | PASS_REAL | pulled to Mac as `MiniMax-H3-Windows-Smoke/MiniMax_H3_best_quality_train_00002_.mp4` and hash-matched; beginning/middle/end contact sheet was visually inspected for temporal coherence |
+
+The installed Worker has an exact rollback copy named
+`index.cjs.before-output-fix-20260824`. The operator confirmed the exact
+`2.0.0-rc.6` prerelease version; public CI, release assets and public-tag
+pickup are recorded only after they complete.
 
 ## 2.0.0-rc.5 current release candidate
 

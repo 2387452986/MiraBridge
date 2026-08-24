@@ -138,4 +138,21 @@ describe("structured process execution", () => {
     expect(stored).toContain("MiraBridge omitted");
     expect(stored.endsWith("TAIL")).toBe(true);
   });
+
+  it("terminates a process promptly when explicit output decoding fails", async () => {
+    const files = await paths();
+    const startedAt = Date.now();
+    await expect(executeProcess({
+      program: process.execPath,
+      args: [
+        "-e",
+        "process.stderr.write('ASCII READY\\n'); setTimeout(() => process.stderr.write(Buffer.from([0xA8, 0x84])), 50); setInterval(() => {}, 1000)",
+      ],
+      cwd: files.root,
+      env: {},
+      timeoutMs: 30_000,
+      outputEncoding: "utf-8",
+    }, files.stdout, files.stderr)).rejects.toMatchObject({ code: "UNSUPPORTED_ENCODING" });
+    expect(Date.now() - startedAt).toBeLessThan(3_000);
+  }, 5_000);
 });

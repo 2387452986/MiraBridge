@@ -117,10 +117,10 @@ internal static class Program
         string data = Directory.CreateDirectory(Path.Combine(root, "data")).FullName;
         await File.WriteAllTextAsync(Path.Combine(packages, "MiraBridge.Windows-2.0.0-rc.1-full.nupkg"), "known-good-package");
         var store = new UpdateRecoveryStore(Path.Combine(root, "app"), data);
-        UpdateRecoveryReceipt receipt = await store.PrepareAsync("2.0.0-rc.1", "2.0.0-rc.5");
+        UpdateRecoveryReceipt receipt = await store.PrepareAsync("2.0.0-rc.1", "2.0.0-rc.6");
         True(File.Exists(receipt.PreviousPackage));
         UpdateStartupAction action = await store.ProcessStartupAsync(
-            "2.0.0-rc.5",
+            "2.0.0-rc.6",
             _ => Task.FromResult<(bool, string?)>((true, null)),
             (_, _) => throw new Exception("Rollback must not launch after a healthy update."));
         Equal(UpdateStartupAction.Continue, action);
@@ -134,10 +134,10 @@ internal static class Program
         string data = Directory.CreateDirectory(Path.Combine(root, "data")).FullName;
         await File.WriteAllTextAsync(Path.Combine(packages, "MiraBridge.Windows-2.0.0-rc.1-full.nupkg"), "known-good-package");
         var store = new UpdateRecoveryStore(Path.Combine(root, "app"), data);
-        _ = await store.PrepareAsync("2.0.0-rc.1", "2.0.0-rc.5");
+        _ = await store.PrepareAsync("2.0.0-rc.1", "2.0.0-rc.6");
         bool launched = false;
         UpdateStartupAction action = await store.ProcessStartupAsync(
-            "2.0.0-rc.5",
+            "2.0.0-rc.6",
             _ => Task.FromResult<(bool, string?)>((false, "injected doctor failure")),
             (receipt, _) =>
             {
@@ -156,7 +156,7 @@ internal static class Program
 
     private static string RequestCode(DateTimeOffset created, DateTimeOffset expires)
     {
-        var request = new PairingRequest("request", 1, created, expires, "1pRvuX6uLgTvJx4oFyxskU_X6gK5bNbC", "windows-main", PublicKey, PairingCodec.FingerprintPublicKey(PublicKey), new PairingMac("Test Mac", "arm64", "2.0.0-rc.5"));
+        var request = new PairingRequest("request", 1, created, expires, "1pRvuX6uLgTvJx4oFyxskU_X6gK5bNbC", "windows-main", PublicKey, PairingCodec.FingerprintPublicKey(PublicKey), new PairingMac("Test Mac", "arm64", "2.0.0-rc.6"));
         byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(request, new JsonSerializerOptions(JsonSerializerDefaults.Web));
         return PairingCodec.Prefix + Convert.ToBase64String(bytes).TrimEnd('=').Replace('+', '-').Replace('/', '_');
     }

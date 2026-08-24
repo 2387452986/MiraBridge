@@ -123,6 +123,21 @@ try {
   assert(cp936.result.stdout_encoding === "cp936" && cp936.result.stderr_encoding === "cp936", "resolved CP936 metadata is missing");
   const badEncoding = await api.call("mira_bridge_exec", { workspace_id: workspaceId, program: "where.exe", args: ["node.exe"], cwd: ".", env: {}, timeout_ms: 60000, output_encoding: "cp437" });
   assert(!badEncoding.ok && badEncoding.error.code === "UNSUPPORTED_ENCODING", "unsupported output encoding was not rejected");
+  const mismatchedJob = await api.call("mira_bridge_start_job", {
+    workspace_id: workspaceId,
+    program: process.execPath,
+    args: ["-e", "process.stderr.write('ASCII READY\\n'); setTimeout(() => process.stderr.write(Buffer.from([0xA8,0x84])), 100); setInterval(() => {}, 1000)"],
+    cwd: ".",
+    env: {},
+    timeout_ms: 60000,
+    output_encoding: "utf-8",
+    idempotency_key: `invalid-output-${randomUUID()}`,
+  });
+  assert(mismatchedJob.ok, `mismatched-encoding Job did not start: ${JSON.stringify(mismatchedJob)}`);
+  const mismatchedResult = await waitFor(api, mismatchedJob.result.job_id, ["exited"], 30000);
+  assert(mismatchedResult.error?.code === "UNSUPPORTED_ENCODING", `mismatched-encoding Job lost its real error: ${JSON.stringify(mismatchedResult)}`);
+  const mismatchedLogs = await api.call("mira_bridge_read_job_logs", { job_id: mismatchedJob.result.job_id, stream: "stderr", offset: 0, max_bytes: 65536 });
+  assert(mismatchedLogs.ok && mismatchedLogs.result.text.includes("ASCII READY") && mismatchedLogs.result.counts_final, "mismatched-encoding Job did not finalize its safe log prefix");
   const missing = await api.call("mira_bridge_exec", { workspace_id: workspaceId, program: "definitely-missing.exe", args: [], cwd: ".", env: {}, timeout_ms: 60000 });
   assert(!missing.ok && missing.error.code === "PROGRAM_NOT_FOUND", "missing program error mapping failed");
   const powershell = await api.call("mira_bridge_powershell", { workspace_id: workspaceId, script: "Write-Output 'PowerShell-中文'", cwd: ".", timeout_ms: 60000 });

@@ -20,7 +20,7 @@ if (target === "plugin") {
   const mcp = await json(resolve(moduleRoot, ".mcp.json"));
   const marketplace = await json(resolve(repositoryRoot, ".agents/plugins/marketplace.json"));
   invariant(manifest.name === "mira-bridge", "Plugin name must be mira-bridge.");
-  invariant(manifest.version === "2.0.0-rc.5", "Plugin version must be 2.0.0-rc.5.");
+  invariant(manifest.version === "2.0.0-rc.6", "Plugin version must be 2.0.0-rc.6.");
   invariant(manifest.license === "MIT", "Plugin license must be MIT.");
   invariant(manifest.skills === "./skills/", "Plugin must expose its skills directory.");
   invariant(manifest.mcpServers === "./.mcp.json", "Plugin must bind its local MCP manifest.");

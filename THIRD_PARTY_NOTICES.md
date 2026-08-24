@@ -1,6 +1,6 @@
 # Third-party notices
 
-MiraBridge 2.0.0-rc.5 includes or bundles the following principal components. Their own license files remain authoritative.
+MiraBridge 2.0.0-rc.6 includes or bundles the following principal components. Their own license files remain authoritative.
 
 | Component | Version | License | Project |
 |---|---:|---|---|

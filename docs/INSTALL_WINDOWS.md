@@ -15,7 +15,7 @@ The x64 Velopack application lives under `%LOCALAPPDATA%\MiraBridge.Windows`; AR
 
 ## First run
 
-1. Compare Setup against the matching `MiraBridge.Windows-<RID>-2.0.0-rc.5.sha256.json` from the same GitHub prerelease.
+1. Compare Setup against the matching `MiraBridge.Windows-<RID>-2.0.0-rc.6.sha256.json` from the same GitHub prerelease.
 2. Expect an unsigned-publisher SmartScreen warning for this RC. Do not continue if the download source or digest differs.
 3. Open MiraBridge and click **Install / Repair** once. The separate helper asks for UAC only for OpenSSH, firewall and ACL changes.
 4. Existing OpenSSH is preserved. MiraBridge adds or replaces only the `# BEGIN MIRABRIDGE 2.0` block, preserves host keys/other public keys, validates `sshd_config`, and stops on `AllowUsers`/`DenyUsers` conflicts.

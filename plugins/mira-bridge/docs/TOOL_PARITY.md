@@ -1,4 +1,4 @@
-# MiraBridge 2.0.0-rc.5 tool parity
+# MiraBridge 2.0.0-rc.6 tool parity
 
 ## Measured Codex surface
 
@@ -16,7 +16,7 @@ The callable registry captured in the implementing Codex task on 2026-08-21 cont
 | Web research | 1 | Remains Mac-hosted. |
 | Installed MiraBridge 1.0 registry | 25 | Current long-lived task snapshot; it cannot hot-add a tool. |
 
-The 2.0.0-rc.5 source exposes 28 MiraBridge tools. A new Codex task after plugin reinstall is the pickup boundary. Verification must inspect the new task rather than infer a total from older task-local registries.
+The 2.0.0-rc.6 source exposes 28 MiraBridge tools. A new Codex task after plugin reinstall is the pickup boundary. Verification must inspect the new task rather than infer a total from older task-local registries.
 
 ## Host-bound primitive mapping
 
@@ -47,4 +47,4 @@ This is a bounded workflow composition, not a hidden sync engine. Service-side t
 - Mac-only app UI state cannot be transplanted to Windows. File-based Office/media workflows are supported by pull/process/push; live control of a Windows GUI application is not.
 - Tool registries are dynamic. This document records the measured surface and routing rule; it does not promise that unknown future plugins automatically acquire a Windows implementation.
 
-The parity claim for 2.0.0-rc.5 is therefore: ordinary non-GUI engineering, file-based workflows, native CLI networking, and interactive console/TUI work can close over a Windows x64 or ARM64 execution environment with NVIDIA, AMD, Intel, mixed, virtual, or no hardware GPU, while the Agent and its service connectors remain on macOS. Hardware-specific acceleration still requires a real runtime probe. It is not a claim that a headless Worker is a Windows desktop session.
+The parity claim for 2.0.0-rc.6 is therefore: ordinary non-GUI engineering, file-based workflows, native CLI networking, and interactive console/TUI work can close over a Windows x64 or ARM64 execution environment with NVIDIA, AMD, Intel, mixed, virtual, or no hardware GPU, while the Agent and its service connectors remain on macOS. Hardware-specific acceleration still requires a real runtime probe. It is not a claim that a headless Worker is a Windows desktop session.

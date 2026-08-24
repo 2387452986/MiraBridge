@@ -11,7 +11,7 @@
 <p align="center"><strong>English</strong> · <a href="./README.zh-CN.md">简体中文</a></p>
 
 <p align="center">
-  <a href="https://github.com/2387452986/MiraBridge/releases/tag/v2.0.0-rc.5">Download 2.0.0-rc.5</a>
+  <a href="https://github.com/2387452986/MiraBridge/releases/tag/v2.0.0-rc.6">Download 2.0.0-rc.6</a>
   · <a href="#install-in-one-conversation">Install</a>
   · <a href="./docs/TEST_REPORT.md">Real test evidence</a>
   · <a href="./SECURITY.md">Security</a>
@@ -40,6 +40,56 @@ MiraBridge can install dependencies, keep the dev server running as a durable Jo
 > “检测这台 Windows 的显卡能力，用可用编码器渲染视频；断线也要继续，结束后验证分辨率、帧率和时长。”
 
 The node reports NVIDIA, AMD, Intel, virtual, or CPU-only hardware instead of assuming one GPU vendor. Codex can probe the real encoder path, start FFmpeg or another renderer as a persistent Job, recover it after SSH/MCP reconnect, inspect bounded logs, verify output with `ffprobe`, and pull the result to macOS.
+
+### Real case: install MiniMax H3 and finish a native Windows render
+
+> “Read my Windows hardware, install the full MiniMax H3 model with quality-first settings, render a video with sound, diagnose failures instead of lowering quality, and bring the verified result back to my Mac.”
+
+This was completed on a physical Windows 11 x64 node with a Ryzen 7 9700X,
+32 GiB RAM and an RTX 5070 Ti 16 GiB. The complete evidence is recorded in
+[the test report](./docs/TEST_REPORT.md); it was not a mock or a Mac-side
+generation presented as Windows work.
+
+1. Codex called `describe_node` from the Mac, verified the real GPU, CUDA,
+   memory, architecture, storage and Windows code page, and obtained the
+   operator's explicit MiniMax H3 Community License and region confirmation.
+2. It preserved the existing system-managed C-drive page file, added a 64 GiB
+   D-drive page file, rebooted Windows and verified the resulting memory
+   configuration. This was capacity preparation, not a substitute for finding
+   runtime defects.
+3. It created the isolated Windows workspace
+   `D:\MiraBridgeRoot\AI\MiniMax-H3`. Model bytes came from the domestic
+   ModelScope mirror while SHA-256 integrity was checked against the matching
+   official Hugging Face LFS objects.
+4. It installed a pinned ComfyUI 0.33.1 Python runtime and the full
+   `minimax_h3_fl2va_int8_convrot` model, Qwen3-VL text encoder and official
+   audio/video VAEs. The four selected model files total 55,539,098,189 bytes.
+   Turbo LoRAs, SageAttention and `--fast` quality shortcuts were not used.
+5. The acceptance profile used 1344×768, 124 frames, 24 fps, 20 sampler steps,
+   the non-Turbo graph, DynamicVRAM and native `convrot_w4a4` execution.
+6. ComfyUI ran as a durable MiraBridge Job with `output_encoding=auto`; the
+   Agent retained the Job ID, paged logs and inspected GPU telemetry rather
+   than keeping one fragile SSH command open.
+7. When the first progress-bar glyph caused the Job to become `lost`, the
+   native ComfyUI process was isolated and proved healthy. The actual owner was
+   MiraBridge's delayed handling of a fatal UTF-8 decoder rejection on CP936
+   output. The shared output lifecycle was repaired and the same quality path
+   was rerun—no fallback kernel, smaller frame, reduced step count or silent
+   audio workaround.
+8. The repaired standard Job completed 20/20. `ffprobe` verified a 5.167-second
+   1344×768 H.264 video at 24 fps with AAC stereo audio; the 1,940,180-byte
+   artifact was SHA-256 matched after transfer to the Mac.
+
+The automated acceptance runtime is intentionally pinned and headless for
+reproducibility. **Comfy Desktop is a separate human-facing launcher**, not a
+replacement for MiraBridge's durable Job path. It can adopt an existing
+ComfyUI setup or configure shared model paths, but MiraBridge does not silently
+rewrite a known-good production environment. Hardware and memory choices must
+still be derived from each real Windows node.
+
+References: [MiniMax H3 model and license](https://huggingface.co/MiniMaxAI/MiniMax-H3),
+[official ComfyUI H3 workflow](https://github.com/Comfy-Org/workflow_templates/blob/main/templates/video_minimax_h3_t2v.json),
+and [Comfy Desktop for Windows](https://docs.comfy.org/installation/desktop/windows).
 
 ### Use Windows-only engineering toolchains
 
@@ -70,7 +120,7 @@ This is an unsigned release candidate. Windows SmartScreen may show **Unknown pu
 
 Tell Codex on the Mac:
 
-> 请从 `https://github.com/2387452986/MiraBridge` 安装 `v2.0.0-rc.5`，完成 doctor 并生成 Windows 配对码。
+> 请从 `https://github.com/2387452986/MiraBridge` 安装 `v2.0.0-rc.6`，完成 doctor 并生成 Windows 配对码。
 
 Codex verifies the fixed tag and release manifest, installs the managed Node 24 runtime, MCP server and CLI without Homebrew, and registers `mira-bridge@mirabridge`.
 
@@ -86,7 +136,7 @@ Authorization is already included in step 2. The normal path requires no passwor
 <summary>Explicit Mac commands</summary>
 
 ```sh
-git clone --branch v2.0.0-rc.5 --depth 1 https://github.com/2387452986/MiraBridge.git
+git clone --branch v2.0.0-rc.6 --depth 1 https://github.com/2387452986/MiraBridge.git
 cd MiraBridge
 ./plugins/mira-bridge/scripts/install-mac.sh
 ~/.local/bin/mirabridge doctor
