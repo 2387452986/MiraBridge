@@ -38,6 +38,11 @@ workflow, native ComfyUI kernels and model-quality settings are unchanged.
 | Mac source gate | PASS_REAL | managed Node 24.19.0; strict typecheck; 26 Vitest files / 131 tests; build; plugin and Skill validators; package inspection; production audit with zero vulnerabilities; `git diff --check` |
 | Windows-native integration | PASS_REAL | 34 checks passed in 43.275 seconds, including UTF-8/CP936, invalid-encoding persistent Job, Job restart/list/input, ConPTY screen/Unicode/Ctrl-C/resize, process-tree cancel, traversal/UNC/Junction rejection and storage prune |
 | Diagnostic cleanup | PASS_REAL | the temporary `python.exe` LocalDumps registry key and isolated validation tree were removed; port 8188 had zero listeners and no Job remained queued, starting or running |
+| Four-platform source CI | PASS_REAL | GitHub Actions run `32743533479` passed macOS Apple Silicon/Intel, Windows x64 and native Windows ARM64 on commit `f4f91ee` |
+| Public prerelease | PASS_REAL | annotated `v2.0.0-rc.6`; prerelease run `32743563533` published 27 assets after Windows x64/ARM64 and both Mac payloads passed. One Intel release Job hit a one-off 15-second transfer-test timeout while the independent Intel source CI passed; rerunning the unchanged Job completed successfully, so no assertion or timeout was weakened |
+| Public release integrity | PASS_REAL | public x64 Setup: 251,234,577 bytes / SHA-256 `ca4754a40f77976348fb7c225ffb069c697c14ea89fd748791666730d1a716d9`; public Mac arm64 runtime: 282,120 bytes / SHA-256 `d158e6b2bb1c7d05c6b64a0f6e2a56d7d087063921159ef1396ede4497151d61`; both match the published aggregate `SHA256SUMS` |
+| Public-tag Mac pickup | PASS_REAL | updater verified all 183 manifest files, installed managed runtime/CLI/plugin `2.0.0-rc.6`, kept Node 24.19.0, exposed exactly 28 tools and handshook with the physical rc.6 Worker over RPC `2.0` |
+| Public x64 replacement | PASS_REAL | pre-upgrade `worker.toml` plus SQLite `VACUUM INTO` backup completed; external interactive receipt records uninstall 0, install 0, Worker rc.6, `runtime_ready=true`, one application after five duplicate launches, window activation, zero new crashes and durable data preserved. Job/Workspace counts remained 181/114; Request/Output counts increased from 5,160/826 to 5,164/830 |
 
 ### Full native H3 acceptance
 
@@ -49,10 +54,18 @@ workflow, native ComfyUI kernels and model-quality settings are unchanged.
 | Deliverable | PASS_REAL | `MiniMax_H3_best_quality_train_00002_.mp4`, 1,940,180 bytes, SHA-256 `e4f63b450d6646b0aaa49477ba9ef4d8ac2f1abfdb982afdf4df7d7f16a8a1b3`; H.264 High 1344x768 24 fps 5.167 s plus AAC LC 32 kHz stereo; 331,776 audio samples, mean -23.8 dB and max -10.4 dB |
 | Cross-host transfer | PASS_REAL | pulled to Mac as `MiniMax-H3-Windows-Smoke/MiniMax_H3_best_quality_train_00002_.mp4` and hash-matched; beginning/middle/end contact sheet was visually inspected for temporal coherence |
 
-The installed Worker has an exact rollback copy named
-`index.cjs.before-output-fix-20260824`. The operator confirmed the exact
-`2.0.0-rc.6` prerelease version; public CI, release assets and public-tag
-pickup are recorded only after they complete.
+### Related Windows Comfy Desktop installation
+
+| Gate | Result | Evidence |
+|---|---|---|
+| Official desktop package | PASS_REAL | the installer served by the official Comfy Desktop download endpoint was 301,880,168 bytes / SHA-256 `45496b4eaca74d47d97252fe2b886bc18dfad89bd18d9cbb76ab0eaf9d2089c5`; Authenticode was valid for Drip Artificial Inc / Comfy Org and the installed product reports `Comfy Desktop 1.0.39` |
+| Installed surface | PASS_REAL | per-user executable, uninstall registration, Desktop shortcut and Start Menu shortcut all resolve to `Comfy Desktop.exe`; an interactive-session capture showed the real Chinese first-run cloud/local selection window, and the Electron process group remained healthy after MiraBridge rc.6 replacement |
+| License boundary | NOT_RUN | the application is installed and open, but the operator must select Local and accept Comfy's own EULA/terms before it initializes an instance. MiniMax H3 license consent does not authorize accepting a separate product agreement |
+| Runtime ownership | PASS_REAL | the pinned H3 automation environment remains under the Windows acceptance root and is not silently replaced or imported by Comfy Desktop; Desktop is the human launcher, while MiraBridge durable Jobs keep the tested deterministic execution path |
+
+The installed pre-release Worker fix retains an exact rollback copy named
+`index.cjs.before-output-fix-20260824`; the public rc.6 Setup now owns the live
+runtime. Release: `https://github.com/2387452986/MiraBridge/releases/tag/v2.0.0-rc.6`.
 
 ## 2.0.0-rc.5 current release candidate
 
