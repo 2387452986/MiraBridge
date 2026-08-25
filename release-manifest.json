@@ -2,7 +2,7 @@
   "schema_version": 1,
   "product": "MiraBridge",
   "version": "2.0.0-rc.6",
-  "generated_at": "2026-08-24T15:36:24.168Z",
+  "generated_at": "2026-08-25T06:27:00.720Z",
   "files": [
     {
       "path": ".agents/plugins/marketplace.json",
@@ -876,13 +876,13 @@
     },
     {
       "path": "README.md",
-      "bytes": 11830,
-      "sha256": "10c435f5bbeabebcb8e35ccc3cb6a9e251eb14ca18aaa69e3a40dca57d28361f"
+      "bytes": 8321,
+      "sha256": "a3210b829df4bad4bae1747a9fa5859cdf06b4f51ab267d79e5031e3ff140b4e"
     },
     {
       "path": "README.zh-CN.md",
-      "bytes": 11143,
-      "sha256": "0bdc6eeb1f5bcfef8402828cc2e2098b4a8e2821346117d1fa47369f134b5aea"
+      "bytes": 7789,
+      "sha256": "ec828e7861160d5a65d06efda847a5b551b17a433fc52fa3cfab0b59c000d84f"
     },
     {
       "path": "scripts/build-windows-release.ps1",

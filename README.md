@@ -4,9 +4,9 @@
 
 <h1 align="center">MiraBridge</h1>
 
-<p align="center"><strong>Use a Windows PC as the native tool runtime for Codex reasoning on your Mac.</strong></p>
+<p align="center"><strong>Use your Windows PC from Codex on your Mac—without a proxy, Codex installation, or OpenAI sign-in on Windows.</strong></p>
 
-<p align="center">MiraBridge 将 Windows 电脑变成 Mac 上 Codex 可直接使用的远程原生工具环境。</p>
+<p align="center">Codex stays on your Mac. Windows simply does the work and sends the results back.</p>
 
 <p align="center"><strong>English</strong> · <a href="./README.zh-CN.md">简体中文</a></p>
 
@@ -19,121 +19,100 @@
 
 ---
 
-MiraBridge keeps the Agent, LLM, planning, approval, and completion judgment on macOS. Its Windows Worker has no model and no autonomous loop: it executes exact file, process, terminal, browser, transfer, and maintenance operations, then returns structured evidence to the Mac.
+## Your Mac thinks. Your Windows PC does the work.
 
-## Real work, not remote-command demos
+You may already use Codex comfortably on a Mac, while a Windows PC holds the GPU, project, compiler, packaging tool, or files you actually need.
 
-### Deliver a Windows project end to end
+MiraBridge connects those two computers without turning Windows into another Codex machine:
 
-> “检查 Windows 上的这个 .NET 项目，修复测试，完成 Release 打包，把安装产物传回 Mac。”
+```text
+You → Codex on Mac → approved operation → MiraBridge Worker on Windows
+You ← answer and evidence ← logs, files, screenshots, and finished artifacts
+```
 
-Codex can inspect the existing Windows workspace, search and read source, make SHA-guarded edits, run tests, inspect failures, build the native package, verify its files and hashes, and pull only the finished artifacts back to the Mac.
+The Agent, account, conversation, planning, approval, and completion judgment stay with Codex on the Mac. Windows runs a model-free Worker that performs concrete operations and returns evidence. It does not run Codex, another Agent, or an LLM.
 
-### Build and visually verify a website on Windows
+## Why use MiraBridge?
 
-> “在 Windows 上制作一个 Vite 网页，启动服务，用 Edge 检查桌面和移动端效果，修完控制台错误后把源码和构建目录传回来。”
+Codex's native SSH connection is useful when the remote computer can run Codex itself. The [official setup](https://learn.chatgpt.com/docs/remote-connections) requires Codex to be installed and authenticated on the remote host.
 
-MiraBridge can install dependencies, keep the dev server running as a durable Job, verify HTTP with Windows `curl.exe`, render isolated Edge screenshots, report console/page errors, run the production build, and transfer the complete project directory.
+MiraBridge is for the other case: **Windows should be usable by Codex without installing Codex, signing in to OpenAI, or giving that PC access to an OpenAI proxy.**
 
-### Run GPU and media workloads without tying up the Mac
+| | Codex native remote connection | MiraBridge |
+|---|---|---|
+| Install Codex on Windows | Required for SSH mode | Not required |
+| Sign in to OpenAI on Windows | Required | Not required |
+| OpenAI/proxy access from Windows | Follows the remote Codex setup | Not needed for the MiraBridge control path |
+| Where Codex works | Connected remote computer | Codex stays on the Mac; Windows only executes operations |
+| General desktop and mouse control | Available with Computer Use on supported hosts | Not a goal |
+| Windows execution model | General remote Codex environment | Structured, auditable Worker operations |
 
-> “检测这台 Windows 的显卡能力，用可用编码器渲染视频；断线也要继续，结束后验证分辨率、帧率和时长。”
+> **Network note:** MiraBridge itself does not require Windows to reach OpenAI. Software or model downloads requested by a task may still need their own internet or mirror access.
 
-The node reports NVIDIA, AMD, Intel, virtual, or CPU-only hardware instead of assuming one GPU vendor. Codex can probe the real encoder path, start FFmpeg or another renderer as a persistent Job, recover it after SSH/MCP reconnect, inspect bounded logs, verify output with `ffprobe`, and pull the result to macOS.
+## Things you can ask Codex to do
 
-### Real case: install MiniMax H3 and finish a native Windows render
+### Build and test a Windows project
 
-> “Read my Windows hardware, install the full MiniMax H3 model with quality-first settings, render a video with sound, diagnose failures instead of lowering quality, and bring the verified result back to my Mac.”
+> “Open my .NET project on Windows, fix the failing tests, create the Release package, and bring the installer back to my Mac.”
 
-This was completed on a physical Windows 11 x64 node with a Ryzen 7 9700X,
-32 GiB RAM and an RTX 5070 Ti 16 GiB. The complete evidence is recorded in
-[the test report](./docs/TEST_REPORT.md); it was not a mock or a Mac-side
-generation presented as Windows work.
+Codex can inspect and edit the Windows project, run its native toolchain, verify the output, and transfer the finished artifact back.
 
-1. Codex called `describe_node` from the Mac, verified the real GPU, CUDA,
-   memory, architecture, storage and Windows code page, and obtained the
-   operator's explicit MiniMax H3 Community License and region confirmation.
-2. It preserved the existing system-managed C-drive page file, added a 64 GiB
-   D-drive page file, rebooted Windows and verified the resulting memory
-   configuration. This was capacity preparation, not a substitute for finding
-   runtime defects.
-3. It created the isolated Windows workspace
-   `D:\MiraBridgeRoot\AI\MiniMax-H3`. Model bytes came from the domestic
-   ModelScope mirror while SHA-256 integrity was checked against the matching
-   official Hugging Face LFS objects.
-4. It installed a pinned ComfyUI 0.33.1 Python runtime and the full
-   `minimax_h3_fl2va_int8_convrot` model, Qwen3-VL text encoder and official
-   audio/video VAEs. The four selected model files total 55,539,098,189 bytes.
-   Turbo LoRAs, SageAttention and `--fast` quality shortcuts were not used.
-5. The acceptance profile used 1344×768, 124 frames, 24 fps, 20 sampler steps,
-   the non-Turbo graph, DynamicVRAM and native `convrot_w4a4` execution.
-6. ComfyUI ran as a durable MiraBridge Job with `output_encoding=auto`; the
-   Agent retained the Job ID, paged logs and inspected GPU telemetry rather
-   than keeping one fragile SSH command open.
-7. When the first progress-bar glyph caused the Job to become `lost`, the
-   native ComfyUI process was isolated and proved healthy. The actual owner was
-   MiraBridge's delayed handling of a fatal UTF-8 decoder rejection on CP936
-   output. The shared output lifecycle was repaired and the same quality path
-   was rerun—no fallback kernel, smaller frame, reduced step count or silent
-   audio workaround.
-8. The repaired standard Job completed 20/20. `ffprobe` verified a 5.167-second
-   1344×768 H.264 video at 24 fps with AAC stereo audio; the 1,940,180-byte
-   artifact was SHA-256 matched after transfer to the Mac.
+### Use the Windows GPU
 
-The automated acceptance runtime is intentionally pinned and headless for
-reproducibility. **Comfy Desktop is a separate human-facing launcher**, not a
-replacement for MiraBridge's durable Job path. It can adopt an existing
-ComfyUI setup or configure shared model paths, but MiraBridge does not silently
-rewrite a known-good production environment. Hardware and memory choices must
-still be derived from each real Windows node.
+> “Check which GPU is available, render this video on Windows, keep it running if the connection drops, and verify the finished file.”
 
-References: [MiniMax H3 model and license](https://huggingface.co/MiniMaxAI/MiniMax-H3),
-[official ComfyUI H3 workflow](https://github.com/Comfy-Org/workflow_templates/blob/main/templates/video_minimax_h3_t2v.json),
-and [Comfy Desktop for Windows](https://docs.comfy.org/installation/desktop/windows).
+MiraBridge reports the actual hardware instead of assuming one GPU vendor. Long renders and compute jobs continue independently of the SSH session and can be found again later.
 
-### Use Windows-only engineering toolchains
+### Test a website in Microsoft Edge
 
-> “在 Windows 上运行 PowerShell、交互式 CLI 和打包工具，处理中文输出，失败后继续排查。”
+> “Run this website on Windows, check desktop and mobile layouts in Edge, fix the errors, and return the screenshots and build.”
 
-Structured argv execution avoids shell translation. Separate PowerShell, UTF-8/Windows code-page decoding, durable stdin, and ConPTY terminal snapshots support normal CLI tools, REPLs, prompts, control keys, resizes, and full-screen TUIs.
+MiraBridge can keep the local server running, capture isolated Edge screenshots, report page and console errors, and return the results.
 
-### Inspect and maintain the actual PC safely
+### Inspect files and clean up carefully
 
-> “告诉我 Windows 桌面有哪些文件，扫描 D 盘和回收站里可以清理的内容，先给候选，确认后再精确删除。”
+> “Show me what is on the Windows Desktop and in the Recycle Bin. Ask me before deleting anything.”
 
-Desktop access uses the real Windows Known Folder. Recycle Bin and storage workflows scan first, return sizes and evidence, require a fresh receipt or explicit target for destructive work, then rescan to verify the result. Unknown personal files are never treated as cache merely because they are large.
+Codex can inspect allowed locations, present exact candidates, and verify the result after an approved change.
 
-## What the Agent can operate
+## Built for real work
 
-- Files and projects: list, stat, page, search, glob, create, exact edit, copy, move, and guarded delete.
-- Native execution: structured `.exe`, `.cmd`, `.bat`, PowerShell, timeouts, process-tree cancellation, and Chinese output.
-- Durable work: discoverable Jobs, idempotent start, log paging, reconnect recovery, stdin, and ConPTY terminal snapshots.
-- Transfers: verified single-file or complete-directory push/pull with SHA-256 and atomic replacement—not background sync.
-- Web acceptance: local HTTP verification and isolated installed-Edge desktop/mobile screenshots without using a signed-in profile.
-- PC capabilities: real architecture, CPU, memory, display adapters, Desktop authorization, Recycle Bin scan, storage retention, and quota status.
+- **Windows-native tools:** run `.exe`, `.cmd`, `.bat`, PowerShell, build tools, interactive terminals, and Chinese-language output correctly.
+- **Recoverable long jobs:** builds, servers, renders, scans, and inference keep running through an SSH or MCP reconnect.
+- **Controlled file access:** read, search, edit, copy, move, and delete only inside configured Windows locations.
+- **Verified transfers:** move one file or a complete directory between Mac and Windows with size and SHA-256 checks.
+- **Evidence, not guesses:** return exit status, logs, hashes, generated files, browser errors, screenshots, and hardware details for Codex to evaluate on the Mac.
 
-The Codex plugin exposes exactly 28 `mira_bridge_*` MCP tools. Ordinary Mac-local work stays local and does not contact Windows.
+The plugin exposes exactly 28 focused `mira_bridge_*` tools. Ordinary Mac work remains local and does not wake or contact Windows.
 
 ## Install in one conversation
 
-This is an unsigned release candidate. Windows SmartScreen may show **Unknown publisher**. Download only from this repository’s Release page and verify the published SHA-256 manifest. Stable `2.0.0` remains blocked on Windows code signing plus physical Windows 10 and ARM64 GUI acceptance.
+### What you need
 
-Tell Codex on the Mac:
+- A Mac where Codex already works.
+- A supported Windows PC reachable over the same trusted LAN or an existing secure SSH network.
+- The Windows installer from the same MiraBridge release as the Mac plugin.
 
-> 请从 `https://github.com/2387452986/MiraBridge` 安装 `v2.0.0-rc.6`，完成 doctor 并生成 Windows 配对码。
+### 1. Ask Codex on the Mac to install MiraBridge
 
-Codex verifies the fixed tag and release manifest, installs the managed Node 24 runtime, MCP server and CLI without Homebrew, and registers `mira-bridge@mirabridge`.
+> Install `v2.0.0-rc.6` from `https://github.com/2387452986/MiraBridge`, run doctor, and create a Windows pairing request.
 
-On Windows, download the matching x64 or ARM64 Setup from the same Release and run it. The **Connect Mac** page gives you both complete commands:
+Codex verifies the fixed release, installs the managed Mac runtime and plugin, and creates the pairing request.
 
-1. Click **Copy command** and give `~/.local/bin/mirabridge pair create` to Codex on the Mac.
-2. Paste the request code into Windows and click **Authorize & create response**.
-3. Click **Copy completion command** and give the complete `~/.local/bin/mirabridge pair accept …` command back to Codex.
+### 2. Install MiraBridge on Windows
 
-Authorization is already included in step 2. The normal path requires no password, private-key copy, TOML edit, SSH file edit, or manually typed host fingerprint.
+Download the matching x64 or ARM64 Setup from the [2.0.0-rc.6 release](https://github.com/2387452986/MiraBridge/releases/tag/v2.0.0-rc.6), run it, and open **Connect Mac**.
+
+### 3. Pair the two computers
+
+1. Copy the complete `mirabridge pair create` command from Windows and give it to Codex on the Mac.
+2. Paste the request code into Windows and select **Authorize & create response**.
+3. Copy the completion command from Windows and give it back to Codex.
+
+The normal flow requires no password, private-key copy, TOML editing, manual SSH file editing, or typed host fingerprint.
 
 <details>
-<summary>Explicit Mac commands</summary>
+<summary>Manual Mac installation commands</summary>
 
 ```sh
 git clone --branch v2.0.0-rc.6 --depth 1 https://github.com/2387452986/MiraBridge.git
@@ -145,45 +124,31 @@ cd MiraBridge
 
 </details>
 
-## Architecture and trust boundary
+## Safety and current limits
 
-```text
-Mac                                                    Windows
-┌──────────────────────────────┐                       ┌─────────────────────────┐
-│ Codex / Agent                │                       │ MiraBridge for Windows  │
-│ reasoning, planning, approval│                       │ setup, status, access   │
-└──────────────┬───────────────┘                       └────────────┬────────────┘
-               │ MCP                                                │ Worker CLI
-┌──────────────▼───────────────┐       pinned SSH / stdio            ▼
-│ mirabridge-mcp               ├──────────────────────────────► deterministic Worker
-│ node config + host trust     │◄────────────────────────────── structured evidence
-└──────────────────────────────┘
+- MiraBridge is not remote desktop and does not control arbitrary Windows GUI applications, mouse input, or an existing signed-in browser profile.
+- Windows must remain reachable from the Mac over a trusted LAN, VPN, mesh network, or other secure SSH path.
+- File tools stay inside configured locations, but native programs still have the permissions of the Windows account running them. The product currently defaults to Administrator.
+- Pairing uses public-key SSH and a pinned host fingerprint. MiraBridge opens no custom command listener and sends no background telemetry.
+- `2.0.0-rc.6` is an unsigned release candidate. Windows SmartScreen may show **Unknown publisher**. Download it only from this repository's Release page and verify the published SHA-256 manifest.
 
-reasoning_host = Mac
-tool_host      = Windows
-```
+See the [security policy](./SECURITY.md), [support matrix](./SUPPORT_MATRIX.md), and [pairing guide](./docs/PAIRING.md) before using MiraBridge on a sensitive or production machine.
 
-MiraBridge is not remote desktop, a Windows Agent, a cloud relay, a Bash translator, or a bidirectional sync engine. It opens no custom command port and stores no LLM conversation or goal state on Windows.
+## Verified on a real Windows PC
 
-## Product defaults
+MiraBridge is tested beyond mocks and compile checks. The current release was installed on a physical Windows 11 x64 PC, exercised through the public Mac plugin, and used for native builds, reconnectable jobs, interactive terminals, Edge snapshots, file transfers, and a complete GPU video workflow. The transferred artifact was verified on the Mac with a matching SHA-256.
 
-- Administrator-first Windows route, with Worker path boundaries and Mac-side approvals still enforced.
-- `%USERPROFILE%\MiraBridge` and Desktop access are configurable from the Windows app.
-- Recycle Bin clearing requires a fresh unchanged scan receipt.
-- Web snapshots are loopback/local-only by default and never use browser cookies or extensions.
-- OpenSSH uses public keys, pinned host fingerprints, and a `LocalSubnet` firewall rule.
-- Output retention: ordinary output 7 days, Job logs 14 days, metadata/audit 90 days, 10 GiB quota, 2 GiB free-space reserve.
-- x64 and ARM64 packages; 32-bit x86 Windows is not supported by the bundled Node 24 runtime.
+Read the [real test report](./docs/TEST_REPORT.md) for the full evidence, known limitations, and release gates.
 
-## Documentation
+## Technical documentation
 
 - [Install on macOS](./docs/INSTALL_MAC.md)
 - [Install on Windows](./docs/INSTALL_WINDOWS.md)
 - [Pairing and SSH trust](./docs/PAIRING.md)
+- [Architecture](./plugins/mira-bridge/docs/ARCHITECTURE.md)
+- [Tool coverage and explicit gaps](./plugins/mira-bridge/docs/TOOL_PARITY.md)
 - [1.x migration and rollback](./docs/MIGRATION_1X.md)
-- [Support matrix](./SUPPORT_MATRIX.md)
-- [Security policy](./SECURITY.md)
-- [Real test report](./docs/TEST_REPORT.md)
+- [Release notes](./docs/release-notes-v2.0.0-rc.6.md)
 
 ## License
 
