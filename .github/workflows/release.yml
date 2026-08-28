@@ -41,7 +41,7 @@ jobs:
           path: artifacts/windows/${{ matrix.rid }}/app
           format: cyclonedx-json
           output-file: artifacts/windows/${{ matrix.rid }}/MiraBridge.Windows-${{ matrix.rid }}-2.0.0-rc.7.sbom.cdx.json
-      - uses: actions/attest-build-provenance@v3
+      - uses: actions/attest-build-provenance@v4
         with:
           subject-path: artifacts/windows/${{ matrix.rid }}/releases/*
       - uses: actions/upload-artifact@v7
@@ -82,7 +82,7 @@ jobs:
           tar -czf ../../artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.7.tar.gz -C ../../artifacts/mac-${{ matrix.arch }} .
           (cd ../../artifacts && shasum -a 256 MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.7.tar.gz) > ../../artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.7.tar.gz.sha256
           npm sbom --omit=dev --sbom-format cyclonedx > ../../artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.7.sbom.cdx.json
-      - uses: actions/attest-build-provenance@v3
+      - uses: actions/attest-build-provenance@v4
         with:
           subject-path: artifacts/MiraBridge-mac-${{ matrix.arch }}-2.0.0-rc.7.tar.gz
       - uses: actions/upload-artifact@v7
