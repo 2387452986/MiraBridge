@@ -52,6 +52,11 @@ export interface PairingDependencies {
   verify?: (nodeId: string, configPath: string) => Promise<RpcPayload>;
 }
 
+export interface ReconnectDependencies {
+  scan?: (host: string, port: number) => Promise<ScannedHostKey[]>;
+  verify?: (nodeId: string, configPath: string) => Promise<RpcPayload>;
+}
+
 function pairingDirectory(configPath: string): string {
   return join(dirname(configPath), "pairings");
 }
@@ -169,6 +174,116 @@ async function defaultVerify(nodeId: string, configPath: string): Promise<RpcPay
     return await pool.call(nodeId, "mira_bridge_describe_node", { node_id: nodeId });
   } finally {
     pool.close();
+  }
+}
+
+function reconnectScanError(error: unknown, nodeId: string, host: string, port: number): BridgeError {
+  const bridge = error instanceof BridgeError
+    ? error
+    : new BridgeError("NODE_OFFLINE", "The candidate address could not be inspected.", { retryable: true, cause: error });
+  const message = bridge.code === "HOST_KEY_MISMATCH"
+    ? "Stopped: the new address does not present this node's pinned SSH host key. Re-pair only after independently verifying the Windows fingerprint.\n已停止：新地址未提供该节点已固定的 SSH 主机密钥。只有独立核对 Windows 主机指纹后才可重新配对。"
+    : `Could not inspect ${host}:${port}. Check the address, Windows sleep state, VPN route, SSH service, and firewall, then retry.\n无法检查 ${host}:${port}。请确认地址、Windows 睡眠状态、VPN 路由、SSH 服务和防火墙后重试。`;
+  return new BridgeError(bridge.code, message, {
+    retryable: bridge.retryable,
+    details: { ...bridge.details, node_id: nodeId, requested_host: host, port },
+    cause: error,
+  });
+}
+
+function reconnectVerificationError(error: unknown, nodeId: string, previousHost: string, host: string): BridgeError {
+  const bridge = error instanceof BridgeError
+    ? error
+    : new BridgeError("INTERNAL_ERROR", error instanceof Error ? error.message : String(error), { cause: error });
+  return new BridgeError(
+    bridge.code,
+    `Reconnect verification failed and the original address was restored: ${bridge.message}\n重连验证失败，已恢复原地址：${bridge.message}`,
+    {
+      retryable: bridge.retryable,
+      details: { ...bridge.details, node_id: nodeId, previous_host: previousHost, requested_host: host },
+      cause: error,
+    },
+  );
+}
+
+export async function reconnectNodeAddress(
+  nodeId: string,
+  host: string,
+  configPath = defaultConfigPath(),
+  dependencies: ReconnectDependencies = {},
+): Promise<{ node_id: string; previous_host: string; host: string; fingerprint: string; handshake: unknown }> {
+  assertNodeId(nodeId);
+  const originalConfig = await loadMacConfig(configPath);
+  const originalNode = originalConfig.nodes[nodeId];
+  if (!originalNode) {
+    throw new BridgeError(
+      "NODE_NOT_FOUND",
+      `Windows node '${nodeId}' is not configured.\nWindows 节点“${nodeId}”尚未配置。`,
+      { details: { node_id: nodeId } },
+    );
+  }
+  const nextNode = nodeConfigSchema.parse({ ...originalNode, host });
+  const conflict = Object.entries(originalConfig.nodes).find(([otherId, node]) => (
+    otherId !== nodeId
+    && node.host === host
+    && node.port === originalNode.port
+    && !fingerprintsEqual(node.host_fingerprint, originalNode.host_fingerprint)
+  ));
+  if (conflict) {
+    throw new BridgeError(
+      "HOST_KEY_MISMATCH",
+      `Stopped: ${host}:${originalNode.port} is already pinned to a different Windows node.\n已停止：${host}:${originalNode.port} 已固定到另一个 Windows 节点。`,
+      { details: { node_id: nodeId, conflicting_node_id: conflict[0], requested_host: host, port: originalNode.port } },
+    );
+  }
+
+  let selected: ScannedHostKey;
+  try {
+    selected = selectHostKey(
+      await (dependencies.scan ?? scanHostKeys)(host, originalNode.port),
+      originalNode.host_fingerprint,
+    );
+  } catch (error) {
+    throw reconnectScanError(error, nodeId, host, originalNode.port);
+  }
+
+  const hostsPath = knownHostsPath(configPath);
+  const originalHosts = await readFile(hostsPath, "utf8").catch(() => "");
+  const withoutRequestedHost = removeHostLines(originalHosts, host, originalNode.port);
+  const stagedHosts = `${withoutRequestedHost ? `${withoutRequestedHost}\n` : ""}${selected.line}\n`;
+  const nextConfig: MacConfig = { nodes: { ...originalConfig.nodes, [nodeId]: nextNode } };
+  try {
+    await writePrivate(hostsPath, stagedHosts);
+    await writeMacConfig(nextConfig, configPath);
+    const verification = await (dependencies.verify ?? defaultVerify)(nodeId, configPath);
+    if (!verification.ok) {
+      throw new BridgeError(
+        verification.error?.code ?? "INTERNAL_ERROR",
+        verification.error?.message ?? "Windows handshake failed.",
+        {
+          ...(verification.error ? { retryable: verification.error.retryable, details: verification.error.details } : {}),
+        },
+      );
+    }
+
+    const oldAddressStillUsed = Object.entries(originalConfig.nodes).some(([otherId, node]) => (
+      otherId !== nodeId && node.host === originalNode.host && node.port === originalNode.port
+    ));
+    if (originalNode.host !== host && !oldAddressStillUsed) {
+      const retained = removeHostLines(stagedHosts, originalNode.host, originalNode.port);
+      await writePrivate(hostsPath, retained ? `${retained}\n` : "");
+    }
+    return {
+      node_id: nodeId,
+      previous_host: originalNode.host,
+      host,
+      fingerprint: originalNode.host_fingerprint,
+      handshake: verification.result,
+    };
+  } catch (error) {
+    await writeMacConfig(originalConfig, configPath);
+    await writePrivate(hostsPath, originalHosts);
+    throw reconnectVerificationError(error, nodeId, originalNode.host, host);
   }
 }
 

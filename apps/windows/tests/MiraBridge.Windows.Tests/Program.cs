@@ -1,6 +1,8 @@
 using System.Text;
 using System.Text.Json;
 using System.IO;
+using System.Windows.Interop;
+using System.Windows.Media;
 using MiraBridge.Windows;
 using MiraBridge.Windows.Core;
 
@@ -14,6 +16,7 @@ internal static class Program
     [STAThread]
     public static async Task<int> Main()
     {
+        await Run("software-only GUI rendering", SoftwareRenderingAsync);
         await Run("pairing TTL and fingerprint", PairingContractAsync);
         await Run("pairing replay protection", PairingReplayAsync);
         await Run("SSH managed block preservation", SshManagedBlockAsync);
@@ -22,8 +25,15 @@ internal static class Program
         await Run("update recovery verified path", UpdateRecoveryVerifiedAsync);
         await Run("update recovery rollback path", UpdateRecoveryRollbackAsync);
         await Run("ViewModel readiness", ViewModelAsync);
-        Console.WriteLine($"PASS {_passed}/8 Windows client checks");
+        Console.WriteLine($"PASS {_passed}/9 Windows client checks");
         return 0;
+    }
+
+    private static Task SoftwareRenderingAsync()
+    {
+        _ = new App();
+        Equal(RenderMode.SoftwareOnly, RenderOptions.ProcessRenderMode);
+        return Task.CompletedTask;
     }
 
     private static Task PairingContractAsync()
@@ -117,10 +127,10 @@ internal static class Program
         string data = Directory.CreateDirectory(Path.Combine(root, "data")).FullName;
         await File.WriteAllTextAsync(Path.Combine(packages, "MiraBridge.Windows-2.0.0-rc.1-full.nupkg"), "known-good-package");
         var store = new UpdateRecoveryStore(Path.Combine(root, "app"), data);
-        UpdateRecoveryReceipt receipt = await store.PrepareAsync("2.0.0-rc.1", "2.0.0-rc.6");
+        UpdateRecoveryReceipt receipt = await store.PrepareAsync("2.0.0-rc.1", "2.0.0-rc.7");
         True(File.Exists(receipt.PreviousPackage));
         UpdateStartupAction action = await store.ProcessStartupAsync(
-            "2.0.0-rc.6",
+            "2.0.0-rc.7",
             _ => Task.FromResult<(bool, string?)>((true, null)),
             (_, _) => throw new Exception("Rollback must not launch after a healthy update."));
         Equal(UpdateStartupAction.Continue, action);
@@ -134,10 +144,10 @@ internal static class Program
         string data = Directory.CreateDirectory(Path.Combine(root, "data")).FullName;
         await File.WriteAllTextAsync(Path.Combine(packages, "MiraBridge.Windows-2.0.0-rc.1-full.nupkg"), "known-good-package");
         var store = new UpdateRecoveryStore(Path.Combine(root, "app"), data);
-        _ = await store.PrepareAsync("2.0.0-rc.1", "2.0.0-rc.6");
+        _ = await store.PrepareAsync("2.0.0-rc.1", "2.0.0-rc.7");
         bool launched = false;
         UpdateStartupAction action = await store.ProcessStartupAsync(
-            "2.0.0-rc.6",
+            "2.0.0-rc.7",
             _ => Task.FromResult<(bool, string?)>((false, "injected doctor failure")),
             (receipt, _) =>
             {
@@ -156,7 +166,7 @@ internal static class Program
 
     private static string RequestCode(DateTimeOffset created, DateTimeOffset expires)
     {
-        var request = new PairingRequest("request", 1, created, expires, "1pRvuX6uLgTvJx4oFyxskU_X6gK5bNbC", "windows-main", PublicKey, PairingCodec.FingerprintPublicKey(PublicKey), new PairingMac("Test Mac", "arm64", "2.0.0-rc.6"));
+        var request = new PairingRequest("request", 1, created, expires, "1pRvuX6uLgTvJx4oFyxskU_X6gK5bNbC", "windows-main", PublicKey, PairingCodec.FingerprintPublicKey(PublicKey), new PairingMac("Test Mac", "arm64", "2.0.0-rc.7"));
         byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(request, new JsonSerializerOptions(JsonSerializerDefaults.Web));
         return PairingCodec.Prefix + Convert.ToBase64String(bytes).TrimEnd('=').Replace('+', '-').Replace('/', '_');
     }

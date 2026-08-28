@@ -11,7 +11,7 @@
 <p align="center"><a href="./README.md">English</a> · <strong>简体中文</strong></p>
 
 <p align="center">
-  <a href="https://github.com/2387452986/MiraBridge/releases/tag/v2.0.0-rc.6">下载 2.0.0-rc.6</a>
+  <a href="https://github.com/2387452986/MiraBridge/releases/tag/v2.0.0-rc.7">下载 2.0.0-rc.7</a>
   · <a href="#一次对话完成安装">安装</a>
   · <a href="./docs/TEST_REPORT.md">真实测试证据</a>
   · <a href="./SECURITY.md">安全说明</a>
@@ -95,13 +95,13 @@ Codex 可以检查已授权位置，列出明确候选，并在得到批准后�
 
 ### 1. 让 Mac 上的 Codex 安装 MiraBridge
 
-> 请从 `https://github.com/2387452986/MiraBridge` 安装 `v2.0.0-rc.6`，完成 doctor 并生成 Windows 配对请求。
+> 请从 `https://github.com/2387452986/MiraBridge` 安装 `v2.0.0-rc.7`，完成 doctor 并生成 Windows 配对请求。
 
 Codex 会验证固定版本，安装 Mac 端受管运行时和插件，然后生成配对请求。
 
 ### 2. 在 Windows 安装 MiraBridge
 
-从 [2.0.0-rc.6 Release](https://github.com/2387452986/MiraBridge/releases/tag/v2.0.0-rc.6) 下载对应的 x64 或 ARM64 Setup，运行后打开**连接 Mac**。
+从 [2.0.0-rc.7 Release](https://github.com/2387452986/MiraBridge/releases/tag/v2.0.0-rc.7) 下载对应的 x64 或 ARM64 Setup，运行后打开**连接 Mac**。
 
 ### 3. 配对两台电脑
 
@@ -115,7 +115,7 @@ Codex 会验证固定版本，安装 Mac 端受管运行时和插件，然后生
 <summary>手动执行的 Mac 安装命令</summary>
 
 ```sh
-git clone --branch v2.0.0-rc.6 --depth 1 https://github.com/2387452986/MiraBridge.git
+git clone --branch v2.0.0-rc.7 --depth 1 https://github.com/2387452986/MiraBridge.git
 cd MiraBridge
 ./plugins/mira-bridge/scripts/install-mac.sh
 ~/.local/bin/mirabridge doctor
@@ -124,13 +124,31 @@ cd MiraBridge
 
 </details>
 
+### DHCP 地址变化后重新连接
+
+如果已配对的 Windows 电脑获得了新的局域网地址，请保留原配对和已固定的
+SSH 身份。可以直接把下面这句话交给 Codex：
+
+> Windows 的 DHCP 地址变了。请把 `windows-main` 安全重连到 `<新主机名或 IP>`，不要关闭主机密钥校验，也不要替换原配对。
+
+在 Mac 上手动执行的等价命令是：
+
+```sh
+~/.local/bin/mirabridge node reconnect windows-main --host <新主机名或 IP>
+```
+
+只有新地址提供该节点原先固定的 SSH 主机密钥时，MiraBridge 才会迁移地址，
+随后还会执行真实 Worker 握手。主机密钥不一致或握手失败时，迁移会停止并
+恢复原配置。不要删除 `known_hosts`；只有 Windows SSH 主机密钥确实被主动
+更换，并且已经独立核对指纹后，才重新配对。
+
 ## 安全边界与当前限制
 
 - MiraBridge 不是远程桌面，不控制任意 Windows 图形界面、鼠标，也不使用现有的已登录浏览器资料。
 - Windows 必须能通过可信局域网、VPN、组网工具或其他安全 SSH 路径被 Mac 访问。
 - 文件工具只能操作配置好的位置，但原生程序仍拥有其 Windows 运行账号的权限；产品当前默认使用 Administrator。
 - 配对使用公钥 SSH 和固定主机指纹。MiraBridge 不开放自定义命令监听端口，也不发送后台遥测。
-- `2.0.0-rc.6` 仍是未签名的 Release Candidate，Windows SmartScreen 可能显示“未知发布者”。请只从本仓库 Release 下载，并核对公开的 SHA-256 清单。
+- `2.0.0-rc.7` 仍是未签名的 Release Candidate，Windows SmartScreen 可能显示“未知发布者”。请只从本仓库 Release 下载，并核对公开的 SHA-256 清单。
 
 在敏感或生产电脑上使用前，请阅读[安全策略](./SECURITY.md)、[支持矩阵](./SUPPORT_MATRIX.md)和[配对说明](./docs/PAIRING.md)。
 
@@ -148,7 +166,7 @@ MiraBridge 的验收不只包含 Mock 和编译测试。当前版本已安装到
 - [架构说明](./plugins/mira-bridge/docs/ARCHITECTURE.md)
 - [工具覆盖与明确缺口](./plugins/mira-bridge/docs/TOOL_PARITY.md)
 - [从 1.x 迁移与回滚](./docs/MIGRATION_1X.md)
-- [版本说明](./docs/release-notes-v2.0.0-rc.6.md)
+- [版本说明](./docs/release-notes-v2.0.0-rc.7.md)
 
 ## 许可证
 

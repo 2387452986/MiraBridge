@@ -16,10 +16,18 @@ try {
   const listResult = JSON.parse(listed.stdout);
   const doctorResult = JSON.parse(doctor.stdout);
   const hosts = await readFile(join(temporary, "known_hosts"), "utf8");
+  let reconnectGuard = false;
+  try {
+    await execFileAsync(process.execPath, [executable, "node", "reconnect", "windows-main", "--host", "192.0.2.145"], { env, encoding: "utf8" });
+  } catch (error) {
+    const stderr = typeof error === "object" && error && "stderr" in error ? String(error.stderr) : "";
+    reconnectGuard = stderr.includes("is not configured") && stderr.includes("尚未配置");
+  }
   if (!Array.isArray(listResult.nodes) || listResult.nodes.length !== 0) throw new Error("Fresh CLI config should contain no nodes.");
   if (!doctorResult.ok || !doctorResult.node_24) throw new Error("CLI doctor did not accept the isolated Node 24 runtime.");
   if (hosts !== "") throw new Error("Fresh managed known_hosts should be empty.");
-  process.stdout.write(`${JSON.stringify({ ok: true, init: true, nodes: 0, doctor: true })}\n`);
+  if (!reconnectGuard) throw new Error("CLI reconnect did not preserve the bilingual missing-node guard.");
+  process.stdout.write(`${JSON.stringify({ ok: true, init: true, nodes: 0, doctor: true, reconnect_guard: true })}\n`);
 } finally {
   await rm(temporary, { recursive: true, force: true });
 }

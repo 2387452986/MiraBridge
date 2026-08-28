@@ -1,4 +1,4 @@
-# MiraBridge 2.0.0-rc.6 troubleshooting
+# MiraBridge 2.0.0-rc.7 troubleshooting
 
 Start with `mirabridge doctor` on Mac and `mirabridge-worker doctor` plus `storage status` under the SSH account on Windows. Preserve exact error codes/details.
 
@@ -35,6 +35,25 @@ actual non-interactive SSH account.
 - MiraBridge uses `BatchMode`; it will not display/fallback to a password prompt.
 - One reconnect uses the same request ID. Repeated blind side-effect retries are intentionally absent.
 
+## Windows DHCP address changed / Windows DHCP 地址变化
+
+Keep the existing pairing and pinned key. On the Mac, run:
+
+```bash
+mirabridge node reconnect windows-main --host <new-host-or-IP>
+mirabridge node test windows-main
+```
+
+The reconnect command accepts the address only if its live SSH host key matches
+the node's existing pinned fingerprint. It then verifies the Worker and rolls
+back both config and `known_hosts` on failure. If the key differs, stop and
+independently compare the fingerprint on Windows; do not delete `known_hosts`.
+
+保留原配对和固定主机密钥，在 Mac 上执行上述命令。只有新地址的实时 SSH
+主机密钥与原固定指纹一致时才会迁移；随后还会验证 Worker，失败时同时回滚
+配置和 `known_hosts`。如果指纹不同，请停止并在 Windows 上独立核对，切勿
+直接删除 `known_hosts`。
+
 ## `HOST_KEY_MISMATCH`
 
 Stop. Do not delete `known_hosts` reflexively. Compare the current Windows host key locally. Only explicit, independently verified re-enrollment can replace a legitimate rotated/reinstalled host key.
@@ -51,7 +70,7 @@ host is missing; do not fall back to an npm-global Worker or shell translation.
 
 ## `PROTOCOL_MISMATCH`
 
-MiraBridge product/packages should both be 2.0.0-rc.6 and RPC must be 2.0. RPC 1.0 and 2.0 are intentionally incompatible; MiraBridge 1.0–1.4 share RPC 2.0, while older products may lack later Job input, encoding, ConPTY, complete hardware inventory, or reliability metadata. Implicit 1.4 defaults are omitted for unchanged rolling-upgrade calls, but an explicitly requested 1.4-only field can be rejected by an older strict Worker. Stop MCP sessions, back up Worker state, upgrade/rollback Mac plugin and Windows Worker together, then run `node test`/`describe_node`.
+MiraBridge product/packages should both be 2.0.0-rc.7 and RPC must be 2.0. RPC 1.0 and 2.0 are intentionally incompatible; MiraBridge 1.0–1.4 share RPC 2.0, while older products may lack later Job input, encoding, ConPTY, complete hardware inventory, or reliability metadata. Implicit 1.4 defaults are omitted for unchanged rolling-upgrade calls, but an explicitly requested 1.4-only field can be rejected by an older strict Worker. Stop MCP sessions, back up Worker state, upgrade/rollback Mac plugin and Windows Worker together, then run `node test`/`describe_node`.
 
 ## `WORKSPACE_OUT_OF_BOUNDS` / `WORKSPACE_READ_ONLY`
 

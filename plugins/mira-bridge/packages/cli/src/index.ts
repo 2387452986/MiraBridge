@@ -8,7 +8,7 @@ import { defaultConfigPath, ensureConfigDirectory, expandUserPath, knownHostsPat
 import { SshPool } from "../../mcp-server/src/ssh-rpc.js";
 import { scanHostKeys, selectHostKey } from "./host-keys.js";
 import { installMac, uninstallMac, updateMac } from "./installation.js";
-import { acceptPairingResponse, createPairingRequest, listPairings, revokePairing } from "./pairing-client.js";
+import { acceptPairingResponse, createPairingRequest, listPairings, reconnectNodeAddress, revokePairing } from "./pairing-client.js";
 
 const execFileAsync = promisify(execFile);
 
@@ -97,6 +97,15 @@ async function listNodes(): Promise<void> {
   process.stdout.write(`${JSON.stringify({ nodes: Object.entries(config.nodes).map(([nodeId, node]) => ({ node_id: nodeId, host: node.host, port: node.port, user: node.user })) }, null, 2)}\n`);
 }
 
+async function reconnectNode(nodeId: string, values: string[]): Promise<void> {
+  const options = flags(values);
+  const result = await reconnectNodeAddress(nodeId, required(options, "host"));
+  process.stdout.write(
+    `Reconnected ${result.node_id}: ${result.previous_host} -> ${result.host}; pinned host fingerprint unchanged (${result.fingerprint}).\n`
+    + `已重新连接 ${result.node_id}：${result.previous_host} -> ${result.host}；固定主机指纹保持不变（${result.fingerprint}）。\n`,
+  );
+}
+
 async function testNode(nodeId: string): Promise<void> {
   const pool = new SshPool();
   try {
@@ -127,7 +136,7 @@ async function doctor(): Promise<void> {
 }
 
 function usage(): void {
-  process.stderr.write("Usage: mirabridge install|uninstall|update|doctor | init | pair create [--id ID] | pair accept RESPONSE | pair list | pair revoke ID [--local-only] | node add --id ID --host HOST --user USER --identity-file PATH [--port 22 --fingerprint SHA256:...] | node list | node test ID | worker check ID\n");
+  process.stderr.write("Usage: mirabridge install|uninstall|update|doctor | init | pair create [--id ID] | pair accept RESPONSE | pair list | pair revoke ID [--local-only] | node add --id ID --host HOST --user USER --identity-file PATH [--port 22 --fingerprint SHA256:...] | node reconnect ID --host HOST | node list | node test ID | worker check ID\n");
 }
 
 async function main(): Promise<number> {
@@ -156,6 +165,7 @@ async function main(): Promise<number> {
     return 0;
   }
   if (args[0] === "node" && args[1] === "add") { await addNode(args.slice(2)); return 0; }
+  if (args[0] === "node" && args[1] === "reconnect" && args[2]) { await reconnectNode(args[2], args.slice(3)); return 0; }
   if (args[0] === "node" && args[1] === "list") { await listNodes(); return 0; }
   if (args[0] === "node" && args[1] === "test" && args[2]) { await testNode(args[2]); return typeof process.exitCode === "number" ? process.exitCode : 0; }
   if (args[0] === "doctor") { await doctor(); return typeof process.exitCode === "number" ? process.exitCode : 0; }

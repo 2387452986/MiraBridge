@@ -1,4 +1,4 @@
-# MiraBridge 2.0.0-rc.6 security baseline
+# MiraBridge 2.0.0-rc.7 security baseline
 
 MiraBridge deliberately gives a Mac-hosted Agent the ability to execute approved operations as one Windows account. It secures transport, constrains Worker-owned paths/capabilities, bounds storage, and records evidence. It is not a sandbox for an untrusted Agent and cannot restrict a native child process beyond the Windows account/ACL boundary.
 
@@ -98,7 +98,7 @@ Total Worker storage defaults to 10 GiB with a 2 GiB free-space reserve and 256 
 
 ## Installation and update trust
 
-- `2.0.0-rc.6` is unsigned. Verify the Setup SHA-256 and GitHub artifact
+- `2.0.0-rc.7` is unsigned. Verify the Setup SHA-256 and GitHub artifact
   attestation from the same Release; SmartScreen reputation is not evidence of
   a hash match.
 - Windows update checks run at most daily, only notify automatically, and apply

@@ -1,6 +1,6 @@
 {
   "name": "@mirabridge/windows-worker",
-  "version": "2.0.0-rc.6",
+  "version": "2.0.0-rc.7",
   "type": "module",
   "files": [
     "dist/index.cjs",

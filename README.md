@@ -11,7 +11,7 @@
 <p align="center"><strong>English</strong> · <a href="./README.zh-CN.md">简体中文</a></p>
 
 <p align="center">
-  <a href="https://github.com/2387452986/MiraBridge/releases/tag/v2.0.0-rc.6">Download 2.0.0-rc.6</a>
+  <a href="https://github.com/2387452986/MiraBridge/releases/tag/v2.0.0-rc.7">Download 2.0.0-rc.7</a>
   · <a href="#install-in-one-conversation">Install</a>
   · <a href="./docs/TEST_REPORT.md">Real test evidence</a>
   · <a href="./SECURITY.md">Security</a>
@@ -95,13 +95,13 @@ The plugin exposes exactly 28 focused `mira_bridge_*` tools. Ordinary Mac work r
 
 ### 1. Ask Codex on the Mac to install MiraBridge
 
-> Install `v2.0.0-rc.6` from `https://github.com/2387452986/MiraBridge`, run doctor, and create a Windows pairing request.
+> Install `v2.0.0-rc.7` from `https://github.com/2387452986/MiraBridge`, run doctor, and create a Windows pairing request.
 
 Codex verifies the fixed release, installs the managed Mac runtime and plugin, and creates the pairing request.
 
 ### 2. Install MiraBridge on Windows
 
-Download the matching x64 or ARM64 Setup from the [2.0.0-rc.6 release](https://github.com/2387452986/MiraBridge/releases/tag/v2.0.0-rc.6), run it, and open **Connect Mac**.
+Download the matching x64 or ARM64 Setup from the [2.0.0-rc.7 release](https://github.com/2387452986/MiraBridge/releases/tag/v2.0.0-rc.7), run it, and open **Connect Mac**.
 
 ### 3. Pair the two computers
 
@@ -115,7 +115,7 @@ The normal flow requires no password, private-key copy, TOML editing, manual SSH
 <summary>Manual Mac installation commands</summary>
 
 ```sh
-git clone --branch v2.0.0-rc.6 --depth 1 https://github.com/2387452986/MiraBridge.git
+git clone --branch v2.0.0-rc.7 --depth 1 https://github.com/2387452986/MiraBridge.git
 cd MiraBridge
 ./plugins/mira-bridge/scripts/install-mac.sh
 ~/.local/bin/mirabridge doctor
@@ -124,13 +124,32 @@ cd MiraBridge
 
 </details>
 
+### Reconnect after a DHCP address change
+
+If the paired Windows PC receives a new LAN address, keep the existing pairing
+and pinned SSH identity. Give Codex this prompt:
+
+> Windows received a new DHCP address. Reconnect `windows-main` to `<new-host-or-IP>` without disabling host-key verification or replacing the pairing.
+
+The equivalent manual command on the Mac is:
+
+```sh
+~/.local/bin/mirabridge node reconnect windows-main --host <new-host-or-IP>
+```
+
+MiraBridge accepts the new address only when it presents the node's existing
+pinned SSH host key, then performs a real Worker handshake. A key mismatch or
+failed handshake stops the migration and restores the original configuration.
+Do not delete `known_hosts`; independently verify the Windows fingerprint and
+re-pair only when the Windows SSH host key was intentionally replaced.
+
 ## Safety and current limits
 
 - MiraBridge is not remote desktop and does not control arbitrary Windows GUI applications, mouse input, or an existing signed-in browser profile.
 - Windows must remain reachable from the Mac over a trusted LAN, VPN, mesh network, or other secure SSH path.
 - File tools stay inside configured locations, but native programs still have the permissions of the Windows account running them. The product currently defaults to Administrator.
 - Pairing uses public-key SSH and a pinned host fingerprint. MiraBridge opens no custom command listener and sends no background telemetry.
-- `2.0.0-rc.6` is an unsigned release candidate. Windows SmartScreen may show **Unknown publisher**. Download it only from this repository's Release page and verify the published SHA-256 manifest.
+- `2.0.0-rc.7` is an unsigned release candidate. Windows SmartScreen may show **Unknown publisher**. Download it only from this repository's Release page and verify the published SHA-256 manifest.
 
 See the [security policy](./SECURITY.md), [support matrix](./SUPPORT_MATRIX.md), and [pairing guide](./docs/PAIRING.md) before using MiraBridge on a sensitive or production machine.
 
@@ -148,7 +167,7 @@ Read the [real test report](./docs/TEST_REPORT.md) for the full evidence, known 
 - [Architecture](./plugins/mira-bridge/docs/ARCHITECTURE.md)
 - [Tool coverage and explicit gaps](./plugins/mira-bridge/docs/TOOL_PARITY.md)
 - [1.x migration and rollback](./docs/MIGRATION_1X.md)
-- [Release notes](./docs/release-notes-v2.0.0-rc.6.md)
+- [Release notes](./docs/release-notes-v2.0.0-rc.7.md)
 
 ## License
 

@@ -20,7 +20,7 @@ function request(now = new Date("2026-08-23T00:00:00.000Z")): PairingRequest {
     node_id: "windows-main",
     public_key: publicKey,
     public_key_fingerprint: fingerprintOpenSshPublicKey(publicKey),
-    mac: { name: "Mira Mac", architecture: "arm64", mirabridge_version: "2.0.0-rc.6" },
+    mac: { name: "Mira Mac", architecture: "arm64", mirabridge_version: "2.0.0-rc.7" },
   };
 }
 
@@ -51,7 +51,7 @@ describe("pairing codes", () => {
       request_nonce: "1pRvuX6uLgTvJx4oFyxskU_X6gK5bNbC",
       node_id: "windows-main",
       public_key_fingerprint: fingerprintOpenSshPublicKey(publicKey),
-      windows: { hostname: "WINDOWS-NODE", architecture: "x64", user: "Administrator", mirabridge_version: "2.0.0-rc.6" },
+      windows: { hostname: "WINDOWS-NODE", architecture: "x64", user: "Administrator", mirabridge_version: "2.0.0-rc.7" },
       ssh: { addresses: ["192.0.2.74"], port: 22, host_fingerprint: "SHA256:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", host_key_algorithm: "ssh-ed25519" },
       worker_command: "\"C:\\Users\\Administrator\\AppData\\Local\\MiraBridge.Windows\\current\\MiraBridge.Host.exe\" worker serve --stdio",
       management_command: "\"C:\\Users\\Administrator\\AppData\\Local\\MiraBridge.Windows\\current\\MiraBridge.Host.exe\" worker",

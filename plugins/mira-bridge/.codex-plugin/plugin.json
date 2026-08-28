@@ -1,6 +1,6 @@
 {
   "name": "mira-bridge",
-  "version": "2.0.0-rc.6",
+  "version": "2.0.0-rc.7",
   "description": "Expose a paired Windows computer as a remote native tool runtime for an Agent reasoning on macOS.",
   "author": {
     "name": "2387452986",

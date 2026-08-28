@@ -1,4 +1,4 @@
-# MiraBridge 2.0.0-rc.6 threat model
+# MiraBridge 2.0.0-rc.7 threat model
 
 ## Executive summary
 

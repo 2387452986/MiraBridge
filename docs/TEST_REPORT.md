@@ -1,10 +1,44 @@
 # MiraBridge test report
 
-Date: 2026-08-24
+Date: 2026-08-28
 
 Status vocabulary is intentionally closed: `PASS_REAL`,
 `PASS_SAFE_REJECTION`, `FAIL_PRODUCT`, `FAIL_ENVIRONMENT`, and `NOT_RUN`.
 Mock, compile-only, CI-targeted, and real-LAN evidence are kept separate.
+
+## 2.0.0-rc.7 GUI rendering and DHCP reconnect
+
+This release candidate is backward-compatible with `2.0.0-rc.6`. RPC `2.0`,
+the 28-tool MCP surface and SQLite v5 are unchanged.
+
+| Contract | Observed |
+|---|---|
+| Product/packages | `2.0.0-rc.7` |
+| RPC / MCP surface | `2.0` / exactly 28 tools (unchanged) |
+| Worker database | SQLite `user_version=5` (unchanged) |
+| Scope | process-scoped WPF software rendering; host-key-safe DHCP address reconnect; English/Simplified Chinese recovery prompts |
+
+### Error-before and repair
+
+| Gate | Result | Evidence |
+|---|---|---|
+| Intermittent black-window diagnosis | PASS_REAL | the initial Session 1 capture was not black, so the report was not treated as deterministically reproduced. The installed GUI still reported rc.2 while the Worker reported rc.6; the host exposed mixed physical/virtual display adapters plus recent display-topology and NVIDIA driver-reset events, while the WPF process had no application-owned rendering policy |
+| Rendering boundary | PASS_REAL | `App` selects process-scoped `RenderMode.SoftwareOnly`; no display driver, registry value, Worker capability, protocol, configuration or durable data is changed |
+| DHCP identity boundary | PASS_SAFE_REJECTION | `node reconnect` scans the candidate address and requires the already pinned SSH fingerprint. Unit regressions reject a different key, restore config plus `known_hosts` after a failed Worker handshake, and preserve an old endpoint still used by another node |
+| Bilingual recovery | PASS_REAL | success, missing-node, unreachable-address, fingerprint-mismatch and rollback paths provide English and Simplified Chinese guidance; public README, pairing, troubleshooting, Windows Help and the packaged Skill document the same safe command |
+
+### Mac, real-LAN and Windows acceptance
+
+| Gate | Result | Evidence |
+|---|---|---|
+| Mac source gate | PASS_REAL | managed Node 24.19.0; strict typecheck; 26 Vitest files / 135 tests; build; plugin and Skill validation; stdio/CLI/package smoke; 28 tools; production audit with zero vulnerabilities; release manifest 184 files; `git diff --check` |
+| Real-LAN reconnect | PASS_REAL | the rc.7 CLI reconnected the paired node to its current address, matched the existing pinned key, completed a real Worker handshake and emitted both languages. The config and managed `known_hosts` SHA-256 values were byte-identical before/after and both retained mode 0600 |
+| Physical Windows release build | PASS_REAL | durable Job `job_d2luZG93cy1tYWlu_9e7fed62-63a1-42c8-a82d-0726b04d1697`, exit 0; 114 cross-platform tests passed with 21 environment-routed skips, 103/103 Windows-native tests, 34 Windows-local integration checks and WPF 9/9 |
+| x64 Setup | PASS_REAL | 251,234,384 bytes; SHA-256 `81fdd59749ecb582302c33438ae8846434e4847839830ca8f349ecd6ebf7993e` |
+| Upgrade backup | PASS_REAL | no active Job; product backup saved `worker.toml` SHA-256 `6c68cce62a430ac387ff2f1abe80b8d40a5c3edb4b2aab4bdc9fb80d1db2c920` and a SQLite `VACUUM INTO` snapshot SHA-256 `3d36d3c75a93d7ace5ff0067404470252e36c7aae2d4bbc4694be9e931bc6506` |
+| Installed replacement | PASS_REAL | receipt SHA-256 `eb33a9d408e715c35f9f8423ca2edee5ffd7f67e7d51c078891358be03372826`; uninstall/install 0, Worker rc.7, runtime Ready, one application after five duplicate launches, immediate/settled activation true, zero new crashes and durable data preserved |
+| Installed GUI pixels | PASS_REAL | private Session 1 capture: 1180x780, 91,435 bytes, SHA-256 `1ed844fb4a50a9dd2986d9ddcb25c43726ec2bfc3179a94bb1fbf6f963e6403f`, average luminance 232.202 and complete rc.7 UI with no black surface. It is not public because it contains live LAN and host-fingerprint data |
+| Acceptance cleanup | PASS_REAL | both exact one-shot interactive Scheduled Tasks exited 0 and were unregistered; no Job remains queued, starting or running |
 
 ## 2.0.0-rc.6 output-runner repair
 

@@ -21,7 +21,7 @@ const transport = new StdioClientTransport({
   },
   stderr: "pipe",
 });
-const client = new Client({ name: "mirabridge-installed-plugin-smoke", version: "2.0.0-rc.6" });
+const client = new Client({ name: "mirabridge-installed-plugin-smoke", version: "2.0.0-rc.7" });
 
 function result(response) {
   const value = response.structuredContent;
@@ -36,7 +36,7 @@ try {
   const nodes = result(await client.callTool({ name: "mira_bridge_list_nodes", arguments: {} }));
   if (!nodes.nodes.some((node) => node.node_id === nodeId)) throw new Error(`Configured node not visible: ${nodeId}`);
   const described = result(await client.callTool({ name: "mira_bridge_describe_node", arguments: { node_id: nodeId } }));
-  if (described.worker_version !== "2.0.0-rc.6" || described.protocol_version !== "2.0") {
+  if (described.worker_version !== "2.0.0-rc.7" || described.protocol_version !== "2.0") {
     throw new Error(`Unexpected stable Host handshake: ${JSON.stringify({ worker: described.worker_version, protocol: described.protocol_version })}`);
   }
   const transfer = pullSource && pullDestination
