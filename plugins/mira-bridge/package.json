@@ -43,7 +43,7 @@
     "cross-spawn": "7.0.6",
     "playwright-core": "1.62.1",
     "smol-toml": "1.8.0",
-    "zod": "4.4.3"
+    "zod": "4.5.4"
   },
   "devDependencies": {
     "@types/cross-spawn": "6.0.6",
