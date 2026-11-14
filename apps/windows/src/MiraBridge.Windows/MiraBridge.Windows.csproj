@@ -13,7 +13,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\MiraBridge.Windows.Core\MiraBridge.Windows.Core.csproj" />
-    <PackageReference Include="Velopack" Version="1.2.0" />
+    <PackageReference Include="Velopack" Version="1.2.161" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Help\**\*" CopyToOutputDirectory="PreserveNewest" />
